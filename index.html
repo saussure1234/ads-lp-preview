@@ -55,6 +55,19 @@
   --lead:clamp(15px, 1.15vw, 16.5px);  /* 実測 16.4px */
   --pt:clamp(13px, .98vw, 14px);       /* 訴求 */
   --navfs:clamp(12px, .896vw, 12.9px); /* 実測：項目6つの墨の合計 506px に合わせた */
+  /* 縦のリズム。実測でバラついていたものを3トークンに寄せた（2026-09-04）
+     小見出し→見出し 41/45 ／ 見出し→リード 36/42/44 ／ 見出し→本体 64/69/77/93/141/166 */
+  --g-eyebrow:clamp(24px,3.13vw,45px);
+  --g-lead:clamp(24px,3.06vw,44px);
+  --g-body:clamp(40px,5.35vw,77px);
+  --sec-y:clamp(70px,10.3vw,148px);    /* 節の上下 */
+  /* 見出しの級数。実測で37/45/48/58/84の5種あったのを2種に */
+  --h2:clamp(26px,3.33vw,48px);
+  --h2-lg:clamp(30px,4.03vw,58px);
+  /* 地の交互。実測の差は最大1.08しかなく、メリハリになっていなかった */
+  --paper:#f0efed;                     /* 白 #fff との差 1.15 */
+  --dark:#2c1119;                      /* 濃色章。白文字 17.48 */
+  --dark-deep:#1e0b11;
   --pad:clamp(20px, 4.93vw, 71px);     /* 実測：CTAの箱の左端 71px。H1の65pxは字面 */
   --head-h:clamp(60px, 6.87vw, 99px);  /* 実測：赤ブロックを画素走査 106モック → 99 */
 }
@@ -229,7 +242,7 @@ a{color:inherit;text-decoration:none}
    番号の色                #8c101e  → ブランド色 #aa1b45 に寄せる
    和文名の色              #000000
    ──────────────────────────────────────────────── */
-.svc{background:#fafafa; padding:clamp(34px,4.31vw,62px) 0 0}   /* 実測：ラベルの墨の上端 y68 */
+.svc{background:#fff; padding:var(--sec-y) 0 0}
 .svc__head{text-align:center; padding-inline:var(--pad)}
 .svc__label{
   display:inline-block; margin:0;
@@ -243,11 +256,11 @@ a{color:inherit;text-decoration:none}
 .svc__h2{
   margin:clamp(22px,2.85vw,41px) 0 0; font-weight:400; color:#111;  /* 実測：罫y110 → 見出しの箱 */
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-size:clamp(21px,3.33vw,48px);   /* 実測 字送り48.9px */
+  font-size:var(--h2);   /* 実測 字送り48.9px → 節見出しに統一 */
   line-height:1.54;                    /* 実測 行送り74px ÷ 48px */
   letter-spacing:.02em;
 }
-.svc__list{margin-top:clamp(36px,4.44vw,64px)}  /* 実測：段の上端 y361 */
+.svc__list{margin-top:var(--g-body)}  /* 実測：段の上端 y361 */
 .svc__row{
   display:grid; grid-template-columns:727fr 713fr;   /* 実測：境目 x727 */
   height:clamp(210px,25.7vw,370px);      /* 実測 段の高さ 370px。min-heightだと伸びて下の段がずれる */
@@ -295,25 +308,25 @@ a{color:inherit;text-decoration:none}
    説明の墨  y1089（字送り15.0）/ 2段目の枠 y1187（段の間隔 678）
    CTA      513 x 70、中央、上端 y1961
    ※ 節の上端はヘッダー下 y120。以下の余白はそこからの差 */
-.wk{background:var(--bg); padding:clamp(56px,7.99vw,115px) var(--pad) clamp(70px,9.03vw,130px)}
+.wk{padding:var(--sec-y) var(--pad)}
 .wk__label{
   margin:0; font-size:clamp(12px,1.18vw,17px); font-weight:700;
   letter-spacing:.14em; color:var(--brand);
 }
 .wk__h2{
-  margin:clamp(18px,2.36vw,34px) 0 0; font-weight:400; color:#111;
+  margin:var(--g-eyebrow) 0 0; font-weight:400; color:#111;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-size:clamp(30px,4.72vw,68px);    /* 実測：墨の高さ64px */
+  font-size:var(--h2);    /* 実測：墨の高さ64px */
   letter-spacing:.06em; line-height:1;
 }
 .wk__lead{
-  margin:clamp(20px,3.06vw,44px) 0 0; font-size:clamp(13px,1.11vw,16px);
+  margin:var(--g-lead) 0 0; font-size:clamp(13px,1.11vw,16px);
   line-height:1.9; color:#333;
 }
 .wk__grid{
   display:grid; grid-template-columns:repeat(4,1fr);
   gap:clamp(14px,1.81vw,26px) clamp(14px,1.81vw,26px);   /* 実測 26px */
-  margin-top:clamp(38px,4.79vw,69px);                    /* 実測：リードの墨下端431 → 枠509 */
+  margin-top:var(--g-body);                    /* 実測：リードの墨下端431 → 枠509 */
 }
 .wk__card{display:block}
 .wk__ph{
@@ -358,11 +371,11 @@ a{color:inherit;text-decoration:none}
    見出しの墨 x68-358（幅291・7字）y259-292（高さ34）→ 明朝39px・字間.07em
    赤い罫 y327・左端x68・幅56 / ロゴ6列2段、段の間隔127 / 地 #f1f1f1
    ※ 節の上端はヘッダー下 y94。以下の余白はそこからの差 */
-.cl{background:var(--bg); padding:clamp(80px,11.4vw,164px) var(--pad) clamp(70px,9.03vw,130px)}  /* 実測差分で117→164 */
+.cl{background:#fff; padding:var(--sec-y) var(--pad)}
 .cl__h2{
   margin:0; font-weight:400; color:#111;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-size:clamp(21px,2.57vw,37px); letter-spacing:.07em; line-height:1;  /* 実測 墨の高さ34px */
+  font-size:var(--h2); letter-spacing:.07em; line-height:1;   /* 節見出しに統一 */
 }
 .cl__h2::after{
   content:""; display:block; width:clamp(34px,3.89vw,56px); height:1px;
@@ -372,7 +385,7 @@ a{color:inherit;text-decoration:none}
   display:grid; grid-template-columns:repeat(6,1fr);
   gap:clamp(26px,6.04vw,87px) clamp(12px,1.6vw,23px);   /* 実測 段の間隔127 − ロゴ40 = 87 */
   align-items:center;
-  margin-top:clamp(50px,6.46vw,93px);                   /* 実測差分で85→93 */
+  margin-top:var(--g-body);                   /* 実測差分で85→93 */
 }
 .cl__logo{display:flex; align-items:center; justify-content:center}
 .cl__logo img{
@@ -398,10 +411,10 @@ a{color:inherit;text-decoration:none}
    CTA   x447-974（幅528）y2015-2104（高さ90）
    🚨 折り図8点とアイコン4点は extract.py でモックから抜いた透過マスク。
       本番はADSの線画に差し替える */
-.pr{background:#f6f6f6}
+.pr{background:var(--paper)}
 .pr__band{
   position:relative; overflow:hidden;
-  padding:clamp(90px,12.6vw,181px) var(--pad) clamp(80px,11.5vw,166px);  /* 実測差分 */
+  padding:var(--sec-y) var(--pad);  /* 実測差分 */
   /* 実測：見出しの墨 y303（節の上端はヘッダー下 y94 なので 209）*/
 }
 .pr__bandph{
@@ -410,21 +423,21 @@ a{color:inherit;text-decoration:none}
 .pr__bandph img{width:100%; height:100%; object-fit:cover; object-position:left center; display:block}
 .pr__bandph::after{
   content:""; position:absolute; inset:0;
-  background:linear-gradient(90deg,#f6f6f6 0%, rgba(246,246,246,.75) 16%, rgba(246,246,246,0) 46%);
+  background:linear-gradient(90deg,var(--paper) 0%, rgba(240,239,237,.75) 16%, rgba(240,239,237,0) 46%);
 }
 /* 🚨 .pr__band > * は .pr__bandph と同じ詳細度。後に書くと absolute が戻る */
 .pr__band > *:not(.pr__bandph){position:relative; z-index:1}
 .pr__h2{
   margin:0; font-weight:400; color:#111;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-size:clamp(36px,5.83vw,84px);      /* 実測 墨の高さ78 */
+  font-size:var(--h2-lg);                 /* 帯の見出し */
   letter-spacing:.1em; line-height:1;
 }
 .pr__sub{
   margin:clamp(18px,2.92vw,42px) 0 0;     /* 実測 墨380 → 422 */
   font-size:clamp(12px,1.04vw,15px); color:#333; letter-spacing:.02em;
 }
-.pr__box{background:#fefefe; padding:clamp(46px,6.94vw,100px) var(--pad) clamp(50px,6.6vw,95px)}
+.pr__box{background:#fff; padding:var(--sec-y) var(--pad)}
 .pr__h3{
   margin:0; font-weight:400; color:#111;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
@@ -515,19 +528,20 @@ a{color:inherit;text-decoration:none}
 /* ============ 共通：節の見出し ============
    実測（works1 / topics1 / outline1 を1440換算）
    ラベルの墨 y235-249（高さ15）／見出しの墨 y299-362（高さ64）／リードの墨 y415-431 */
-.sc{padding:clamp(70px,10.3vw,148px) var(--pad) clamp(70px,9.7vw,140px)}
-.sc--alt{background:#fafafa}
+.sc{background:#fff; padding:var(--sec-y) var(--pad)}
+.sc--alt{background:var(--paper)}
+.wk.sc--alt{background:var(--paper)}
 .sc__label{
   margin:0; font-size:clamp(12px,.9vw,13px); font-weight:700;
   letter-spacing:.22em; color:var(--brand);
 }
 .sc__h2{
-  margin:clamp(24px,3.13vw,45px) 0 0; font-weight:400; color:#111;
+  margin:var(--g-eyebrow) 0 0; font-weight:400; color:#111;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-size:clamp(28px,4.03vw,58px); letter-spacing:.1em; line-height:1;
+  font-size:var(--h2); letter-spacing:.1em; line-height:1;
 }
 .sc__lead{
-  margin:clamp(24px,3.06vw,44px) 0 0; font-size:clamp(13px,1.11vw,16px);
+  margin:var(--g-lead) 0 0; font-size:clamp(13px,1.11vw,16px);
   color:#333; line-height:1.9; letter-spacing:.02em;
 }
 .sc__more{
@@ -546,7 +560,7 @@ a{color:inherit;text-decoration:none}
 }
 
 /* ---- 制作の流れ ---- 実測：ラベル y89-104／見出し y147-199／リード y263-326 */
-.fl__list{margin-top:clamp(40px,5.35vw,77px); border-top:1px solid #e6e6e6}
+.fl__list{margin-top:var(--g-body); border-top:1px solid #e6e6e6}
 .fl__row{
   display:grid; grid-template-columns:clamp(52px,6.6vw,95px) 1fr;
   gap:clamp(16px,2.5vw,36px);
@@ -560,7 +574,7 @@ a{color:inherit;text-decoration:none}
 .fl__d{margin:clamp(10px,1.25vw,18px) 0 0; font-size:clamp(12px,1.04vw,15px); color:#555; line-height:1.9}
 
 /* ---- 制作会社の選び方 ---- 実測：見出し y193-230／3列 */
-.ch__grid{display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(20px,2.99vw,43px); margin-top:clamp(40px,5.35vw,77px)}
+.ch__grid{display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(20px,2.99vw,43px); margin-top:var(--g-body)}
 .ch__n{
   margin:0; font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
   font-size:clamp(22px,2.5vw,36px); color:var(--brand); line-height:1;
@@ -577,7 +591,7 @@ a{color:inherit;text-decoration:none}
 .ch__lk:hover{background:var(--brand); color:#fff}
 
 /* ---- TOPICS ---- 実測：4件・行の間隔 108（259/367/475/584） */
-.tp__list{margin-top:clamp(34px,4.44vw,64px); border-top:1px solid #e6e6e6}
+.tp__list{margin-top:var(--g-body); border-top:1px solid #e6e6e6}
 .tp__row{
   display:grid; grid-template-columns:clamp(84px,9.03vw,130px) 1fr;
   gap:clamp(12px,2.08vw,30px); align-items:baseline;
@@ -594,7 +608,7 @@ a{color:inherit;text-decoration:none}
   gap:clamp(18px,3.13vw,45px);
   padding:clamp(30px,4.03vw,58px) 0; border-bottom:1px solid #e6e6e6;
 }
-.co__list{margin-top:clamp(40px,5.35vw,77px); border-top:1px solid #e6e6e6}
+.co__list{margin-top:var(--g-body); border-top:1px solid #e6e6e6}
 .co__n{
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
   font-size:clamp(34px,4.79vw,69px); line-height:1; color:var(--brand);
@@ -606,7 +620,7 @@ a{color:inherit;text-decoration:none}
 .co__d{margin:clamp(14px,1.74vw,25px) 0 0; font-size:clamp(12px,1.04vw,15px); color:#555; line-height:2}
 
 /* ---- 会社概要 ---- 実測：定義リスト 行の間隔 約66（361/426/495/560/625/691） */
-.ol__wrap{display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(28px,4.44vw,64px); margin-top:clamp(40px,5.35vw,77px)}
+.ol__wrap{display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(28px,4.44vw,64px); margin-top:var(--g-body)}
 .ol__dl{margin:0; border-top:1px solid #e6e6e6}
 .ol__row{display:grid; grid-template-columns:clamp(90px,10.4vw,150px) 1fr; gap:clamp(12px,1.6vw,23px);
   padding:clamp(14px,1.88vw,27px) 0; border-bottom:1px solid #e6e6e6}
@@ -617,22 +631,25 @@ a{color:inherit;text-decoration:none}
   font-size:clamp(12px,.97vw,14px); color:var(--brand); font-weight:700}  /* 実測 19px → 44 */
 
 /* ---- お問い合わせ＋フッター ---- 実測：見出し y418-460／フォーム項目 5つ */
-.ct{background:#fafafa; padding:clamp(70px,10.3vw,148px) var(--pad) clamp(50px,6.94vw,100px)}
+/* 濃色の章。明るい節が11続くと平坦なので、締めの1節だけ濃くする。
+   🚨 中の白い箱では文字色を戻す（節の color が箱の中の見出しまで白くする） */
+.ct{background:var(--dark); color:#fff; padding:var(--sec-y) var(--pad) clamp(50px,6.94vw,100px)}
 .ct__inner{max-width:clamp(320px,58.3vw,840px); margin:0 auto}
 .ct__h2{
-  margin:0; text-align:center; font-weight:400; color:#111;
+  margin:0; text-align:center; font-weight:400; color:#fff;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-size:clamp(24px,3.13vw,45px); letter-spacing:.08em; line-height:1;
+  font-size:var(--h2); letter-spacing:.08em; line-height:1;
 }
-.ct__lead{margin:clamp(20px,2.5vw,36px) 0 0; text-align:center; font-size:clamp(12px,1.04vw,15px); color:#444; line-height:1.9}
+.ct__lead{margin:var(--g-lead) 0 0; text-align:center; font-size:clamp(12px,1.04vw,15px);
+  color:rgba(255,255,255,.82); line-height:1.9}
 .ct__tel{margin:clamp(16px,1.94vw,28px) 0 0; text-align:center;
-  font-size:clamp(20px,2.29vw,33px); font-weight:700; color:var(--brand); letter-spacing:.04em}
-.ct__form{margin-top:clamp(34px,4.44vw,64px); display:grid; gap:clamp(16px,1.94vw,28px)}
+  font-size:clamp(20px,2.29vw,33px); font-weight:700; color:#fff; letter-spacing:.04em}
+.ct__form{margin-top:var(--g-body); display:grid; gap:clamp(16px,1.94vw,28px)}
 .ct__f{display:grid; gap:clamp(7px,.9vw,13px)}
-.ct__lb{font-size:clamp(12px,.97vw,14px); color:#333; font-weight:700}
+.ct__lb{font-size:clamp(12px,.97vw,14px); color:#111; font-weight:700}
 .ct__lb i{font-style:normal; margin-left:8px; padding:2px 7px; font-size:max(12px,.82em); font-weight:400;
   background:var(--brand); color:#fff}
-.ct__lb i.opt{background:#9a9a9a}
+.ct__lb i.opt{background:#707070}   /* 白文字 4.83:1。#9a9a9a は 2.81 で割れていた */
 .ct__in{
   width:100%; min-height:48px;            /* 実測 42px → 48（タップ44以上）*/
   padding:clamp(11px,1.32vw,19px) clamp(12px,1.11vw,16px);
@@ -648,13 +665,14 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
   transition:background .2s;
 }
 .ct__submit:hover{background:var(--brand-dark)}
-.ft{background:#fafafa; padding:clamp(40px,5.56vw,80px) var(--pad) clamp(30px,3.47vw,50px);
-  border-top:1px solid #e6e6e6}
+.ft{background:var(--dark-deep); color:rgba(255,255,255,.86);
+  padding:clamp(40px,5.56vw,80px) var(--pad) clamp(30px,3.47vw,50px)}
 .ft__nav{display:flex; flex-wrap:wrap; gap:clamp(6px,1.6vw,23px); justify-content:center;
-  font-size:clamp(12px,.97vw,14px); color:#333}
+  font-size:clamp(12px,.97vw,14px); color:rgba(255,255,255,.86)}
 .ft__nav a{display:flex; align-items:center; min-height:44px; padding:0 10px}  /* 実測 19px → 44 */
-.ft__nav a:hover{color:var(--brand)}
-.ft__cr{margin:clamp(24px,2.78vw,40px) 0 0; text-align:center; font-size:clamp(12px,.83vw,12px); color:#5a5a5a}
+.ft__nav a:hover{color:#fff}
+.ft__cr{margin:clamp(24px,2.78vw,40px) 0 0; text-align:center; font-size:clamp(12px,.83vw,12px);
+  color:rgba(255,255,255,.55)}
 
 /* ============ スマホのヘッダーと下部CTA ============
    実測：現行サイトも下部に固定CTA（お問い合わせ／デザイン相談（無料））を出している。
@@ -704,6 +722,44 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
   position:absolute; right:0; top:0; width:60px; height:60px;
   display:flex; align-items:center; justify-content:center;
   background:#fff; border-left:1px solid #e2e0df; color:var(--brand); font-size:20px;
+}
+
+/* ============ 動き ============
+   ・スクロールで節が立ち上がる（IntersectionObserver）
+   ・FVの写真がゆっくり漂う（常時）
+   ・カードは hover でわずかに持ち上がる
+   prefers-reduced-motion では全部止める */
+[data-rv]{opacity:0; transform:translateY(18px); transition:opacity .8s cubic-bezier(.22,.68,.3,1), transform .8s cubic-bezier(.22,.68,.3,1)}
+[data-rv].is-in{opacity:1; transform:none}
+[data-rv-d="1"]{transition-delay:.08s} [data-rv-d="2"]{transition-delay:.16s}
+[data-rv-d="3"]{transition-delay:.24s} [data-rv-d="4"]{transition-delay:.32s}
+
+/* FVの写真。20秒で行って帰る。止まっているように見えない程度 */
+.hero__photo img{animation:heroDrift 26s ease-in-out infinite alternate}
+@keyframes heroDrift{
+  from{transform:scale(1.00) translate3d(0,0,0)}
+  to  {transform:scale(1.045) translate3d(-10px,-6px,0)}
+}
+/* ヘッダーの赤ブロックに、細い明るい帯をゆっくり通す */
+.head__cta{position:relative; overflow:hidden}
+.head__cta::before{
+  content:""; position:absolute; top:0; bottom:0; width:38%;
+  background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.14), rgba(255,255,255,0));
+  animation:ctaSheen 7.3s linear infinite;
+}
+@keyframes ctaSheen{from{left:-40%} to{left:110%}}
+
+/* 押せるものは持ち上げる */
+.wk__card,.tp__row,.svc__row,.co__row{transition:transform .35s cubic-bezier(.22,.68,.3,1)}
+.wk__card:hover{transform:translateY(-4px)}
+.wk__ph img{transition:transform .6s cubic-bezier(.22,.68,.3,1)}
+.wk__card:hover .wk__ph img{transform:scale(1.04)}
+.cl__logo img{transition:opacity .3s} .cl__logo:hover img{opacity:.62}
+
+@media (prefers-reduced-motion:reduce){
+  [data-rv]{opacity:1; transform:none; transition:none}
+  .hero__photo img,.head__cta::before{animation:none}
+  .wk__card,.wk__ph img,.tp__row,.svc__row,.co__row{transition:none}
 }
 
 /* ============ タブレット ============
@@ -869,7 +925,7 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 </section>
 
 <!-- ============ WORKS ============ -->
-<section class="wk" id="works">
+<section class="wk sc--alt" id="works">
   <p class="wk__label">WORKS</p>
   <h2 class="wk__h2">制作実績</h2>
   <p class="wk__lead">業種や目的に合わせて、伝わる会社案内・パンフレットを制作しています。</p>
@@ -1201,6 +1257,29 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
   addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
   /* 幅が戻ったら閉じる。開いたまま残ると PC で全面が塞がる */
   matchMedia('(min-width:901px)').addEventListener('change', function (e) { if (e.matches) close(); });
+})();
+
+
+/* スクロールで立ち上げる。once。ヒーローは対象外（最初から見えている） */
+(function () {
+  var t = document.querySelectorAll(
+    '.svc__head,.svc__row,.wk__lead,.wk__card,.cl__h2,.cl__logo,' +
+    '.pr__band>h2,.pr__band>p,.pr__box>*,.sc__label,.sc__h2,.sc__lead,' +
+    '.fl__row,.ch__grid>div,.tp__row,.co__row,.ol__wrap,.ct__inner>*,.sc__more');
+  if (!t.length || !('IntersectionObserver' in window)) return;
+  var seen = {};
+  t.forEach(function (e) {
+    e.setAttribute('data-rv', '');
+    /* 並んでいるものは少しずつ遅らせる。同じ親の中での順番で決める */
+    var i = [].indexOf.call(e.parentElement.children, e) % 5;
+    if (i) e.setAttribute('data-rv-d', String(Math.min(i, 4)));
+  });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (x) {
+      if (x.isIntersecting) { x.target.classList.add('is-in'); io.unobserve(x.target); }
+    });
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
+  t.forEach(function (e) { io.observe(e); });
 })();
 
 /* 上へ */
