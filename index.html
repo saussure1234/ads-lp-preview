@@ -626,7 +626,7 @@ a{color:inherit;text-decoration:none}
 /* ---- お問い合わせ＋フッター ---- 実測：見出し y418-460／フォーム項目 5つ */
 /* 濃色の章。明るい節が11続くと平坦なので、締めの1節だけ濃くする。
    🚨 中の白い箱では文字色を戻す（節の color が箱の中の見出しまで白くする） */
-.ct{background:var(--dark); color:#fff; padding:var(--sec-y) var(--pad) clamp(50px,6.94vw,100px)}
+.ct{padding:var(--sec-y) var(--pad) clamp(50px,6.94vw,100px)}
 .ct__inner{max-width:clamp(320px,58.3vw,840px); margin:0 auto}
 .ct__h2{
   margin:0; text-align:center; font-weight:400; color:#fff;
@@ -723,6 +723,71 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 .pr__fold--a3{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22164%22%20height%3D%2286%22%20viewBox%3D%220%200%20164%2086%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222.4%22%3E%3Cpath%20d%3D%22M12%2026%20L60%2016%20L60%2066%20L12%2076%20Z%22/%3E%3Cpath%20d%3D%22M60%2016%20L108%2026%20L108%2076%20L60%2066%20Z%22/%3E%3Cpath%20d%3D%22M108%2026%20L152%2016%20L152%2066%20L108%2076%20Z%22/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22164%22%20height%3D%2286%22%20viewBox%3D%220%200%20164%2086%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222.4%22%3E%3Cpath%20d%3D%22M12%2026%20L60%2016%20L60%2066%20L12%2076%20Z%22/%3E%3Cpath%20d%3D%22M60%2016%20L108%2026%20L108%2076%20L60%2066%20Z%22/%3E%3Cpath%20d%3D%22M108%2026%20L152%2016%20L152%2066%20L108%2076%20Z%22/%3E%3C/svg%3E")}
 .pr__fold--ac{-webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22164%22%20height%3D%2286%22%20viewBox%3D%220%200%20164%2086%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222.4%22%3E%3Cpath%20d%3D%22M82%2016%20L16%2026%20L16%2070%20L82%2060%20Z%22/%3E%3Cpath%20d%3D%22M82%2016%20L148%2026%20L148%2070%20L82%2060%20Z%22/%3E%3Cpath%20d%3D%22M82%2016%20L82%2060%22/%3E%3Cpath%20d%3D%22M24%2033%20L74%2025%20M24%2043%20L74%2035%20M24%2053%20L74%2045%22/%3E%3Cpath%20d%3D%22M90%2025%20L140%2033%20M90%2035%20L140%2043%20M90%2045%20L140%2053%22/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22164%22%20height%3D%2286%22%20viewBox%3D%220%200%20164%2086%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%222.4%22%3E%3Cpath%20d%3D%22M82%2016%20L16%2026%20L16%2070%20L82%2060%20Z%22/%3E%3Cpath%20d%3D%22M82%2016%20L148%2026%20L148%2070%20L82%2060%20Z%22/%3E%3Cpath%20d%3D%22M82%2016%20L82%2060%22/%3E%3Cpath%20d%3D%22M24%2033%20L74%2025%20M24%2043%20L74%2035%20M24%2053%20L74%2045%22/%3E%3Cpath%20d%3D%22M90%2025%20L140%2033%20M90%2035%20L140%2043%20M90%2045%20L140%2053%22/%3E%3C/svg%3E")}
 .pr__spec{margin:clamp(8px,1.04vw,15px) 0 0; font-size:clamp(12px,.9vw,13px); color:#4a4a4a}
+
+/* ============ 濃色の章 ============
+   SHARE Security は15節中3節（20%）を濃色にしていた。1節だけだと最後にしか変化がない。
+   ここでは11節中3節（実績・選び方・お問い合わせ）を濃色にする */
+.is-dark{
+  position:relative; overflow:hidden;
+  background:linear-gradient(180deg, var(--dark) 0%, #240e14 46%, var(--dark-deep) 100%);
+  color:#fff;
+}
+.is-dark > *{position:relative; z-index:1}
+.is-dark .sc__h2,.is-dark .wk__h2{color:#fff}
+.is-dark .sc__lead,.is-dark .wk__lead{color:rgba(255,255,255,.78)}
+.is-dark .sc__label,.is-dark .wk__label{color:#e8899f}   /* 濃色の上では赤が沈むので明るく */
+.is-dark .wk__name{color:#fff}
+.is-dark .wk__desc{color:rgba(255,255,255,.68)}
+.is-dark .wk__tag{background:rgba(255,255,255,.12); color:rgba(255,255,255,.86)}
+.is-dark .wk__ph{background:rgba(255,255,255,.06)}
+.is-dark .ch__t{color:#fff}
+.is-dark .ch__d{color:rgba(255,255,255,.72)}
+.is-dark .ch__n{color:#e8899f}
+.is-dark .ch__lk{border-color:rgba(255,255,255,.5); color:#fff}
+.is-dark .ch__lk:hover{background:#fff; color:var(--dark)}
+.is-dark .fl__row,.is-dark .tp__row,.is-dark .co__row{border-color:rgba(255,255,255,.16)}
+.is-dark .fl__list,.is-dark .tp__list,.is-dark .co__list{border-color:rgba(255,255,255,.16)}
+
+/* ---- 濃色章の背景。線が流れ、層が漂い、粒が息をする ---- */
+.dbg{position:absolute; inset:0; z-index:0; width:100%; height:100%; pointer-events:none; opacity:.55}
+.dbg .ln{fill:none; stroke:#c2506c; stroke-width:1.1; opacity:.55}
+.dbg .ln--b{stroke:#8d3a52}
+.dbg .far{animation:dDriftFar 34s ease-in-out infinite alternate}
+.dbg .near{animation:dDriftNear 26s ease-in-out infinite alternate}
+.dbg .dot{fill:#e8899f; transform-box:fill-box; transform-origin:center}
+.dbg .ring{fill:none; stroke:#c2506c; stroke-width:1}
+
+/* 🚨 stroke-dashoffset の keyframe に calc(var()) を書くと補間されない。線ごとに実数で書く */
+@keyframes dFlow1{from{stroke-dasharray:0 0 380 1750; stroke-dashoffset:0}
+                  to  {stroke-dasharray:0 0 380 1750; stroke-dashoffset:-2130}}
+@keyframes dFlow2{from{stroke-dasharray:0 0 300 1720; stroke-dashoffset:0}
+                  to  {stroke-dasharray:0 0 300 1720; stroke-dashoffset:-2020}}
+@keyframes dFlow3{from{stroke-dasharray:0 0 420 1740; stroke-dashoffset:0}
+                  to  {stroke-dasharray:0 0 420 1740; stroke-dashoffset:-2160}}
+.dbg .f1{animation:dFlow1 11.3s linear infinite}
+.dbg .f2{animation:dFlow2 13.7s linear -4s infinite}
+.dbg .f3{animation:dFlow3  9.7s linear -7s infinite}
+@keyframes dDriftFar {from{transform:translate3d(0,0,0)}       to{transform:translate3d(-38px,14px,0)}}
+@keyframes dDriftNear{from{transform:translate3d(0,0,0)}       to{transform:translate3d(26px,-18px,0)}}
+@keyframes dBreath   {0%,100%{opacity:.25; transform:scale(1)} 50%{opacity:.8; transform:scale(1.5)}}
+@keyframes dRing     {from{r:6; opacity:.5} to{r:56; opacity:0}}
+.dbg .b1{animation:dBreath 6.1s ease-in-out infinite}
+.dbg .b2{animation:dBreath 7.9s ease-in-out -2.4s infinite}
+.dbg .b3{animation:dBreath 5.3s ease-in-out -4.1s infinite}
+.dbg .r1{animation:dRing 8.2s ease-out infinite}
+.dbg .r2{animation:dRing 8.2s ease-out -4.1s infinite}
+
+/* ---- 見出しの赤い罫が伸びる ---- */
+.sc__label,.svc__label,.cl__h2,.pr__h3{--rule-w:100%}
+.svc__label::after,.cl__h2::after,.pr__h3::after{transform-origin:left center; transform:scaleX(0);
+  transition:transform .9s cubic-bezier(.22,.68,.3,1) .15s}
+.svc__label::after{transform-origin:center}
+.is-in.svc__label::after,.is-in.cl__h2::after,.is-in.pr__h3::after{transform:scaleX(1)}
+
+@media (prefers-reduced-motion:reduce){
+  .dbg{display:none}
+  .svc__label::after,.cl__h2::after,.pr__h3::after{transform:none; transition:none}
+}
 
 /* ============ コンテンツ幅 ============
    1920pxで見ると文字も表も画面の端まで伸びていた。
@@ -938,7 +1003,24 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 </section>
 
 <!-- ============ WORKS ============ -->
-<section class="wk sc--alt" id="works">
+<section class="wk is-dark" id="works">
+  <svg class="dbg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g class="far">
+      <path class="ln f1" d="M-120 700 C 300 620, 620 790, 1560 545"/>
+      <path class="ln ln--b f2" d="M-120 300 C 420 385, 940 175, 1560 325"/>
+      <circle class="dot b1" cx="286" cy="212" r="3.4"/>
+      <circle class="dot b3" cx="1168" cy="640" r="3"/>
+      <circle class="ring r1" cx="286" cy="212" r="6"/>
+    </g>
+    <g class="near">
+      <path class="ln f3" d="M-120 880 C 520 762, 1010 905, 1560 735"/>
+      <circle class="dot b2" cx="742" cy="452" r="3.8"/>
+      <circle class="ring r2" cx="742" cy="452" r="6"/>
+      <path class="ln ln--b" d="M980 -40 L1180 940" opacity=".2"/>
+      <path class="ln ln--b" d="M1210 -40 L1410 940" opacity=".14"/>
+    </g>
+  </svg>
+
   <p class="wk__label">WORKS</p>
   <h2 class="wk__h2">制作実績</h2>
   <p class="wk__lead">業種や目的に合わせて、伝わる会社案内・パンフレットを制作しています。</p>
@@ -1145,7 +1227,24 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 </section>
 
 <!-- ============ 制作会社の選び方 ============ -->
-<section class="sc sc--alt" id="choose">
+<section class="sc is-dark" id="choose">
+  <svg class="dbg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g class="far">
+      <path class="ln f1" d="M-120 700 C 300 620, 620 790, 1560 545"/>
+      <path class="ln ln--b f2" d="M-120 300 C 420 385, 940 175, 1560 325"/>
+      <circle class="dot b1" cx="286" cy="212" r="3.4"/>
+      <circle class="dot b3" cx="1168" cy="640" r="3"/>
+      <circle class="ring r1" cx="286" cy="212" r="6"/>
+    </g>
+    <g class="near">
+      <path class="ln f3" d="M-120 880 C 520 762, 1010 905, 1560 735"/>
+      <circle class="dot b2" cx="742" cy="452" r="3.8"/>
+      <circle class="ring r2" cx="742" cy="452" r="6"/>
+      <path class="ln ln--b" d="M980 -40 L1180 940" opacity=".2"/>
+      <path class="ln ln--b" d="M1210 -40 L1410 940" opacity=".14"/>
+    </g>
+  </svg>
+
   <p class="sc__label">HOW TO CHOOSE</p>
   <h2 class="sc__h2">制作会社の選び方</h2>
   <p class="sc__lead">制作会社をお選びの際のポイントとしてご参考ください。</p>
@@ -1229,7 +1328,24 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 </section>
 
 <!-- ============ お問い合わせ ============ -->
-<section class="ct" id="contact">
+<section class="ct is-dark" id="contact">
+  <svg class="dbg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g class="far">
+      <path class="ln f1" d="M-120 700 C 300 620, 620 790, 1560 545"/>
+      <path class="ln ln--b f2" d="M-120 300 C 420 385, 940 175, 1560 325"/>
+      <circle class="dot b1" cx="286" cy="212" r="3.4"/>
+      <circle class="dot b3" cx="1168" cy="640" r="3"/>
+      <circle class="ring r1" cx="286" cy="212" r="6"/>
+    </g>
+    <g class="near">
+      <path class="ln f3" d="M-120 880 C 520 762, 1010 905, 1560 735"/>
+      <circle class="dot b2" cx="742" cy="452" r="3.8"/>
+      <circle class="ring r2" cx="742" cy="452" r="6"/>
+      <path class="ln ln--b" d="M980 -40 L1180 940" opacity=".2"/>
+      <path class="ln ln--b" d="M1210 -40 L1410 940" opacity=".14"/>
+    </g>
+  </svg>
+
   <div class="ct__inner">
     <h2 class="ct__h2">デザイン相談（無料）</h2>
     <p class="ct__lead">会社案内・パンフレットの制作について、<br>お気軽にご相談ください。</p>
