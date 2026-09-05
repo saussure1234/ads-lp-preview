@@ -873,6 +873,91 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 .svc__label::after{transform-origin:center}
 .is-in.svc__label::after,.is-in.cl__h2::after,.is-in.pr__h3::after{transform:scaleX(1)}
 
+/* ============================================================
+   節ごとの「地と箱」── 生成した節別デザイン（_fv2/ps/）の実測を規則にしたもの。
+   実測した強度は3段階しかない：
+     弱     地と箱の輝度差 7〜12   … 何度でも使える
+     強     差 80以上              … 章の切り替えに1〜2回だけ
+     色だけ 差 0（赤の線で差す）    … 輝度を動かさずに変化を作る
+   🚨 いまの実装は全部が差0〜1だった。だから面が増えず「飽きる」。
+      同じ強度を続けないように上から順に割り当てる。
+   割り当て（生成側の実測値）：
+     サービス 弱8.6 / 実績 強88.5 / 依頼企業 色だけ / 料金 弱6.1 /
+     流れ 色だけ0.9 / 選ばれる理由 強2 47.3 / お知らせ 弱7.7 /
+     コラム 罫 / 会社概要 罫0.4 / 問い合わせ 強96.8
+   ============================================================ */
+:root{
+  --tone-box:#f4f4f4;      /* 弱の箱。白地(#fff)との輝度差 7.8 */
+  --tone-mid:#e6e4e1;      /* 強2の地。濃い箱との差を作るための中間 */
+  --tone-line:#e4e2df;     /* 罫 */
+}
+
+/* ① サービス ── 弱：白地 × 淡グレーの箱 */
+.svc{background:#fff}
+.svc__row{background:var(--tone-box)}
+.svc__row + .svc__row{margin-top:clamp(10px,1.1vw,16px)}
+
+/* ② 制作実績 ── 強：濃い地 × 白い箱（いまはカードが地に溶けている） */
+.wk__card{
+  background:#fff; padding:0 0 clamp(14px,1.5vw,22px);
+  border-radius:2px; overflow:hidden;
+}
+.wk__name,.wk__tag,.wk__ex{padding-inline:clamp(12px,1.25vw,18px)}
+/* 🚨 .is-dark .wk__name（2クラス）が効いているので、こちらも2クラス以上で書く */
+.is-dark .wk__card .wk__name{color:#111}
+.is-dark .wk__card .wk__tag{background:#f4f4f4; border-color:#e6e6e6; color:#5a5a5a}
+.is-dark .wk__card .wk__ex{color:#4a4a4a}   /* 白い箱の上なので墨に戻す（6.0:1）*/
+.is-dark .wk__card .wk__desc{color:#4a4a4a}
+
+/* ③ 主なご依頼企業 ── 色だけ：白地のまま、上辺に赤の細い線 */
+.cl{border-top:2px solid var(--brand)}
+
+/* ④ 料金 ── 弱：白地 × 淡グレーの箱（いまは地が #eae7e3 で箱と同色） */
+.pr{background:#fff}
+.pr__band,.pr__opts{background:transparent}
+
+/* ⑤ 制作の流れ ── 色だけ：白地・白い箱、上辺に赤の線 */
+#flow{background:#fff}
+.fl__row{border-top:2px solid var(--brand); background:#fff}
+
+/* ⑥ 選ばれる理由 ── 強2：中間グレーの地 × 濃い箱 */
+#choose{background:var(--tone-mid); background-image:none}
+#choose .sc__label{color:var(--brand-ink)}
+#choose .sc__h2{color:#111}
+#choose .sc__lead{color:#3a3a3a}
+#choose .ch__box{background:#23232a; color:#fff}
+#choose .ch__n{color:#fff}
+#choose .ch__t{color:#fff}
+#choose .ch__d{color:#c8c8cc}
+#choose .dbg{display:none}          /* 濃色用の背景アニメは中間地では邪魔になる */
+
+/* ⑦ お知らせ ── 弱：白地 × 淡グレーの箱 */
+#topics{background:#fff}
+.tp__row{background:var(--tone-box)}
+
+/* ⑧ コラム ── 罫：白地・罫だけ */
+#column{background:#fff}
+.co__row{background:transparent; border-top:1px solid var(--tone-line)}
+
+/* ⑨ 会社概要 ── 罫：白地・罫だけ（いまと同じ。続けて白にならないよう⑧を罫にした） */
+#outline{background:#fff}
+
+/* 実測して当て直したぶん ------------------------------------ */
+/* ④ 料金の箱は .pr__box（表の外枠）。.pr__cell は中のマスなので地が付かなかった */
+.pr__box{background:var(--tone-box); padding:clamp(20px,2.4vw,34px)}
+.pr__foot{background:transparent}
+
+/* ⑥ 選ばれる理由の箱は .ch__grid > div。.ch__box というクラスは存在しなかった */
+#choose .ch__grid > div{
+  background:#23232a; color:#fff;
+  padding:clamp(20px,2.4vw,34px) clamp(18px,2vw,28px);
+  border-radius:2px;
+}
+#choose .ch__grid > div .ch__n{color:#fff}
+#choose .ch__grid > div .ch__t{color:#fff}
+#choose .ch__grid > div .ch__d{color:#c8c8cc}
+#choose .ch__grid > div .ch__lk{color:#fff}
+
 @media (prefers-reduced-motion:reduce){
   .dbg{display:none}
   .svc__label::after,.cl__h2::after,.pr__h3::after{transform:none; transition:none}
@@ -1363,7 +1448,7 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 </section>
 
 <!-- ============ 制作会社の選び方 ============ -->
-<section class="sc is-dark" id="choose">
+<section class="sc sc--mid" id="choose">
   <svg class="dbg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <g class="far">
       <path class="ln f1" d="M-120 700 C 300 620, 620 790, 1560 545"/>
