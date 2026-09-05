@@ -905,10 +905,18 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 /* 横一列にしたので段の余白は gap に任せる */
 
 /* ② 制作実績 ── 強：濃い地 × 白い箱（いまはカードが地に溶けている） */
+/* 🚨 実績は 2,121px＝2.4画面あった。生成した節別デザイン（_fv2/ps/works.png）どおり
+   格子に畳む。4列→5列、表紙の比を 305/460(0.66) から 3/4(0.75) に詰める。
+   文言は1つも減らしていない（級数と桁で畳む） */
+.wk__grid{grid-template-columns:repeat(5,minmax(0,1fr)); gap:clamp(10px,1.25vw,18px)}
+.wk__ph{aspect-ratio:3/4}
 .wk__card{
-  background:#fff; padding:0 0 clamp(14px,1.5vw,22px);
+  background:#fff; padding:0 0 clamp(12px,1.32vw,19px);
   border-radius:2px; overflow:hidden;
 }
+.wk__card .wk__name{font-size:clamp(12px,1.11vw,16px); margin-top:clamp(10px,1.11vw,16px); line-height:1.45}
+.wk__card .wk__tag{margin-top:clamp(7px,.83vw,12px); padding:3px 7px; font-size:clamp(10px,.83vw,12px)}
+.wk__card .wk__ex{font-size:clamp(10.5px,.9vw,13px); line-height:1.7; margin-top:clamp(7px,.76vw,11px)}
 .wk__name,.wk__tag,.wk__ex{padding-inline:clamp(12px,1.25vw,18px)}
 /* 🚨 .is-dark .wk__name（2クラス）が効いているので、こちらも2クラス以上で書く */
 .is-dark .wk__card .wk__name{color:#111}
@@ -925,7 +933,39 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 
 /* ⑤ 制作の流れ ── 色だけ：白地・白い箱、上辺に赤の線 */
 #flow{background:#fff}
-.fl__row{border-top:2px solid var(--brand); background:#fff}
+/* 🚨 制作の流れは 1,897px＝2.1画面あった。生成した節別デザインどおり7ステップを横一列に。
+   番号→小見出し→説明を縦に積み、上辺の赤い線が「色だけ」の差になる */
+.fl__list{
+  display:grid; grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:clamp(8px,1.04vw,15px);
+  border-top:0;
+}
+.fl__row{
+  display:flex; flex-direction:column;
+  border-top:2px solid var(--brand); border-bottom:0;
+  background:#fff;
+  padding:clamp(12px,1.39vw,20px) clamp(8px,.9vw,13px) clamp(16px,1.67vw,24px);
+}
+.fl__n{font-size:clamp(17px,1.74vw,25px); margin-bottom:clamp(6px,.62vw,9px)}
+.fl__t{font-size:clamp(11px,1.04vw,15px); line-height:1.5}
+.fl__d{margin-top:clamp(6px,.69vw,10px); font-size:clamp(10.5px,.9vw,13px); line-height:1.7}
+
+/* 🚨 料金は 2,227px＝2.2画面。表と制作オプションを左右に並べて畳む */
+.pr__box{
+  display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+  gap:clamp(20px,3.06vw,44px);
+  align-items:start;
+}
+/* 🚨 .pr__foot は存在しない。子は h3/note/grid/h3/opts/more の6つで、
+   grid-column:1/-1 を当てると全部が別の段に落ちて逆に高くなった（2.22→2.57画面）。
+   左＝料金表、右＝制作オプション、最下段＝リンク、と明示して置く */
+.pr__box > *:nth-child(1){grid-column:1; grid-row:1}   /* 見出し「料金表」 */
+.pr__box > *:nth-child(2){grid-column:1; grid-row:2}   /* 注記 */
+.pr__box > *:nth-child(3){grid-column:1; grid-row:3}   /* 料金の表 */
+.pr__box > *:nth-child(4){grid-column:2; grid-row:1}   /* 見出し「制作オプション」 */
+.pr__box > *:nth-child(5){grid-column:2; grid-row:2 / span 2; align-self:start}
+.pr__box > *:nth-child(6){grid-column:1 / -1; grid-row:4; margin-top:clamp(14px,1.67vw,24px)}
+.pr__opts{grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(12px,1.39vw,20px); margin-top:clamp(12px,1.39vw,20px)}
 
 /* ⑥ 選ばれる理由 ── 強2：中間グレーの地 × 濃い箱 */
 #choose{background:var(--tone-mid); background-image:none}
@@ -1024,7 +1064,7 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
    ナビ・タグライン・CTAが横一列に収まらない。タグラインを落として詰める */
 @media (max-width:1200px){
   .head__tag{display:none}
-  .wk__grid{grid-template-columns:repeat(3,1fr)}
+  .wk__grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .head__nav{gap:clamp(12px,2.4vw,30px); padding-right:clamp(12px,1.8vw,24px)}
   .head__cta{flex:0 0 clamp(150px,19vw,240px)}
 }
@@ -1037,7 +1077,7 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
         375pxの溢れ判定は当てにならない。実機/実ブラウザで見ること */
   .svc__h2{font-size:clamp(17px,5vw,23px)}
   .svc__h2 br{display:none}
-  .wk__grid{grid-template-columns:repeat(2,1fr)}
+  .wk__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .ch__grid{grid-template-columns:1fr}
   .ol__wrap{grid-template-columns:1fr}
   .fl__row,.co__row,.tp__row{grid-template-columns:1fr; gap:8px}
