@@ -338,43 +338,50 @@ a{color:inherit;text-decoration:none}
   line-height:1.54;                    /* 実測 行送り74px ÷ 48px */
   letter-spacing:.02em;
 }
-.svc__list{margin-top:var(--g-body)}  /* 実測：段の上端 y361 */
-.svc__row{
-  display:grid; grid-template-columns:727fr 713fr;   /* 実測：境目 x727 */
-  height:clamp(210px,25.7vw,370px);      /* 実測 段の高さ 370px。min-heightだと伸びて下の段がずれる */
+/* 🚨 1項目1段のフルブリードだと節が 2,380px＝2.6画面になり、面として認識されない。
+   生成した節別デザイン（_fv2/ps/service.png）どおり、5フェーズを横一列に畳む。
+   実測：畳む前 2,380px → 目標 1画面（900px前後） */
+.svc__list{
+  margin-top:var(--g-body);
+  max-width:var(--wrap); margin-inline:auto; padding-inline:var(--pad);
+  display:grid; grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:clamp(10px,1.25vw,18px);
+  align-items:stretch;
 }
-.svc__row:nth-child(even) .svc__ph{order:2}   /* 偶数段は写真を右へ */
-/* 実測：偶数段（文字が左）の墨の左端は x96。奇数段は境目+86＝x813 */
-.svc__row:nth-child(even) .svc__txt{padding-left:clamp(28px,6.67vw,96px)}
-.svc__ph{position:relative; overflow:hidden; background:#e7e7e7}
+.svc__row{
+  display:flex; flex-direction:column;   /* 写真が上・文字が下 */
+  height:auto;                           /* 段の固定高さは横並びでは使わない */
+  overflow:hidden; border-radius:2px;
+}
+.svc__ph{position:relative; overflow:hidden; background:#e7e7e7; aspect-ratio:4/3}
 .svc__ph img{width:100%; height:100%; object-fit:cover; display:block}
 .svc__txt{
-  display:flex; flex-direction:column; justify-content:center; overflow:hidden;
-  padding:clamp(22px,3vw,44px) clamp(24px,5.97vw,86px) clamp(52px,7.5vw,108px);
-  /* 下だけ厚くして中身を上へ。実測：見出し行が18px下にあった */
+  display:flex; flex-direction:column; flex:1 1 auto;
+  padding:clamp(14px,1.53vw,22px) clamp(12px,1.32vw,19px) clamp(18px,1.94vw,28px);
 }
-.svc__t{display:flex; align-items:baseline; gap:clamp(10px,1.5vw,22px)}
+/* 横並びでは番号を大きく振れない。番号→和名→英字を縦に積む */
+.svc__t{display:flex; flex-direction:column; align-items:flex-start; gap:2px}
 .svc__n{
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-size:clamp(38px,5.28vw,76px); line-height:1; color:var(--brand-ink);
-  margin-left:clamp(-11px,-.76vw,-6px);   /* 実測：墨 26x53。明朝の「1」の左余白ぶん戻す */
+  font-size:clamp(20px,2.15vw,31px); line-height:1; color:var(--brand-ink); margin:0;
 }
 .svc__ja{
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-size:clamp(19px,2.5vw,36px); color:#000; letter-spacing:.02em;   /* 実測：2字で68px */
+  font-size:clamp(15px,1.53vw,22px); color:#000; letter-spacing:.02em;
 }
 .svc__en{
   font-family:"Hiragino Mincho ProN","Times New Roman",serif;
-  font-size:clamp(12px,1.32vw,19px); color:var(--brand-ink); letter-spacing:.02em; /* 実測：Planning が74px */
+  font-size:clamp(10px,.9vw,13px); color:var(--brand-ink); letter-spacing:.02em;
 }
 .svc__dash{
-  width:clamp(18px,1.94vw,28px); height:1.5px; background:var(--brand);
-  margin:clamp(10px,1.25vw,18px) 0 clamp(18px,2.29vw,33px);  /* 実測：見出しの墨下端482 → 罫531 → 本文578 */
+  display:block; width:clamp(14px,1.39vw,20px); height:1.5px; background:var(--brand);
+  margin:clamp(8px,.9vw,13px) 0 clamp(10px,1.11vw,16px);
 }
 .svc__d{
-  margin:0; font-size:clamp(14px,1.42vw,20.4px); line-height:1.76;   /* 実測 字送り20.4・行送り36 */
-  color:#333; letter-spacing:.02em;
+  margin:0; font-size:clamp(11px,1.04vw,15px); line-height:1.75;
+  color:#333; letter-spacing:.01em;
 }
+.svc__d br{display:none}                 /* 5列では改行位置が合わない。自然に折り返す */
 
 /* ============ WORKS 制作実績 ============
    出どころ： _sec/works1.png（1024x1536 ＝ 1440CSS幅）。値はすべて1440基準の実測
@@ -895,7 +902,7 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 /* ① サービス ── 弱：白地 × 淡グレーの箱 */
 .svc{background:#fff}
 .svc__row{background:var(--tone-box)}
-.svc__row + .svc__row{margin-top:clamp(10px,1.1vw,16px)}
+/* 横一列にしたので段の余白は gap に任せる */
 
 /* ② 制作実績 ── 強：濃い地 × 白い箱（いまはカードが地に溶けている） */
 .wk__card{
