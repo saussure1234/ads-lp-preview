@@ -71,7 +71,7 @@
   --dark-deep:#1e0b11;
   --pad:clamp(20px, 4.93vw, 71px);     /* 実測：CTAの箱の左端 71px。H1の65pxは字面 */
   --wrap:1200px;                       /* コンテンツの最大幅。1440超で端まで伸びるのを止める */
-  --head-h:clamp(60px, 6.87vw, 99px);  /* 実測：赤ブロックを画素走査 106モック → 99 */
+  --head-h:clamp(62px, 5.55vw, 80px);  /* モック実測は99pxだったが、実物ロゴが縦に高いぶん詰めた */
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -94,13 +94,16 @@ a{color:inherit;text-decoration:none}
 }
 .head__left{
   display:flex; align-items:center; gap:clamp(14px,2.5vw,36px);  /* 実測 ADS→タグライン 36px */
-  padding-left:clamp(16px,2.29vw,33px);   /* 実測 ロゴ左端 x33 */ flex:0 0 auto;
+  /* 🚨 本文は1200pxで止まるのに、ヘッダーだけ左端x33で揃っていなかった（1920pxで327pxのズレ）
+     コンテンツの左端に合わせる。赤のCTAは意匠として右端に付けたまま */
+  padding-left:max(var(--pad), calc((100vw - var(--wrap)) / 2)); flex:0 0 auto;
 }
 .logo{display:flex; align-items:center; gap:12px; min-height:44px}   /* 実測 34px → 44 */
 .logo__mark{
   /* 現行サイトの本物（見開きの本＋ADS＋Advertising Design Studio）。
      赤の D は #e50012。UIの赤 #aa1b45 とは別物なので画像のまま使う */
-  height:clamp(34px,4.31vw,62px); width:auto; display:block;  /* 実測：モックのロゴ枠 x33-213=180px 幅に合わせた（250:86 なので高さ62）*/
+  height:clamp(30px,3.19vw,46px); width:auto; display:block;
+  /* ヘッダー80pxに対して46px（58%）。62pxだと63%を占めて詰まって見えた */
 }
 .head__tag{
   font-size:clamp(12px,.861vw,12.4px);   /* 実測：字面 x249-473 = 225px ÷ 18字 */
@@ -136,7 +139,7 @@ a{color:inherit;text-decoration:none}
 .hero{
   position:relative;
   min-height:calc(100svh - var(--head-h));
-  padding:clamp(28px,5.83vw,84px) var(--pad) clamp(40px,7vw,90px);
+  padding:clamp(34px,7.15vw,103px) var(--pad) clamp(40px,7vw,90px);  /* ヘッダーを99→80にしたぶん +19 */
   /* 実測差分で71。ヘッダーを112→99にしたので +13 して墨の位置を保つ */
   display:flex; flex-direction:column; align-items:flex-start;
   overflow:hidden;
