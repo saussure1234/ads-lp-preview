@@ -51,8 +51,10 @@
   --rule:#d9d8d9;           /* 訴求の仕切り罫。実測 */
 
   /* 級数。1440基準の実測値を、1200〜1600でなめらかに効かせる */
-  --h1:clamp(38px, 5.14vw, 74px);      /* 実測 74px @1440 */
-  --lead:clamp(15px, 1.15vw, 16.5px);  /* 実測 16.4px */
+  --h1:clamp(26px, 3.19vw, 46px);      /* 採用案の実測は56px@1440。ただし1行11字なので
+                                          文字幅 506px に収まる 46px に落とす */
+  --lead:clamp(14px, 1.32vw, 19px);    /* 採用案の実測は24px@1536=22.5px@1440だが、
+                                          モックはポスター寸法なので実務値へ落とす */
   --pt:clamp(13px, .98vw, 14px);       /* 訴求 */
   --navfs:clamp(12px, .896vw, 12.9px); /* 実測：項目6つの墨の合計 506px に合わせた */
   /* 縦のリズム。実測でバラついていたものを3トークンに寄せた（2026-09-04）
@@ -136,46 +138,92 @@ a{color:inherit;text-decoration:none}
 .head__burger{display:none}
 
 /* ============ ヒーロー ============ */
+/* 採用案 _fv2/ADOPTED_fv.png（1536x1024）の実測を 1440x900 に換算して置く。
+   換算率は 横 x0.9375 / 縦 x0.879。
+   ・写真は左。画面左端まで裁ち落とし。実測 x0-974 → x0-913（幅913＝63.4%）
+   ・文字は右。実測 見出し左端 x1024 → x960（66.7%）
+   🚨 いままでは写真が右・文字が左で、採用案と左右が逆だった */
 .hero{
   position:relative;
-  min-height:calc(100svh - var(--head-h));
-  padding:clamp(34px,7.15vw,103px) var(--pad) clamp(40px,7vw,90px);  /* ヘッダーを99→80にしたぶん +19 */
-  /* 実測差分で71。ヘッダーを112→99にしたので +13 して墨の位置を保つ */
-  display:flex; flex-direction:column; align-items:flex-start;
+  /* 🚨 min-height だと行の高さが auto のままで、img の height:100% が効かない。
+     画像が自分の比(0.73)で 1145px まで伸びて行を押し広げていた。height で確定させる */
+  height:calc(100svh - var(--head-h));
+  min-height:520px;
+  display:grid;
+  /* 実測は 写真63.4%。ただし現行コピーの最長行は「"イメージづくり"を、」の11字で、
+     採用案の8字より3字長い。実測どおりだと見出しが4行に折れるので文字側を +5.6% 広げた */
+  grid-template-columns:58% minmax(0,1fr);
+  align-items:center;
   overflow:hidden;
 }
-/* 写真：右側に敷き、左端は地に溶かす */
+/* 写真：左を埋める。地(#f1f1f1)は写真側で合わせ込んであるので溶かす処理は要らない
+   （hero_covers.jpg は縁の地を実測して #f1f1f1 に平行移動済み・差0） */
 .hero__photo{
-  position:absolute; inset:0 0 0 auto;
-  width:clamp(320px, 62%, 1000px);
+  grid-column:1; grid-row:1;
+  align-self:stretch;
+  min-height:0;
+  padding:clamp(16px,3.05vw,44px) 0;   /* 紙が上下の端に触れないように */
   z-index:0; pointer-events:none;
 }
 .hero__photo img{
-  width:100%; height:100%; object-fit:cover; object-position:center right;
+  /* 🚨 cover にすると 2.4:1 の帯が縦長の枠で4倍に拡大され、表紙が1枚しか見えない。
+     写真の地は #f1f1f1 に合わせてあるので contain で浮かせる */
+  width:100%; height:100%; object-fit:contain; object-position:center;
   display:block;
-}
-.hero__photo::after{
-  content:""; position:absolute; inset:0;
-  background:linear-gradient(90deg,
-    var(--bg) 0%, rgba(241,241,241,.86) 12%, rgba(241,241,241,0) 34%);
 }
 /* 🚨 .hero > * だと .hero__photo（同じ詳細度・先に書いてある）を上書きして
    absolute が relative に戻る。写真は除外する */
 .hero > *:not(.hero__photo){position:relative; z-index:1}
 
+/* 右カラム。採用案の実測：見出しの左端 x1024/1536 → x960/1440。
+   写真枠が 913px までなので、カラム内で 47px 右へ入る */
+.hero__inner{
+  grid-column:2; grid-row:1;
+  padding-left:clamp(18px,3.26vw,47px);
+  padding-right:var(--pad);
+  display:flex; flex-direction:column; align-items:flex-start;
+}
 .h1{
   margin:0; font-weight:400; color:var(--ink);
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",
               "Noto Serif JP","Times New Roman",serif;
   font-size:var(--h1);
-  margin-left:-6px;                       /* 実測：字面が箱より6px左に出る */
-  line-height:1.30;                      /* 実測 96/74 */
+  margin-left:-4px;                      /* 実測：字面が箱より左に出る */
+  line-height:1.47;                      /* 実測 行送り88 / 級数60 */
   letter-spacing:.01em;
 }
 .lead{
-  margin:clamp(8px,.9vw,13px) 0 0;       /* 実測差分で 45→13（40px下がっていた）*/
-  font-size:var(--lead); line-height:1.9;/* 実測 31/16.4 */
+  /* 実測：見出し2行目の下端 y562 → 説明の上端 y609＝47px（@1536）→ 44px@1440 */
+  margin:clamp(16px,3.05vw,44px) 0 0;
+  font-size:var(--lead); line-height:1.85;
   color:var(--body); letter-spacing:.02em;
+}
+/* 赤の短い罫。実測 x1026-1159（幅134）y692 太さ3 @1536 → 幅126 太さ3 @1440。
+   色は原画の最暗5%が #b1123b。ブランド実測 #aa1b45 に寄せる */
+.hero__rule{
+  display:block; width:clamp(64px,8.75vw,126px); height:3px;
+  background:var(--brand);
+  margin-top:clamp(20px,3.82vw,55px);    /* 実測 説明の下端 y631 → 罫 y692＝61px@1536 */
+}
+/* 右下の SCROLL。実測 x1430-1482 y885-974 @1536 */
+.hero__scroll{
+  grid-column:2; grid-row:1; align-self:end; justify-self:end;
+  margin:0 var(--pad) clamp(18px,3.1vw,45px) 0;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  font-size:11px; letter-spacing:.12em; color:#6b6b6b;
+  font-family:"Helvetica Neue",Arial,sans-serif;
+}
+.hero__scroll::after{
+  content:""; width:1px; height:clamp(30px,3.6vw,52px); background:#c7c7c7;
+}
+/* ---- FV直下の帯（訴求3点＋CTA）----
+   採用案のFVには載っていない要素。消さずにここへ降ろした */
+.herobar{background:var(--bg); border-top:1px solid var(--rule)}
+.herobar__in{
+  max-width:var(--wrap); margin-inline:auto;
+  padding:clamp(18px,2.4vw,34px) var(--pad);
+  display:flex; align-items:center; justify-content:space-between;
+  gap:clamp(16px,3vw,44px); flex-wrap:wrap;
 }
 /* ---- 訴求3点 ---- */
 .pts{
@@ -800,8 +848,8 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
   max-width:var(--wrap); margin-left:auto; margin-right:auto;
 }
 .hero{max-width:none}
-.hero__inner{max-width:var(--wrap); margin:0 auto; width:100%;
-  display:flex; flex-direction:column; align-items:flex-start}
+/* 🚨 ここで --wrap(1200px) の中央寄せに戻すと、採用案の「写真63.4% / 文字36.6%」の
+   桁が壊れて文字が左へ寄る。ヒーローだけは全幅の桁のままにする */
 
 /* ============ 動き ============
    ・スクロールで節が立ち上がる（IntersectionObserver）
@@ -884,14 +932,22 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
   .fixcta{display:block}
   body{padding-bottom:60px}          /* 固定CTAのぶん */
   .ct,.ft{padding-bottom:clamp(40px,10vw,70px)}
-  .hero{padding-bottom:clamp(30px,8vw,60px)}
+  /* スマホは1列に畳む。文字 → 写真の順（CTAは .herobar でさらに下） */
+  .hero{
+    grid-template-columns:minmax(0,1fr);
+    height:auto; min-height:0;   /* PCで固定した高さをスマホで解除 */
+    padding:clamp(26px,7vw,44px) 0 clamp(30px,8vw,60px);
+    row-gap:clamp(22px,6vw,34px);
+  }
+  .hero__inner{
+    grid-column:1; grid-row:1;
+    padding-inline:var(--pad);
+  }
   .hero__photo{
-    position:relative; inset:auto; width:calc(100% + var(--pad)*2);
-    margin:26px calc(-1*var(--pad)) 0; height:min(42vw,260px); order:9;
+    grid-column:1; grid-row:2;
+    align-self:auto; height:min(74vw,340px); padding:0;
   }
-  .hero__photo::after{
-    background:linear-gradient(180deg, var(--bg) 0%, rgba(241,241,241,0) 26%);
-  }
+  .hero__scroll{display:none}   /* 1画面に収まらないので出さない */
   .pts{flex-wrap:wrap; gap:10px 0}
   .pt{padding-left:0; padding-right:16px}
   .pt + .pt{border-left:0}
@@ -935,23 +991,33 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 
 <section class="hero">
   <div class="hero__photo">
-    <img src="img/hero.webp" alt="ADSが制作した会社案内・パンフレット">
+    <!-- 実写。mv1@2x.webp（3840x1600・制作物の表紙が白ホリで並ぶ）を採用案の枠の比 1.33 で
+         切り出し、縁の地を実測して #f1f1f1 へ平行移動したもの（差0）。
+         ※採用案は「1冊を開いて白ホリに浮かせた」カットだが、その撮影素材は存在しない。
+           撮り直す場合はここを差し替える -->
+    <img src="img/hero_covers.jpg" alt="ADSが制作した会社案内・パンフレット">
   </div>
 
   <div class="hero__inner">
     <h1 class="h1">会社の<br>&quot;イメージづくり&quot;を、<br>はじめましょう。</h1>
-  
     <p class="lead">伝えたい価値を、かたちにする。<br>誠実なデザインで、企業の信頼をつくります。</p>
-  
+    <i class="hero__rule" aria-hidden="true"></i>
+  </div>
+
+  <span class="hero__scroll" aria-hidden="true">SCROLL</span>
+</section>
+
+<!-- 訴求3点とCTA。採用案のFVには無いので、消さずにFVの直下へ降ろした -->
+<div class="herobar">
+  <div class="herobar__in">
     <div class="pts">
       <div class="pt pt--a"><span class="pt__ico"></span><span class="pt__t">デザイン<br>3案以上</span></div>
       <div class="pt pt--b"><span class="pt__ico"></span><span class="pt__t">修正回数<br>無制限</span></div>
       <div class="pt pt--c"><span class="pt__ico"></span><span class="pt__t">小部数の<br>印刷に対応</span></div>
     </div>
-  
     <a class="cta" href="/#contact">デザイン相談（無料）<span class="arw"></span></a>
   </div>
-</section>
+</div>
 
 <!-- ============ OUR SERVICE ============ -->
 <section class="svc" id="service">
