@@ -984,7 +984,31 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 
 /* ⑧ コラム ── 罫：白地・罫だけ */
 #column{background:#fff}
-.co__row{background:transparent; border-top:1px solid var(--tone-line)}
+/* 🚨 コラムは 1.95画面。4件を縦に積んでいた。2列×2段に畳む。
+   説明文が長いので5列や横一列は入らない（実測：1件の説明が2.0行送りで4〜5行） */
+.co__list{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(16px,2.22vw,32px) clamp(20px,3.06vw,44px);
+  border-top:0;
+}
+.co__row{
+  background:transparent;
+  border-top:1px solid var(--tone-line); border-bottom:0;
+  padding:clamp(16px,2.15vw,31px) 0 0;
+  grid-template-columns:clamp(46px,5.0vw,72px) 1fr;
+  gap:clamp(12px,1.53vw,22px);
+}
+.co__n{font-size:clamp(22px,2.5vw,36px)}
+.co__t{font-size:clamp(14px,1.32vw,19px)}
+.co__d{margin-top:clamp(9px,1.11vw,16px); font-size:clamp(12px,1.04vw,15px); line-height:1.85}
+.co__t br{display:none}
+
+/* 🚨 実績は5列にしても 1.99画面。見出しの塊が 350px 近くあるのが効いている。
+   節の上下と見出し周りを詰める（文言は触らない） */
+.wk{padding:clamp(48px,5.6vw,80px) var(--pad)}
+.wk__h2{margin-top:clamp(10px,1.11vw,16px)}
+.wk__lead{margin-top:clamp(8px,.9vw,13px)}
+.wk__grid{margin-top:clamp(22px,2.5vw,36px)}
 
 /* ⑨ 会社概要 ── 罫：白地・罫だけ（いまと同じ。続けて白にならないよう⑧を罫にした） */
 #outline{background:#fff}
@@ -1087,10 +1111,16 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
   /* 🚨 消すのは min-height ではなく height。ベースの height:clamp(210px,25.7vw,370px)
      が残ると、393px では段が210pxしかないのに中身は写真184＋文章133＝317px になり、
      あふれた107pxぶん写真が文字に覆いかぶさる（番号・見出し・説明が全部隠れていた） */
-  .svc__row{grid-template-columns:1fr; height:auto; min-height:0}
-  .svc__row:nth-child(even) .svc__ph{order:0}   /* スマホは写真を上で統一 */
-  .svc__ph{aspect-ratio:620/290}
-  .svc__txt{padding:22px var(--pad) 34px}
+  /* 🚨 PCで横一列に畳んだぶん、スマホでは列数を落とし直す必要がある。
+     ここを入れ忘れて、393pxでもサービス5列・流れ7列のままだった */
+  .svc__list{grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+  .svc__row{height:auto; min-height:0}
+  .svc__ph{aspect-ratio:4/3}
+  .svc__txt{padding:12px 12px 18px}
+  .fl__list{grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+  .co__list{grid-template-columns:minmax(0,1fr); gap:0}
+  .pr__box{grid-template-columns:minmax(0,1fr); gap:0}
+  .pr__box > *:nth-child(n){grid-column:1; grid-row:auto}   /* PCの桁指定を解除 */
   .head__nav,.head__tag{display:none}
   .head__burger{display:block}
   /* 🚨 ナビを display:none にすると margin-left:auto も消えるので、CTAが
