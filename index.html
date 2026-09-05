@@ -162,13 +162,13 @@ a{color:inherit;text-decoration:none}
   grid-column:1; grid-row:1;
   align-self:stretch;
   min-height:0;
-  padding:clamp(16px,3.05vw,44px) 0;   /* 紙が上下の端に触れないように */
+  padding:clamp(10px,1.9vw,28px) 0;    /* 採用案は紙が画面の左端まで裁ち落ちる。上下だけ空ける */
   z-index:0; pointer-events:none;
 }
 .hero__photo img{
   /* 🚨 cover にすると 2.4:1 の帯が縦長の枠で4倍に拡大され、表紙が1枚しか見えない。
      写真の地は #f1f1f1 に合わせてあるので contain で浮かせる */
-  width:100%; height:100%; object-fit:contain; object-position:center;
+  width:100%; height:100%; object-fit:contain; object-position:left center;
   display:block;
 }
 /* 🚨 .hero > * だと .hero__photo（同じ詳細度・先に書いてある）を上書きして
@@ -991,10 +991,9 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 
 <section class="hero">
   <div class="hero__photo">
-    <!-- 実写。mv1@2x.webp（3840x1600・制作物の表紙が白ホリで並ぶ）を採用案の枠の比 1.33 で
-         切り出し、縁の地を実測して #f1f1f1 へ平行移動したもの（差0）。
-         ※採用案は「1冊を開いて白ホリに浮かせた」カットだが、その撮影素材は存在しない。
-           撮り直す場合はここを差し替える -->
+    <!-- 採用案 _fv2/ADOPTED_fv.png から見開きだけを外接で切り出したもの（985x833）。
+         縁の地は実測して #f1f1f1 へ平行移動済み（差0）。
+         ※これは生成画像。実際に撮影した素材ではない。本番前に撮影に差し替える前提 -->
     <img src="img/hero_covers.jpg" alt="ADSが制作した会社案内・パンフレット">
   </div>
 
