@@ -868,7 +868,10 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
   .pr__grid,.pr__opts{grid-template-columns:repeat(2,1fr)}
   .pr__cell:nth-child(n+3){border-top:1px solid #ececec}
   .pr__opt+.pr__opt{border-left:0}
-  .svc__row{grid-template-columns:1fr; min-height:0}
+  /* 🚨 消すのは min-height ではなく height。ベースの height:clamp(210px,25.7vw,370px)
+     が残ると、393px では段が210pxしかないのに中身は写真184＋文章133＝317px になり、
+     あふれた107pxぶん写真が文字に覆いかぶさる（番号・見出し・説明が全部隠れていた） */
+  .svc__row{grid-template-columns:1fr; height:auto; min-height:0}
   .svc__row:nth-child(even) .svc__ph{order:0}   /* スマホは写真を上で統一 */
   .svc__ph{aspect-ratio:620/290}
   .svc__txt{padding:22px var(--pad) 34px}
