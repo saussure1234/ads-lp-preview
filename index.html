@@ -166,27 +166,33 @@ a{color:inherit;text-decoration:none}
   perspective:1500px; perspective-origin:58% 46%;
   z-index:0; pointer-events:none;
 }
-/* 奥行きの下地。真後ろの淡い光と、床に落ちる大きな影 */
+/* 🚨 カードを複数並べていた頃の「後ろの光＋床の影」は外した。
+   いまの見開きは生成画像の中に光も影も入っており、重ねると枠の境目に段差が出る
+   （実測：写真の外 241 に対して内 237、下は自前の影で 222）。
+   奥行きは残す最小限として、ごく淡い縦のグラデーションだけにする */
 .hero__stage::before{
   content:""; position:absolute; inset:0;
-  background:
-    radial-gradient(58% 46% at 46% 38%, #ffffff 0%, rgba(255,255,255,0) 68%),
-    radial-gradient(46% 22% at 44% 88%, rgba(24,18,21,.10) 0%, rgba(24,18,21,0) 70%);
+  background:linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 42%);
 }
-.hero__card{
-  position:absolute; display:block;
-  left:var(--x); top:var(--y); width:var(--w);
-  transform:translateZ(var(--z)) rotateY(var(--ry)) rotateZ(var(--rz));
-  transform-style:preserve-3d;
-  box-shadow:0 calc(var(--w) * .06) calc(var(--w) * .13) rgba(26,18,22,.20),
-             0 calc(var(--w) * .012) calc(var(--w) * .03) rgba(26,18,22,.10);
-  animation:cardFloat var(--dur) ease-in-out infinite alternate;
-  animation-delay:var(--delay);
+.hero__spread{
+  /* 🚨 写真の縁は自前のビネットで地より4/255暗く、四角い境目が見える。
+     地を合わせても消えないので、縁をぼかして溶かす（切り出しに余白92pxを残してある）*/
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 4.5%,#000 95.5%,transparent 100%),
+                     linear-gradient(180deg,transparent 0,#000 5.5%,#000 94.5%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent 0,#000 4.5%,#000 95.5%,transparent 100%),
+             linear-gradient(180deg,transparent 0,#000 5.5%,#000 94.5%,transparent 100%);
+  mask-composite:intersect;
+  position:absolute; inset:0; margin:auto;
+  max-width:100%; max-height:100%; width:auto; height:auto;
+  object-fit:contain;
+  animation:spreadFloat 18s ease-in-out infinite alternate;
 }
 /* 動き：気配だけ。図形として意識に上がったら失敗 */
-@keyframes cardFloat{
-  from{ transform:translateZ(var(--z)) translateY(0)                 rotateY(var(--ry))              rotateZ(var(--rz)); }
-  to  { transform:translateZ(var(--z)) translateY(var(--lift,-10px)) rotateY(calc(var(--ry) + 1.6deg)) rotateZ(calc(var(--rz) + .5deg)); }
+@keyframes spreadFloat{
+  from{ transform:translate3d(0,0,0)        rotateY(0)      rotateZ(0); }
+  to  { transform:translate3d(0,-12px,26px) rotateY(1.8deg) rotateZ(.5deg); }
+}
 }
 /* 🚨 .hero > * だと .hero__stage（同じ詳細度・先に書いてある）を上書きして
    position が戻る。舞台は除外する */
@@ -1008,15 +1014,14 @@ textarea.ct__in{min-height:clamp(110px,10.4vw,150px); resize:vertical}
 </nav>
 
 <section class="hero">
-  <!-- 制作物の表紙。1点ずつ 1024x1536 で生成（gen_fv2.py covers）→ 紙の外接で切って長辺1000。
-       もとの実素材は 274x385 しかなく荒かったので置き換えた。
-       立体感と動きはCSS（--x/--y/--z/--ry/--rz）。※本番前に実際の制作物へ差し替える前提 -->
+  <!-- 見開きは、採用モック（_fv2/ADOPTED_fv.png）を images/edits の入力に渡して
+       生成し直したもの（gen_fv2.py heropick）。モックから引き継いだのは
+       角度・光・紙の厚みと影・赤の効かせ方だけで、紙面の中身は作り直している。
+       4案から、枠(835x820)を72%埋める heropick4 を採用。
+       地は 233 → 241 へ折れ線で写して #f1f1f1 に一致（差1・白飛び0%）。
+       ※生成画像。本番前に撮影素材へ差し替える前提 -->
   <div class="hero__stage" aria-hidden="true">
-    <img class="hero__card" src="img/wk/iryo.jpg"     alt="" style="--x:3%;  --y:7%;  --w:21%; --z:-150px; --ry:-16deg; --rz:-6deg; --dur:15s; --delay:-2s; --lift:-8px">
-    <img class="hero__card" src="img/wk/shokuhin.jpg" alt="" style="--x:55%; --y:9%;  --w:28%; --z:-30px;  --ry:-10deg; --rz:-4deg; --dur:13s; --delay:-6s; --lift:-12px">
-    <img class="hero__card" src="img/wk/it.jpg"       alt="" style="--x:59%; --y:53%; --w:26%; --z:-70px;  --ry:-8deg;  --rz:3deg;  --dur:17s; --delay:-9s; --lift:-9px">
-    <img class="hero__card" src="img/wk/saiyo.jpg"    alt="" style="--x:-8%; --y:32%; --w:32%; --z:10px;   --ry:-19deg; --rz:2deg;  --dur:16s; --delay:-4s; --lift:-11px">
-    <img class="hero__card" src="img/wk/kenchiku.jpg" alt="" style="--x:20%; --y:14%; --w:38%; --z:70px;   --ry:-13deg; --rz:-3deg; --dur:14s; --delay:0s;  --lift:-14px">
+    <img class="hero__spread" src="img/hero_spread.jpg" alt="">
   </div>
 
   <div class="hero__inner">
