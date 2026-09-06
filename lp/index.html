@@ -33,6 +33,7 @@
 
   /* 桁 */
   --wrap:1200px;
+  --head-h:clamp(62px,5.55vw,80px);   /* 追従ヘッダーの高さ。トップページと同じ */
   --pad:clamp(20px,4.93vw,71px);
 
   /* 級数。モックはポスター寸法なので実務値へ落としてある */
@@ -50,7 +51,10 @@
 }
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:calc(var(--head-h) + 8px);   /* 追従ヘッダーにアンカーが潜らないように */
+}
 body{
   margin:0; background:var(--bg); color:var(--text);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
@@ -60,23 +64,85 @@ body{
 img{max-width:100%; height:auto}
 a{color:inherit}
 
-/* 追従CTA。構成案の指定：スマホは画面下部固定、PCは右下固定 */
-.lpcta{
-  position:fixed; z-index:60; right:clamp(16px,1.8vw,26px); bottom:clamp(16px,1.8vw,26px);
-  display:flex; align-items:center; gap:clamp(10px,1.1vw,16px);
-  padding:clamp(12px,1.25vw,18px) clamp(18px,1.94vw,28px);
-  background:var(--blue); color:#fff; text-decoration:none;
-  box-shadow:0 6px 24px rgba(20,16,18,.22);
+/* ══════ ヘッダー ══════
+   トップページ（fv/index.html）の .head をそのまま移植し、色だけ青トークンに置き換えた。
+   ナビは下層ページではなくLP内のアンカー。バーガーはJSが要るので置かず、
+   900px以下はロゴ＋CTAだけにする（LPの通常の作法）。 */
+.lph{
+  position:sticky; top:0; z-index:50;
+  height:var(--head-h); display:flex; align-items:stretch;
+  background:var(--bg); border-bottom:1px solid var(--line);
 }
-.lpcta__t{font-weight:700; font-size:clamp(13px,1.11vw,16px); line-height:1.3}
-.lpcta__s{display:block; margin-top:3px; font-weight:400; font-size:clamp(10.5px,.83vw,12px); opacity:.9}
-.lpcta:hover{background:var(--blue-dark)}
+.lph__left{
+  display:flex; align-items:center; gap:clamp(14px,2.5vw,36px);
+  /* 🚨 ヘッダーだけ x=--pad で始まると本文の桁（1200中央＝1440で120）とズレる。
+     本文の左端に合わせる */
+  padding-left:max(var(--pad), calc((100vw - var(--wrap)) / 2));
+  flex:0 0 auto;
+}
+.lph__logo{display:flex; align-items:center; min-height:44px}
+.lph__logo img{height:clamp(30px,3.19vw,46px); width:auto; display:block}
+.lph__tag{
+  margin:0; font-size:clamp(12px,.861vw,12.4px);
+  color:var(--mute); letter-spacing:.02em; white-space:nowrap;
+}
+.lph__nav{
+  margin-left:auto; display:flex; align-items:center;
+  gap:clamp(13px,2.4vw,34.5px);
+  font-size:clamp(12px,.97vw,14px); color:var(--text); white-space:nowrap;
+  padding-right:clamp(16px,2.57vw,37px);
+}
+.lph__nav a{display:flex; align-items:center; align-self:stretch; text-decoration:none}
+.lph__nav a:hover{color:var(--blue)}
+.lph__cta{
+  flex:0 0 clamp(170px,19.58vw,282px);
+  background:var(--blue); color:#fff; text-decoration:none;
+  display:flex; align-items:center; justify-content:flex-start;
+  padding-left:clamp(14px,2.29vw,33px);
+  gap:clamp(14px,2.78vw,40px);
+  font-size:clamp(12px,1.02vw,14.5px); font-weight:700; letter-spacing:.04em;
+  transition:background .2s;
+}
+.lph__cta:hover{background:var(--blue-dark)}
+.lph__arw{width:clamp(24px,3.47vw,50px); height:1px; background:#fff; position:relative}
+.lph__arw::after{
+  content:""; position:absolute; right:-1px; top:50%;
+  width:11px; height:1px; background:#fff;
+  transform-origin:right center; transform:translateY(-50%) rotate(-38deg);
+}
+@media (max-width:1180px){
+  .lph__tag{display:none}
+  .lph__nav{gap:clamp(12px,2.4vw,30px); padding-right:clamp(12px,1.8vw,24px)}
+  .lph__cta{flex:0 0 clamp(150px,19vw,240px)}
+}
 @media (max-width:900px){
-  .lpcta{
-    left:0; right:0; bottom:0; border-radius:0;
-    justify-content:center; padding:12px 16px; box-shadow:0 -4px 18px rgba(20,16,18,.18);
-  }
-  body{padding-bottom:64px}   /* 固定CTAのぶん */
+  .lph__nav{display:none}
+  .lph__left{padding-left:var(--pad)}
+  .lph__cta{flex:0 0 auto; margin-left:auto; padding-inline:16px; font-size:12px}
+  .lph__arw{display:none}
+}
+
+/* ══════ フッター ══════ */
+.lpf{
+  background:var(--navy); color:rgba(255,255,255,.86);
+  /* 🚨 下は 50px では足りない。右下に固定されるCTA（bottom:22 + 高さ82 ＝ 下から104px）が
+     Copyright に乗る。104px を越える余白を取る */
+  padding:clamp(40px,5.56vw,80px) var(--pad) clamp(90px,7.64vw,110px);
+}
+.lpf__nav,.lpf__cr{max-width:var(--wrap); margin-inline:auto}
+.lpf__nav{
+  display:flex; flex-wrap:wrap; justify-content:center;
+  gap:clamp(6px,1.6vw,23px); font-size:clamp(12px,.97vw,14px);
+}
+.lpf__nav a{display:flex; align-items:center; min-height:44px; padding:0 10px; text-decoration:none}
+.lpf__nav a:hover{color:#fff}
+.lpf__cr{
+  /* 🚨 ショートハンドの margin で書くと、上の margin-inline:auto を 0 に潰して左寄せになる */
+  margin:clamp(24px,2.78vw,40px) auto 0; text-align:center;
+  font-size:12px; color:rgba(255,255,255,.55);
+}
+@media (max-width:900px){
+  body{padding-bottom:70px}          /* 画面下に固定されるCTA（.scontact__fixed 66px）のぶん */
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -2241,9 +2307,36 @@ a{color:inherit}
   /* 固定した帯が箱の下端を隠さないよう、節の下に帯のぶんを空ける */
   .scontact{ padding-bottom:calc(var(--sec-y) + 66px); }
 }
+
+/* ══════ 桁の統一（節をまたぐ調整なので、節の部品ではなくここで持つ） ══════
+   節ごとに独立して組んだ結果、文字の左端が 120 / 135 / 143 / 172 / 197 の5種類あった。
+   桁は2本だけにする：
+     面   … 画面幅 − --pad×2   （1440で x71-1369）
+     文字 … --wrap 1200 を面の中央（1440で x120-1320）＝ 残り7節と同じ
+   面の内側の余白 = (面幅 − 1200) / 2。% は「親の幅」に対して解決されるので、
+   親に --pad が無い節（8・11）には先に親へ --pad を入れて条件を揃える。 */
+.scompare,.scontact{padding-inline:var(--pad)}
+.spain__box,.strans__panel,.scompare__box,.scontact__card{
+  width:auto; max-width:none; margin-inline:0;
+  padding-inline:max(clamp(16px,3.5vw,24px), calc((100% - var(--wrap)) / 2));
+}
 </style>
 </head>
 <body>
+<header class="lph">
+  <div class="lph__left">
+    <a class="lph__logo" href="#fv"><img src="data:image/png;base64,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" alt="ADS株式会社 Advertising Design Studio"></a>
+    <p class="lph__tag">会社案内・パンフレットのデザイン制作</p>
+  </div>
+  <nav class="lph__nav">
+    <a href="#trans">制作実例</a>
+    <a href="#record">実績</a>
+    <a href="#flow">進め方</a>
+    <a href="#price">料金</a>
+    <a href="#faq">よくあるご質問</a>
+  </nav>
+  <a class="lph__cta" href="#contact">デザイン相談（無料）<span class="lph__arw"></span></a>
+</header>
 <section class="sfv" id="fv">
   <div class="sfv__top">
 
@@ -2885,8 +2978,12 @@ a{color:inherit}
     </span>
   </a>
 </section>
-<a class="lpcta" href="#contact">
-  <span class="lpcta__t">お問い合わせ｜デザイン相談（無料）<span class="lpcta__s">1営業日以内にご返信</span></span>
-</a>
+<footer class="lpf">
+  <nav class="lpf__nav">
+    <a href="#trans">制作実例</a><a href="#record">実績</a><a href="#flow">進め方</a>
+    <a href="#price">料金</a><a href="#faq">よくあるご質問</a><a href="#company">会社情報</a>
+  </nav>
+  <p class="lpf__cr">Copyright © ads co.,ltd. All Rights Reserved.</p>
+</footer>
 </body>
 </html>
