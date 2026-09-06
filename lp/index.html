@@ -7,48 +7,52 @@
 <title>会社案内・パンフレットのデザイン制作｜ADS株式会社</title>
 <meta name="description" content="御社の“らしさ”を読み解いて、伝わる一冊に翻訳します。企画・取材・撮影・コピー・デザイン・印刷まで一貫対応。デザインは3案以上、修正回数は無制限。">
 <style>
+/* ADS ランディングページ ── 青系（soft）のトークン
+   採用FV _lp/fvblue_soft.png の実測から起こしたもの。
+   方向：納得いくまで寄り添う → 誠実さ → 青系（2026-09-06 指示）
+
+   実測値（1536px幅のモック → 1440px実装への換算率 横 x0.9375）
+     地      最頻 #f0f5fb / 平均 #eff4fa → --bg
+     主ボタン 最頻 #1765ab（白文字 6.02:1）→ --blue
+     濃紺    #0f2b4a（地に対し 12.97:1）→ --navy
+     見出し  字送り 47px@1536 → 44px@1440 ／ 行送り 71 → 66（比 1.51）
+     リード  行送り 32 → 30
+     左カラムの左端 x128 → 120
+*/
 :root{
-  /* 実測した現行サイトのブランド色 */
-  --brand:#e50012;          /* ロゴのDの実測色。白文字 4.84:1 */
-  --brand-dark:#c00010;     /* hover */
-  /* 🚨 #e50012 は「白文字＋赤地」なら4.84で通るが、「淡い地＋赤文字」だと
-     #f1f1f1 で4.28・#eae7e3 で3.93と足りない。文字に使う赤は濃度を上げる */
-  --brand-ink:#cc0011;      /* 白5.87 / #f1f1f1 5.20 / #eae7e3 4.77 */
-  --ink:#000;               /* H1。実測 #010101 */
-  --body:#0e0d0e;           /* リード。実測 */
-  --nav:#2c2a2b;            /* ナビ。実測 */
-  --bg:#f1f1f1;             /* 地。実測 */
-  --rule:#d9d8d9;           /* 訴求の仕切り罫。実測 */
-  /* 級数。1440基準の実測値を、1200〜1600でなめらかに効かせる */
-  --h1:clamp(26px, 3.19vw, 46px);      /* 採用案の実測は56px@1440。ただし1行11字なので
-                                          文字幅 506px に収まる 46px に落とす */
-  --lead:clamp(14px, 1.32vw, 19px);    /* 採用案の実測は24px@1536=22.5px@1440だが、
-                                          モックはポスター寸法なので実務値へ落とす */
-  --pt:clamp(13px, .98vw, 14px);       /* 訴求 */
-  --navfs:clamp(12px, .896vw, 12.9px); /* 実測：項目6つの墨の合計 506px に合わせた */
-  /* 縦のリズム。実測でバラついていたものを3トークンに寄せた（2026-09-04）
-     小見出し→見出し 41/45 ／ 見出し→リード 36/42/44 ／ 見出し→本体 64/69/77/93/141/166 */
-  --g-eyebrow:clamp(24px,3.13vw,45px);
-  --g-lead:clamp(24px,3.06vw,44px);
-  --g-body:clamp(40px,5.35vw,77px);
-  --body:clamp(13.5px,1.11vw,16px);    /* 本文。15px→16px */
-  --sec-y:clamp(70px,10.3vw,148px);    /* 節の上下 */
-  /* 見出しの級数。実測で37/45/48/58/84の5種あったのを2種に */
-  --h2:clamp(26px,3.33vw,48px);
-  --h2-lg:clamp(30px,4.03vw,58px);
-  /* 地の交互。実測の差は最大1.08しかなく、メリハリになっていなかった */
-  --paper:#eae7e3;                     /* 白との差 1.27。1.15では見えなかった */
-  --dark:#1e1e20;                      /* 濃色章。ワイン(#2c1119)だと赤の隣で紫に見えたので中性の炭色へ。白文字 16.64 */
-  --dark-deep:#141416;
-  --pad:clamp(20px, 4.93vw, 71px);     /* 実測：CTAの箱の左端 71px。H1の65pxは字面 */
-  --wrap:1200px;                       /* コンテンツの最大幅。1440超で端まで伸びるのを止める */
-  --head-h:clamp(62px, 5.55vw, 80px);  /* モック実測は99pxだったが、実物ロゴが縦に高いぶん詰めた */
+  /* 色。実測。ほかの色を足さない */
+  --bg:#eff4fa;              /* 地。淡い青 */
+  --navy:#0f2b4a;          /* 濃色章の地・強調の箱。地に対し 12.97:1 */
+  --blue:#1765ab;          /* 主ボタン・罫のアクセント。白文字 6.02:1 */
+  --blue-dark:#0b56a2;    /* hover。白文字 7.32:1 */
+  --ink:#111;             /* 見出しの墨。地に対し 17.08:1 */
+  --text:#2b3440;         /* 本文。地に対し 11.39:1 */
+  --mute:#5a6b7d;         /* 注記。地に対し 4.95:1 */
+  --line:#d5e0ec;         /* 細い罫 */
+  --card:#fff;            /* 「弱」の箱 */
+
+  /* 桁 */
+  --wrap:1200px;
+  --pad:clamp(20px,4.93vw,71px);
+
+  /* 級数。モックはポスター寸法なので実務値へ落としてある */
+  --h1:clamp(28px,3.06vw,44px);        /* FV見出し。実測 44px@1440 */
+  --h2:clamp(24px,2.36vw,34px);        /* 節の見出し */
+  --lead:clamp(15px,1.25vw,18px);      /* リード */
+  --body:clamp(14px,1.11vw,16px);      /* 本文 */
+  --small:clamp(12px,.9vw,13px);       /* 注記 */
+
+  /* 縦のリズム */
+  --g-eyebrow:clamp(18px,2.0vw,29px);
+  --g-lead:clamp(24px,2.7vw,39px);
+  --g-body:clamp(34px,4.2vw,60px);
+  --sec-y:clamp(64px,8.3vw,120px);
 }
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  margin:0; background:#fff; color:var(--body);
+  margin:0; background:var(--bg); color:var(--text);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
   font-size:var(--body); line-height:1.9; letter-spacing:.02em;
   -webkit-font-smoothing:antialiased;
@@ -61,12 +65,12 @@ a{color:inherit}
   position:fixed; z-index:60; right:clamp(16px,1.8vw,26px); bottom:clamp(16px,1.8vw,26px);
   display:flex; align-items:center; gap:clamp(10px,1.1vw,16px);
   padding:clamp(12px,1.25vw,18px) clamp(18px,1.94vw,28px);
-  background:var(--brand); color:#fff; text-decoration:none;
+  background:var(--blue); color:#fff; text-decoration:none;
   box-shadow:0 6px 24px rgba(20,16,18,.22);
 }
 .lpcta__t{font-weight:700; font-size:clamp(13px,1.11vw,16px); line-height:1.3}
 .lpcta__s{display:block; margin-top:3px; font-weight:400; font-size:clamp(10.5px,.83vw,12px); opacity:.9}
-.lpcta:hover{background:var(--brand-dark)}
+.lpcta:hover{background:var(--blue-dark)}
 @media (max-width:900px){
   .lpcta{
     left:0; right:0; bottom:0; border-radius:0;
@@ -80,459 +84,623 @@ a{color:inherit}
 }
 
 /* ── 節1 ── */
-/* ============ 第1節 ファーストビュー ============ */
+/* ============================================================
+   第1節 ファーストビュー（青系 soft）
+   出どころ： _lp/blue1.png（1536x1024）を measure.py で実測。
+   1440px 実装への換算率 横 x0.9375（＝ ÷1.0667）。
+   方向：納得いくまで寄り添う → 誠実さ → 青系
+   色と級数は _lp/TOKENS_BLUE.css の変数のみ。赤は使わない。
+
+   実測                          モック@1536      CSS@1440     採用
+   ───────────────────────────────────────────────────────────────
+   地（最頻/平均）               #f0f5fb/#eff4fa    —          var(--bg) #eff4fa
+   左カラムの左端                x128              120         --wrap 1200 中央寄せの左端
+   H1 墨（最暗5%）               #141414            —          var(--ink) #111（地に17.08:1）
+   H1 字送り（全角漢字）         47                 44          var(--h1) 44
+   H1 行送り                     70（1.49倍）       65.6        line-height 1.5
+   H1 3行の墨の上端         142 / 212 / 282    133/199/264      —
+   H1「（デザイン）」字送り      27（本体の0.574倍） 25.3        .58em
+   H1 3行目の墨の右端            x746              700          実測 737。写真の左端838まで101空く（モックは118）
+   リード墨（最暗5%）            #19181a            —          var(--text) #2b3440（11.39:1）
+   リード 字送り                 17.5               16.4        var(--lead) 18 ※ポスター寸法→実務値
+   リード 行送り                 32（1.83倍）       30          line-height 1.83
+   リード 4行の墨の上端     377/409/441/473   353/384/413/443   —
+   H1墨下端→リード墨上端         55                 51.6        27（行送りの上半分を含めて51.6）
+   バッジ アイコン           37〜45 x 44 高      41            40px
+   バッジ アイコンの線           2px                1.9         stroke 2（viewBox44高→約1.8px）
+   バッジ アイコン色（最暗5%）   #1d2b3e            —          var(--navy) #0f2b4a
+   バッジ ラベル 字送り          17.7               16.6        var(--body) 16
+   バッジ ラベル色（最暗5%）     #17181a            —          var(--ink)
+   バッジ アイコン下端→ラベル上端 21                19.7        12（行送りの上半分を含めて19.7）
+   バッジ セルの中心        205 / 404 / 612   192/379/574       3列の等分
+   バッジ 3列目のラベル幅        175（10字）        163         16px x 10字 = 160。箱は184で左右12ずつ
+   主ボタン                x130-396 y680-745   250 x 62        252 x 62
+   主ボタン 塗り                 #1765ab            —          var(--blue)（白文字 6.02:1）
+   主ボタン 文字                 #ffffff            —          #fff
+   副ボタン                x426-696 y680-745   254 x 62        252 x 62
+   副ボタン 文字（最暗5%）       #0b439b            —          var(--blue)（白地 6.02:1）
+   ボタンの角                    2px                1.9         2px
+   ボタンの間                    29                 27          28
+   ボタン列の幅              x130-696 = 567     531            252+28+252 = 532
+   ボタン ラベル 字送り          20〜21.5           20.2        var(--lead) 18 ※同上
+   バッジ下端→ボタン上端         65                 61          var(--g-lead) 39 ＋ 箱の下パディング18
+   ボタン下端→注記の墨上端       32                 30          22（行送りの上半分を含めて30）
+   注記                    x132-511 y776-790   380 x 14        var(--small) 13
+   注記の色（最暗5%）            #6c727d            —          var(--mute) #5a6b7d（4.95:1）
+   注記→ロゴの墨上端             97                 91          78（罫を落とした分は余白で持たせる）
+   ロゴの墨      RECRUIT 和名込み y886-949 高64  高60           高さ 58px
+   ロゴ列の左右             x178〜1355         167〜1270        --wrap いっぱい x120-1320 に space-between
+   「ほか」（最暗5%）            #292c34 / 字送り16  15          var(--small) / var(--text)
+   写真 冊子の左端      x818（H1の行と同じ高さ）  767          左端780＝--wrap の55%、右端は画面外へ
+   画面比                    1536x1024 = 3:2    1440x960       余白の合計でこの高さに収めた
+   ───────────────────────────────────────────────────────────────
+
+   組んだあと 1440px で撮って検算（shot.py → measure.py、同じ関数で測った）2026-09-06
+   ───────────────────────────────────────────────────────────────
+                            目標（モック換算）   実測（この部品）   差
+   地／箱／輝度差              — / — / 7〜12    89.95 / 100.00 / 10.05
+   左端                            120              120           0
+   H1 1行目 墨の上端               133              133           0
+   H1 2行目 墨の上端               199              199           0
+   H1 3行目 墨の上端               264              265          +1
+   H1 行送り                      65.6              66         +0.4
+   リード1行目 墨の上端            353              353           0
+   リード 行送り                    30               33          +3  ← --lead 18px 採用の分
+   リード4行目 墨の上端            443              452          +9  ← 同上の積み上がり
+   バッジ アイコン 墨の上端        502              515         +13  ← 白箱にした分の内側余白
+   バッジ ラベル 墨の上端        562.5              571        +8.5
+   ボタン 上端／下端         637.5 / 698.4     649 / 710      +11.5
+   ボタン 幅／高さ               250 / 62         252 / 62      +2/0
+   注記 墨の上端                 727.5              737       +9.5
+   ロゴ 墨の上端／下端       830.6 / 889.7     833 / 890      +2/0
+   節の高さ                        960              961          +1
+   ───────────────────────────────────────────────────────────────
+   ズレは全て +13px 以内。残っているのは リード を実測16.4pxでなく --lead 18px に
+   上げた分と、バッジを白箱にして内側に余白を取った分。どちらも指示どおりの意図的な差。
+
+   🚨 モックから変えたところ（指示による）
+   1. 信頼バッジ … モックは地に溶けていて輝度差ほぼ0。箱を var(--card) #fff の塗りにした。
+      地 89.95 ／ 箱 100.00 ／ 輝度差 10.05（目標 7〜12）。WCAG相対輝度x100。
+   2. 罫は使わない … モックにあった3種の罫を塗りと余白に置き換えた。
+      ・バッジの仕切り 2本（x304,x501 #d4dbe4）→ 白箱3つの間隔（12px）
+      ・ロゴバー上の罫（y868 x130-1367 #d4dbe4）→ 余白 78px のみ
+      ・副ボタンの枠（1px #1765ab）→ var(--card) #fff の塗り＋青文字
+      3つとも「地と箱は塗りで分ける」に揃えた結果、地#eff4fa・箱#fff・主ボタン#1765ab の3階調になる。
+
+   ※要確認
+   ・写真 ../fv/img/hero_spread.jpg は ASSETS.txt にある唯一の「開いたパンフレット1冊」。
+     ただし誌面の中に赤の罫と赤の見出しが入っている。青系の方向と合うかは判断が要る。
+     差し替えるなら1536x1024・地が明るい見開き写真であれば、このCSSのまま置き換えられる。
+   ・ロゴ列はモックだとロゴの左右に約50pxの余りがある（x167〜1270／--wrapは120〜1320）。
+     ここは --wrap いっぱいに space-between で置いた。文章の左端とロゴの左端が揃う。
+   ・cl_jfe / cl_sonpo は素材に白地が残っている。mix-blend-mode:multiply で地になじませた。
+   ・写真は mix-blend-mode:darken で素材の白地を地に沈めている。
+     🚨 .sfv__art に z-index を付けると重ね合わせ文脈ができて blend が地に届かず、
+        灰色の四角い板が出る。付けないこと（文章側の z-index:1 で前後は足りている）。
+   ============================================================ */
+
 .sfv{
-  background:#fff;
-  overflow-x:clip;                      /* 写真の右への出血をここで切る */
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:clip;                                  /* 写真が画面右へ抜ける分を切る */
+  padding-block:clamp(58px,8.40vw,121px) clamp(40px,4.88vw,70px);
+                                                    /* 実測 上116→121（墨位置を合わせた） / 下70 */
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
 }
-.sfv__grid{
-  display:grid;
-  grid-template-columns:clamp(360px, 47.9vw, 690px) 1fr;  /* 実測 680 / 689 @1440。H1の逃げに +10 */
-  grid-template-areas:"head photo" "cta photo";
-  align-items:start;
-  padding-left:var(--pad);
-  padding-top:clamp(56px, 10.28vw, 148px); /* 実測：H1の墨の上端が 158 に来る位置 */
-}
-.sfv__head{grid-area:head}
-.sfv__cta{grid-area:cta; margin-top:var(--g-lead)}   /* 実測 バッジの箱の下端→ボタンの上端 44 */
-.sfv__photo{grid-area:photo}
 
-/* ---- 見出し ---- */
+.sfv__top{
+  position:relative;
+  width:min(var(--wrap), 100% - var(--pad) * 2);    /* 1440では1200 → 左端120（実測 x128@1536） */
+  margin-inline:auto;
+}
+
+/* ---- 左：文章 ---- */
+.sfv__copy,
+.sfv__act{ position:relative; z-index:1; }
+.sfv__copy{ max-width:min(660px, 55%); }            /* H1 3行目に 637px 要る（実測 x128-746@1536） */
+
 .sfv__h1{
   margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-size:var(--h1);
-  line-height:1.48;                     /* 実測 68 ÷ 46 */
-  font-weight:600;
+  font-weight:400;
+  font-size:var(--h1);                              /* 実測 字送り47@1536 → 44 */
+  line-height:1.5;                                  /* 実測 行送り70 ÷ 字送り47 = 1.49 */
+  letter-spacing:0;                                 /* 実測 字送り＝級数。詰めなし */
   color:var(--ink);
-  /* モックの字送りは 14.30em/17字。palt 無し・字間0 だと 14.76em で溢れた */
-  letter-spacing:-.03em;
-  font-feature-settings:"palt" 1;
 }
-.sfv__nb{white-space:nowrap}            /* 🚨 wbr とセット。無いと画面外へ溢れる */
-.sfv__accent{color:var(--brand); white-space:nowrap}  /* 実測 #e4060c。白地 4.84:1 */
+.sfv__h1 .sfv__gloss{ font-size:.58em; }            /* 実測 27 ÷ 47 = 0.574 */
 
-/* ---- リード ---- */
 .sfv__lead{
-  /* 実測の 44 は墨から墨。--g-lead は箱から箱なので H1 の半行分 22px を引く */
-  margin:calc(var(--g-lead) - 22px) 0 0;
-  font-size:var(--lead);
-  line-height:1.85;                     /* 実測 37 ÷ 19 */
-  color:var(--nav);
+  margin:clamp(16px,1.88vw,27px) 0 0;               /* 実測 墨間55@1536 → 51.6。行送りの上半分を引いて27 */
+  max-width:590px;
+  font-size:var(--lead);                            /* 実測 字送り17.5@1536 → 16.4。ポスター寸法→--lead */
+  line-height:1.83;                                 /* 実測 行送り32 ÷ 字送り17.5 */
+  letter-spacing:0;
+  color:var(--text);
 }
 
-/* ---- 信頼バッジ ---- */
+/* ---- 行動のかたまり（バッジ・CTA・注記）。スマホで写真を挟むため文章と分けてある ---- */
+.sfv__act{
+  max-width:min(576px, 48%);                        /* 写真の左端 55% より内側に必ず収める */
+  margin:clamp(14px,1.32vw,19px) 0 0;
+}
+
+/* ---- 信頼バッジ：白の箱3つ（🚨 モックの仕切り罫は箱の間隔に置き換え） ---- */
 .sfv__badges{
-  display:inline-grid;                  /* 中身の最大幅で3列を揃える（実測 幅186 x3） */
-  grid-auto-flow:column;
-  grid-auto-columns:minmax(0,1fr);
-  gap:13px;                             /* 実測 14 → 13 */
-  margin:calc(var(--g-lead) - 9px) 0 0;  /* 実測 44（墨→箱）− リードの下の半行 9px */
-  padding:0; list-style:none;
+  display:flex;
+  gap:12px;
+  margin:0;
+  padding:0;
+  list-style:none;
 }
 .sfv__badge{
-  box-sizing:border-box;                /* 🚨 無いと padding の分だけ箱が縦に 37px 伸びる */
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:16px;                             /* 実測 アイコン下端→ラベル 19 → 18 */
-  min-height:101px;                     /* 実測 108 → 101 */
-  padding:18px 13px 19px;               /* 実測 箱の幅 186 = ラベル160 + 左右13 */
-  background:#f4f4f4;                   /* 白との輝度差 11 */
-  color:var(--nav);
+  flex:1 1 0;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;                                         /* 実測 アイコン下端→ラベル墨上端 21@1536 */
+  padding:18px clamp(8px,1vw,12px);
+  border-radius:2px;                                /* ボタンの角に揃えた（実測 2px） */
+  background:var(--card);                           /* 🚨 地 #eff4fa との輝度差 10.05 */
 }
-.sfv__badge svg{display:block; flex:none}
+.sfv__badge svg{
+  display:block;
+  width:auto; height:40px;                          /* 実測 高さ44@1536 → 41 */
+  color:var(--navy);                                /* 実測 最暗5% #1d2b3e */
+}
 .sfv__badge span{
-  font-size:var(--body); line-height:1; font-weight:500; white-space:nowrap;
+  font-size:var(--body);                            /* 実測 字送り17.7@1536 → 16.6 */
+  line-height:1.6;
+  letter-spacing:0;
+  text-align:center;                                /* 1440では1行。桁が縮むと2行になる */
+  color:var(--ink);
 }
 
 /* ---- CTA ---- */
-.sfv__btns{display:flex; flex-wrap:wrap; gap:19px}
+.sfv__cta{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));    /* 実測 267 / 271 @1536 → 250 / 254 */
+  gap:28px;                                          /* 実測 29@1536 → 27 */
+  max-width:532px;                                   /* 252 + 28 + 252。実測 x130-696@1536 = 531 */
+  margin:var(--g-lead) 0 0;                          /* 実測 バッジ墨下端→ボタン上端 65@1536 → 61 */
+}
 .sfv__btn{
-  box-sizing:border-box;                /* 🚨 無いと左右 padding 92px が min-width に足され、
-                                              主255→347・副247→339 になって2行に折れる */
-  position:relative;
-  display:flex; align-items:center; justify-content:center;
-  min-width:247px; height:58px;         /* 実測 263x62 → 247x58 */
-  padding:0 46px;
-  font-size:var(--lead); font-weight:600; line-height:1;
+  display:grid;
+  place-items:center;
+  min-height:62px;                                   /* 実測 66@1536 */
+  border-radius:2px;                                 /* 実測 角2px */
+  font-size:var(--lead);                             /* 実測 字送り21.5@1536 → 20.2。ポスター寸法→--lead */
+  line-height:1;
   letter-spacing:.02em;
-  text-decoration:none;                 /* 素の a の下線を消す。モックに下線は無い */
+  text-decoration:none;
+  transition:background-color .2s, color .2s;
 }
 .sfv__btn--main{
-  min-width:255px;                      /* 実測 272 → 255 */
-  background:var(--brand); color:#fff;  /* 白文字 4.84:1 */
+  background:var(--blue);                            /* 実測 最頻 #1765ab */
+  color:#fff;                                        /* 6.02:1 */
 }
-.sfv__btn--main:hover{background:var(--brand-dark)}
+.sfv__btn--main:hover,
+.sfv__btn--main:focus-visible{ background:var(--blue-dark); }   /* 白文字 7.32:1 */
+
+/* 🚨 モックは1pxの青枠＋地色の抜き。罫を使わない指定なので白の塗りにした */
 .sfv__btn--sub{
-  background:#fff; color:var(--nav);
-  box-shadow:inset 0 0 0 1px var(--rule);
+  background:var(--card);
+  color:var(--blue);                                 /* 白地 6.02:1 */
 }
-.sfv__btn--sub:hover{box-shadow:inset 0 0 0 1px var(--nav)}
-.sfv__arw{position:absolute; right:26px; display:block; line-height:0}
+.sfv__btn--sub:hover,
+.sfv__btn--sub:focus-visible{ background:#fff; color:var(--blue-dark); }
 
-/* ---- マイクロコピー ---- */
-.sfv__micro{
-  margin:17px 0 0;                      /* 実測 ボタンの下端→墨の上端 22 */
-  font-size:var(--body); line-height:1.6;
-  /* モック実測 #7a7f83 は白地 4.05:1 で足りない。4.5 を満たす最寄りへ寄せた（5.3:1） */
-  color:color-mix(in srgb, var(--nav) 70%, #fff);
+.sfv__note{
+  margin:22px 0 0;                                   /* 実測 ボタン下端→墨上端 32@1536 → 30 */
+  font-size:var(--small);                            /* 実測 字送り13.5@1536 → 12.7 */
+  line-height:1.7;
+  color:var(--mute);                                 /* 実測 最暗5% #6c727d。地に 4.95:1 */
 }
 
-/* ---- 写真（開いたパンフレット1冊） ---- */
-.sfv__photo{align-self:start; margin-top:max(-17px, -1.18vw)}  /* 実測 見開きの上端が 177 に来る位置 */
-.sfv__photo img{
-  display:block;
-  width:129.3%;                         /* 実測：見えている幅679 に対し実寸878 */
-  max-width:none; height:auto;
-  /* 素材の地が #f1f1f1〜#f6f6f6。白地に溶かすため持ち上げる */
-  filter:brightness(1.07);
+/* ---- 右：写真（開いたパンフレット1冊） ---- */
+.sfv__art{
+  position:absolute;
+  /* z-index は付けない。付けると重ね合わせ文脈ができて mix-blend-mode が地に届かない */
+  top:30px;                                          /* 実測 写真上端 140@1536 → 131（節の上余白121の下） */
+  left:55%;                                          /* 冊子の左端が x806 に来る位置。実測 x818（H1の右端700から118空く） */
+  right:calc(50% - 50vw);                            /* 画面の右端まで抜く */
+  aspect-ratio:744 / 675;                            /* 実測 見えている範囲 744 x 675 の比 */
+  margin:0;
+  overflow:hidden;
+}
+.sfv__art img{
+  width:100%; height:100%;
+  object-fit:cover;
+  object-position:36% 50%;                           /* 冊子の左ページを全部見せ、右ページを画面外で切る */
+  filter:brightness(1.06);                           /* 素材の地 #e9e9e9〜#f6f6f6 を地の明るさへ寄せる */
+  mix-blend-mode:darken;                             /* 素材の白地を節の地 #eff4fa に沈める。四角い板にしない */
 }
 
 /* ---- 信頼バー ---- */
-.sfv__trust{
-  margin-top:clamp(48px, 7.32vw, 105px); /* 実測 マイクロコピーの墨の下端→地の上端 111 */
-  background:#f4f4f4;                   /* 白との輝度差 11 */
-  padding:44px var(--pad);              /* 実測 地の上端811 → ロゴの墨857 */
+.sfv__bar{
+  width:min(var(--wrap), 100% - var(--pad) * 2);
+  margin:clamp(44px,5.42vw,78px) auto 0;             /* 実測 注記→ロゴ墨上端 97@1536 → 91 */
 }
 .sfv__logos{
-  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
-  gap:24px 32px;
-  max-width:var(--wrap); margin:0 auto; padding:0; list-style:none;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:clamp(20px,2.6vw,38px) clamp(24px,4.9vw,70px); /* 実測 ロゴの間 65〜90@1536 */
+  margin:0; padding:0;
+  list-style:none;
 }
 .sfv__logos img{
-  display:block; width:auto;
-  height:clamp(26px, 3.26vw, 47px);     /* 実測 ロゴの高さ 50 → 47 */
+  display:block;
+  width:auto; height:clamp(40px,4.03vw,58px);        /* 実測 ロゴの墨 高64@1536（和名込み）→ 60 */
+  object-fit:contain;
+  mix-blend-mode:multiply;                           /* cl_jfe / cl_sonpo に残る白地を消す */
 }
-.sfv__etc{font-size:var(--body); color:var(--nav)}
+.sfv__logos .sfv__etc{
+  font-size:var(--small);                            /* 実測 字送り16@1536 → 15 */
+  line-height:1;
+  color:var(--text);
+}
 
-/* ---- 1100px 以下：写真を下段へ。スマホは CTA の上に写真を置く ---- */
-@media (max-width:1100px){
-  .sfv__grid{
-    grid-template-columns:minmax(0,1fr);
-    grid-template-areas:"head" "photo" "cta";
-    padding-right:var(--pad);
+/* ---- 1024px以下 ---- */
+@media (max-width:1024px){
+  /* 🚨 スマホ・タブレットは 見出し＋リード → 写真 → CTA の3ブロック。写真はCTAより上に置く */
+  .sfv__top{ display:flex; flex-direction:column; }
+  .sfv__copy{ order:1; max-width:none; }
+  .sfv__art{  order:2; }
+  .sfv__act{  order:3; max-width:none; margin-top:clamp(24px,3.4vw,36px); }
+  .sfv__art{
+    position:static;
+    width:auto;
+    margin:clamp(28px,4vw,48px) calc(50% - 50vw) 0 0;
+    aspect-ratio:16 / 10;
   }
-  .sfv__nb{white-space:normal}
-  .sfv__photo{margin-top:clamp(24px,4vw,40px)}
-  .sfv__photo img{width:100%; max-width:720px; margin-inline:auto}  /* 1段組で写真が支配しないように */
-  .sfv__badges{display:grid; grid-auto-flow:row; grid-template-columns:repeat(3,minmax(0,1fr)); width:100%}
-  .sfv__badge span{white-space:normal; text-align:center}
+  .sfv__art img{ object-position:44% 50%; }
+  .sfv__badges{ flex-wrap:wrap; }
+  .sfv__badge{ flex:1 1 200px; }
 }
-@media (max-width:560px){
-  .sfv__badges{grid-template-columns:1fr}
-  .sfv__badge{flex-direction:row; gap:14px; min-height:0; padding:16px 18px}
-  .sfv__btn{flex:1 1 100%}
-  .sfv__logos{justify-content:center; gap:20px 26px}
+
+/* ---- 700px以下（スマホ） ---- */
+@media (max-width:700px){
+  .sfv__pcbr{ display:none; }                        /* 原稿の改行はPC用。狭い幅では自然に折る */
+  .sfv__lead{ max-width:none; }
+  .sfv__badges{ flex-direction:column; gap:8px; }
+  .sfv__badge{ flex:0 0 auto; flex-direction:row; justify-content:flex-start; gap:14px; padding:14px 18px; }
+  .sfv__badge span{ text-align:left; }
+  .sfv__badge svg{ height:30px; flex:0 0 auto; }
+  .sfv__cta{ grid-template-columns:minmax(0,1fr); gap:12px; }
+  .sfv__logos{ justify-content:flex-start; gap:18px 26px; }
 }
 /* ── 節2 ── */
-/* ============ 2. 共感・課題提起 ============
-   出どころ： _lp/sec2a.png（1536x1024 ＝ 1440CSS幅。換算 x0.9375）
-   写真なし。情報の組み方と余白だけで見せる節。
-
-   実測                          モックpx@1536   CSS換算@1440   採用値
-   ────────────────────────────────────────────────────────────────
-   地の色                        #ecebe9          —            #eeecea（指定）
-   箱の色                        #252529          —            #23232a（指定・白文字15.6:1）
-   列の左端（字面）               x220            206          191（--wrap+--pad）
-   罫の右端                      x1319           1236          1249（同上）
-   ラベル 字送り                  17.7            16.6          16
-   ラベルの赤ダッシュ         x220-266 y126-127  43x2px        43x2px
-   ダッシュ→字の間                21              20            20
-   ラベル→見出し（墨間）           48              45           var(--g-eyebrow) 45
-   見出し 字送り                  56.2            52.7          var(--h2) 48 ※ポスター寸法なので実務値へ
-   見出し 墨の高さ                 53              50            —
-   見出し→リード（箱間）           36              34           var(--g-lead) 44
-   リード 字送り                  23.8            22.3          var(--lead) 19 ※同上
-   リード 行送り                   50（2.10倍）    47            2.1
-   リード→罫                       34              32            32
-   罫                       y429・1px・#c1c1bf   1px           1px var(--rule)
-   罫→箇条                        51              48            48
-   箇条 字送り                    21.4            20.0          var(--body) 16 ※同上
-   箇条 行送り（項目の間隔）        60.25           56.5          56.8（28.8+28）
-   箇条の点                  7φ @x227 y499-506   6.6φ          6φ @left 7
-   箇条の字下げ                    36              34            34
-   箇条→箱                        57              53            54
-   箱                    x220-1280 y819-941    994x115        列幅・角は直角
-   箱の内側 左                     41              38            38
-   箱の字 字送り                  22.2            20.8          var(--body) 16
-   箱の字 行送り                   40（1.80倍）    37.5          1.8
-   ────────────────────────────────────────────────────────────────
-   墨の色は最暗値で見出し#080,リード#010104,箇条#0a0507＝いずれも黒。
-   トークンの --ink / --nav に寄せた（--body は級数トークンで色ではない）。 */
+/* ── 2. 共感・課題提起 ────────────────────────────────────────────
+   採用モック _lp/blue2.png（1536x1024）を measure.py で実測して起こした。
+   換算率 横 x0.9375（1536 → 1440）。数値の横に実測値を残してある。
+   色は TOKENS_BLUE.css の変数のみ。写真なし。 */
 
 .spain{
-  background:#eeecea;                       /* 実測 #ecebe9 → 指定値 */
-  padding-block:var(--sec-y);
-  color:var(--nav);
-}
-.spain__inner{
-  max-width:var(--wrap); margin-inline:auto; padding-inline:var(--pad);
+  background:var(--bg);                     /* 地 実測 #eaf1f9 → トークン --bg #eff4fa */
+  padding:var(--sec-y) var(--pad);
 }
 
-/* ラベル：赤の短い罫 ＋ 和文。FVの .svc__label と違い赤字ではなく墨 */
-.spain__label{
-  display:flex; align-items:center; gap:clamp(12px,1.39vw,20px);   /* 実測：ダッシュ→字 21px */
+/* 濃紺の面。地に対する L* 差 78.9（目標 70以上）／コントラスト 12.97:1 */
+.spain__box{
+  /* 実測 箱の外接 x63-1472（幅1410）@1536 → 幅1322@1440。桁(--wrap 1200)より広い面として置く */
+  max-width:1322px;
+  margin:0 auto;
+  background:var(--navy);                   /* 箱 実測 #03274a → トークン --navy #0f2b4a */
+  color:#fff;                               /* 字 実測 #ffffff。濃紺に対し 14.3:1 */
+  border-radius:3px;                        /* 実測 角丸 3〜4px@1536 */
+  /* 実測 箱の内側余白 上120 / 左147 / 右151 / 下90 @1536 → 上112 左右138 下84 @1440。
+     左右は「字の左端 x197＠1440・内容幅1043」に合わせて126に、
+     上下は「字の上端＝箱上+112／字の下端＝箱下-84」になるよう行間の半分を引いてある */
+  padding:clamp(46px,7.15vw,103px) clamp(24px,8.75vw,126px) clamp(36px,5.42vw,78px);
+  /* 実測：見出しの仮名の字送り 54.6 に対し漢字は 62（比 0.88）、
+     本文も「、」が 18〜19 で漢字 24 より詰まる ＝ 仮名・約物が詰まる組み */
+  font-feature-settings:"palt" 1;
+}
+
+/* 見出し（明朝）。実測 字送り 漢字62px@1536 → 58px@1440 はポスター寸法なので --h2 に収めた */
+.spain__h{
   margin:0;
-  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
-  font-size:clamp(11.5px,1.11vw,16px);      /* 実測 字送り17.7 → 16 */
-  letter-spacing:.06em;                     /* 実測：字送り17.7 − 字幅16.3 */
-  color:var(--nav);
-}
-.spain__label::before{
-  content:""; flex:0 0 auto;
-  width:clamp(28px,2.99vw,43px); height:2px;   /* 実測 46x2px @x220,y126 */
-  background:var(--brand);
-}
-
-.spain__h2{
-  margin:var(--g-eyebrow) 0 0;              /* 実測 墨間48 → 45 */
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:400;
-  font-size:var(--h2);                      /* 実測 字送り56.2@1536 → 節見出しに統一 */
+  font-weight:500;
+  font-size:var(--h2);
   line-height:1.5;
-  letter-spacing:.02em;
-  color:var(--ink);
+}
+/* 見出し下の罫。実測 y292、x209-670（幅462@1536 → 433@1440、内容幅の41.5%）、1px、#e1e4ea */
+.spain__h::after{
+  content:"";
+  display:block;
+  width:clamp(96px,41.5%,433px);
+  height:1px;
+  margin-top:.33em;                         /* 実測 見出しの字の下端から40px@1536 ＝ 0.645em */
+  background:rgba(255,255,255,.88);
 }
 
+/* リード（ゴシック）。実測 字送り 24.6px@1536、行送り42（比1.71） */
 .spain__lead{
-  margin:var(--g-lead) 0 0;                 /* 実測 箱間36 → 34 */
+  margin:1.3em 0 0;                         /* 実測 罫からリードの字の上端まで 42px@1536 ＝ 1.71em */
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
-  font-size:var(--lead);                    /* 実測 字送り23.8@1536 → 19 */
-  line-height:2.1;                          /* 実測 行送り50 ÷ 字送り23.8 */
-  letter-spacing:.02em;
-  color:var(--nav);
+  font-size:var(--lead);
+  line-height:1.7;                          /* 実測 42 / 24.6 */
 }
 
-.spain__rule{
-  border:0; height:1px; background:var(--rule);
-  margin:clamp(22px,2.22vw,32px) 0 clamp(32px,3.33vw,48px);   /* 実測：上34→32 / 下51→48 */
-}
-
+/* 箇条書き。実測 行ピッチ 63.5px@1536、罫は各項目の下に5本 */
 .spain__list{
-  list-style:none; margin:0; padding:0;
+  --spain-pad-y:14px;
+  margin:1.45em 0 0;                        /* 実測 リード下端から1項目の字の上端まで 56px@1536 ＝ 2.3em */
+  padding:0;
+  list-style:none;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+  font-size:var(--body);                    /* 実測 24.3px@1536 はポスター寸法なので --body に収めた */
+  line-height:1.8;
 }
 .spain__item{
   position:relative;
-  padding-left:clamp(24px,2.36vw,34px);     /* 実測：点の左端x227・字の左端x256 → 字下げ36 */
-  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
-  font-size:var(--body);                    /* 実測 字送り21.4@1536 → 16 */
-  line-height:1.8;
-  letter-spacing:.02em;
-  color:var(--nav);
+  padding:var(--spain-pad-y) 0 var(--spain-pad-y) 1.05em;  /* 実測 字下げ 25px / 24.3em ＝ 1.03em */
+  /* 実測 罫 y495・559・621・684・748、x209-1321（内容幅いっぱい）、1px、#899db2 */
+  border-bottom:1px solid rgba(255,255,255,.55);
 }
-.spain__item + .spain__item{
-  margin-top:clamp(14px,1.94vw,28px);       /* 実測 行送り60.25 → 56.5。1.8em(28.8)＋28 */
-}
+/* 中黒。実測 x209-216（径8px ＝ 0.33em）、中心 y463 ＝ 1行目の字の高さの中央 */
 .spain__item::before{
-  content:""; position:absolute;
-  left:clamp(4px,.49vw,7px); top:.9em; transform:translateY(-50%);   /* .9em＝行送り1.8emの半分 */
-  width:6px; height:6px; border-radius:50%;  /* 実測 7φ */
-  background:var(--nav);
+  content:"";
+  position:absolute;
+  left:0;
+  top:calc(var(--spain-pad-y) + .9em);      /* .9em ＝ 行送り1.8の半分 ＝ 1行目の中央 */
+  width:.33em;
+  height:.33em;
+  margin-top:-.165em;
+  border-radius:50%;
+  background:#fff;
 }
 
-.spain__note{
-  margin:clamp(34px,3.75vw,54px) 0 0;       /* 実測 箱間57 → 53 */
-  background:#23232a;                       /* 実測 #252529 → 指定値。白文字 15.6:1 */
-  color:#fff;
-  padding:clamp(20px,2.15vw,31px) clamp(22px,2.64vw,38px);   /* 実測 内側左41 → 38 */
+/* 締め。実測 行送り41px@1536（比1.745） */
+.spain__close{
+  margin:1.4em 0 0;                         /* 実測 最後の罫から字の上端まで 43px@1536 ＝ 1.83em */
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
-  font-size:var(--body);                    /* 実測 字送り22.2@1536 → 16 */
-  line-height:1.8;                          /* 実測 行送り40 ÷ 字送り22.2 */
-  letter-spacing:.02em;
+  font-size:var(--body);
+  line-height:1.75;
 }
 
-/* 明示的な改行はモックの折り位置。幅が足りない画面では自然折り返しに戻す */
-@media (max-width:760px){
-  .spain__lead br,
-  .spain__note br{display:none}
+/* モックはPC幅のみ。狭い画面は原稿の改行を切って自然に折り返させ、
+   箱の内側の左右余白も詰める（375pxで内容幅291px＝1行20.8字。詰めないと
+   1本目の項目が3行になって最終行に1字だけ残る） */
+@media (max-width:767px){
+  .spain__brp{display:none}
+  .spain__box{padding-inline:clamp(18px,5.9vw,24px)}
 }
 /* ── 節3 ── */
-/* ===== 第3節 翻訳の実例 =====================================================
-   モック _lp/sec3a.png（1536x1024）を実測して起こした。1440実装への換算は x0.9375。
-   実測値（モック1536 → 1440換算）
-     地 #121217 ／ 指定の #17171a を採用（白文字 18.0:1）
-     カード 白 x83-527 / 543-989 / 1007-1451（幅445、間16）→ 3等分＋間15px
-     見出し 字送り36 → 33.7 ／ リード 17 → 15.9 ／ 締め 19 → 17.8
-     企業名 22.8 → 21.4 ／ 仕様・ラベル 15 → 14 ／ カード本文 16.3 → 15.3
-     カードの内白 21-22 → 20 ／ 写真 402x229（比 1.755）／ カードR 6
-   級数はモックがポスター寸法のため、共通トークンの実務値へ寄せた（下の各所に注記）
-   ========================================================================= */
-.strans,.strans *{box-sizing:border-box}   /* 字面1200px・ボタン280pxは border-box 前提。
-                                              素の状態でも同じ寸法になるよう部品側で宣言する */
+/* ===== 第3節 翻訳の実例（中核）＝ 青系 ======================================
+   採用モック _lp/blue3.png（1536x1024）を実測して起こした。1440実装への換算 x0.9375。
+   色は _lp/TOKENS_BLUE.css の変数のみ。赤は使わない。
+
+   実測（1536 → 1440換算）
+     地      #092648  → var(--navy) #0f2b4a で全面
+     箱      #fdfdfd  → var(--card) 白。x79-1461（幅1383）→ 幅1296／左右の紺 79 → 74
+     箱の中の余白  左右 63・91（平均72）→ var(--pad)
+     見出し  字送り 36.9 → 34.6 ／ 明朝 ／ 1行
+     リード  字送り 18.6 → 17.4 ／ 行送り 30.5 → 28.6（比 1.65）
+     カラム  左端 143 / 583 / 1011（ピッチ 440）・罫幅 375/367/359（平均367）
+             → 3等分・段間 60 ／ 1段 344
+     仕切り縦罫 x550・x981（段間の中央）／ y270-819 ＝ カード全高 ／ #e3e4e4 → var(--line)
+     番号    数字の高さ 21 → 19.7（＝級数 約27）・#07407d → var(--blue)・明朝
+     社名    字送り 18.6 → 17.4 ／ 番号からの字下げ 42.7 → 40
+     仕様    字送り 13.5 → 12.7
+     見出下の細罫 y332（1px）
+     ラベル  字送り 15.5 → 14.5 ／ #0d3777 → var(--blue)
+     カード本文 字送り 15.9 → 14.9 ／ 行送り 25.5 → 23.9（比 1.60）
+     矢印    14x21 → 13x20 ／ 段の中央
+     写真    367x213 → 344x200（比 1.72）・3枚とも下端 819 で揃う
+     締め    字送り 16.3 → 15.3 ／ 行送り 28 → 26.3（比 1.72）
+     ボタン  459x50 → 430x47 ／ 枠1px #486c96 → var(--blue) ／ 字送り 20 → 18.8
+             ラベルはボタン中央・山形は右から 28 → 26
+   級数はモックがポスター寸法。共通トークン（--h2 / --lead / --body / --small）へ収めた。
+   ========================================================================== */
+.strans,.strans *{box-sizing:border-box}
 .strans{
   --_mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
   --_gothic:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
-  --_g2:clamp(20px,2.08vw,30px);   /* リード→カード 実測35@1536=33@1440。字間隔で40になる値 */
-  --_g3:clamp(20px,2.22vw,32px);   /* カード→仕切り罫 実測32@1536=30@1440 */
-  --_g4:clamp(14px,1.53vw,22px);   /* 仕切り罫→締め 実測30@1536=28@1440。字間隔で31になる値 */
-  --_cardpad:clamp(14px,1.39vw,20px);  /* 実測21-22@1536 */
-  background:#17171a;
-  color:#fff;
-  padding:var(--sec-y) 0;
-}
-.strans__wrap{
-  max-width:calc(var(--wrap) + var(--pad) * 2);   /* 字面の幅を --wrap の1200pxに保つ */
-  margin:0 auto;
-  padding:0 var(--pad);
+  --_gap:clamp(28px,4.17vw,60px);  /* 段間。実測 64@1536 → 60（1440では 4.17vw＝60で実測どおり） */
+  background:var(--navy);      /* 実測 #092648 → トークンの濃紺 */
+  padding:var(--sec-y) var(--pad);
+  font-family:var(--_gothic);
+  font-feature-settings:"palt" 1;   /* モックの約物は詰まっている（仕様行 実測 183px＝1字あたり11.1px）。
+                                       ベタ組みだと 202px まで伸びて折り返す。約物だけを詰める */
 }
 
-/* ---- 見出し ---- */
+/* ---- 白い箱。地との輝度差は 215/255 ---- */
+.strans__panel{
+  max-width:calc(var(--wrap) + 96px);   /* 実測 1383@1536 → 1296 */
+  margin-inline:auto;
+  background:var(--card);
+  padding:30px var(--pad) 40px;         /* 上：実測の字面まで39px − 半行送り9.7 = 30
+                                           下：実測16px は詰まりすぎ（ポスター寸法）。40へ開けた */
+}
+
+/* ---- 節の見出し。明朝 ---- */
 .strans__h2{
   margin:0;
   font-family:var(--_mincho);
   font-weight:600;
-  font-size:var(--h2);          /* 実測33.7@1440。共通トークンの節見出しへ寄せた */
+  font-size:var(--h2);         /* 実測 34.6@1440 → トークン34px */
   line-height:1.45;
-  color:#fff;                   /* #17171a に対し 18.0:1 */
+  letter-spacing:.02em;        /* 実測 字送り − 級数 ≒ 1px@1536 */
+  color:var(--ink);            /* 白地に 18.9:1 */
+  text-align:center;
 }
-.strans__nb{display:inline-block}
 
 /* ---- リード ---- */
 .strans__lead{
-  margin:var(--g-lead) 0 0;     /* 実測の字間隔34@1440。級数を1.4倍にした分トークン値44へ */
-  max-width:43em;               /* 実測 687px÷17px＝40.4字。モックと同じ3行に折る */
-  font-family:var(--_gothic);
-  font-size:var(--lead);        /* 実測15.9@1440 */
-  line-height:1.9;              /* 実測 行送り33÷字送り17＝1.94 */
-  color:#fff;
+  margin:.6em auto 0;          /* 実測 字面の間 26.3px − 半行送り(9.0+6.6) */
+  max-width:40em;              /* 実測 1行目 716@1536＝2文の塊。同じ3行に折るための幅 */
+  font-size:var(--lead);       /* 実測 17.4@1440 → トークン18px */
+  line-height:1.65;            /* 実測 30.5 ÷ 18.6 */
+  color:var(--text);           /* 白地に 12.6:1 */
+  text-align:center;
 }
+.strans__nb{display:inline-block}   /* 文節で折る。<wbr> と対で使う */
 
-/* ---- カード ---- */
+/* ---- 3段 ---- */
 .strans__grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:15px;                     /* 実測16@1536 */
-  margin-top:var(--_g2);
+  grid-template-rows:auto 1fr auto;    /* 社名+仕様／本文／写真 の3行を3段で共有する。
+                                          モックは3段とも 細罫 y332・写真 y606 で揃っている */
+  column-gap:var(--_gap);
+  margin-top:clamp(24px,2.36vw,34px);  /* 実測 34 */
 }
 .strans__card{
-  display:flex;
-  flex-direction:column;
-  padding:var(--_cardpad);
-  background:#fff;
-  border-radius:6px;            /* 実測 角の丸み6@1536 */
-  box-shadow:0 12px 30px rgba(0,0,0,.45);  /* 実測：カード外周の地が輝度18→2まで沈む */
-  color:#1f1f23;
+  position:relative;
+  grid-row:span 3;
+  display:grid;
+  grid-template-rows:subgrid;
+  color:inherit;
   text-decoration:none;
-  transition:transform .2s ease, box-shadow .2s ease;
 }
-.strans__card:hover,
-.strans__card:focus-visible{
-  transform:translateY(-2px);
-  box-shadow:0 18px 38px rgba(0,0,0,.55);
+/* 段と段の間の縦罫。実測 x550・x981＝段間の中央／カード全高 */
+.strans__card + .strans__card::before{
+  content:"";
+  position:absolute;
+  left:calc(var(--_gap) / -2);
+  top:0;
+  bottom:0;
+  width:1px;
+  background:var(--line);
 }
-.strans__co{
+
+/* ---- 番号＋社名＋仕様 ---- */
+.strans__head{
+  display:grid;
+  grid-template-columns:40px 1fr;   /* 実測 番号左端から社名左端まで 42.7@1536 → 40 */
+  align-items:baseline;
+  padding-bottom:12px;              /* 実測 仕様の字面下から細罫まで 16.4 − 半行送り4.4 */
+  border-bottom:1px solid var(--line);  /* 実測 y332 の 1px */
+}
+.strans__num{
+  font-family:var(--_mincho);
+  font-size:calc(var(--lead) * 1.5);  /* 実測 数字高 19.7 ≒ 級数27 */
+  line-height:1;
+  color:var(--blue);                  /* 白地に 6.02:1 */
+}
+.strans__name{
   margin:0;
-  font-family:var(--_gothic);   /* モックはゴシック太。明朝にすると別物になるため踏襲 */
-  font-weight:700;
-  font-size:clamp(17px,1.49vw,21.5px);   /* 実測22.8@1536 */
-  line-height:1.4;
-  color:var(--ink);             /* 実測 #010102 */
+  font-size:var(--lead);        /* 実測 17.4@1440 → トークン18px */
+  font-weight:600;
+  line-height:1.5;
+  color:var(--ink);
 }
 .strans__spec{
-  margin:4px 0 0;
-  padding-bottom:12px;
-  border-bottom:1px solid var(--rule);   /* 実測 y=334 の1本罫 */
-  font-family:var(--_gothic);
-  font-size:var(--pt);          /* 実測15@1536=14@1440 */
+  margin:3px 0 0;               /* 実測 社名の字面下から仕様の字面上まで 12.1 − 半行送り(5.2+4.4) */
+  font-size:var(--small);       /* 実測 12.7@1440 → トークン13px */
   line-height:1.6;
-  color:#32333e;                /* 実測 最暗5% */
+  color:var(--text);            /* 白地に 12.6:1 */
+}
+
+/* ---- 特色 → 矢印 → デザイン判断 ---- */
+.strans__note-block{
+  padding-top:14px;             /* 実測 細罫からラベルの字面まで 19.2 − 半行送り5.4 */
 }
 .strans__label{
-  margin:15px 0 0;
-  font-family:var(--_gothic);
-  font-weight:700;
-  font-size:var(--pt);
-  line-height:1.6;
-  color:#17171c;                /* 実測 最暗5% */
-}
-.strans__label + .strans__txt{margin-top:2px}
-.strans__txt{
   margin:0;
-  font-family:var(--_gothic);
-  font-size:var(--body);        /* 実測15.3@1440 */
-  line-height:1.7;              /* 実測1.41。和文の可読下限まで開けた（下の申し送り参照） */
-  color:#1f1f23;                /* 実測 最暗5% */
+  font-size:var(--body);        /* 実測 14.5@1440 → トークン16px */
+  font-weight:600;
+  line-height:1.6;
+  color:var(--blue);            /* 白地に 6.02:1 */
+}
+.strans__txt{
+  margin:2px 0 0;               /* 実測 ラベルの字面下から本文の字面上まで 12.1〜13.1 − 半行送り10.9 */
+  font-size:var(--body);        /* 実測 14.9@1440 → トークン16px */
+  line-height:1.6;              /* 実測 25.5 ÷ 15.9 */
+  color:var(--text);            /* 白地に 12.6:1 */
 }
 .strans__arrow{
-  margin:6px 0 0;
-  font-size:20px;
-  line-height:1;
-  color:#636369;                /* 実測 最暗5% */
+  display:block;
+  margin:9px auto 13px;         /* 上：実測 本文の字面下から矢印まで 14.1 − 半行送り5.4
+                                   下：実測 矢印からラベルの字面まで 18.8 − 半行送り5.4 */
+  color:var(--blue);
 }
-.strans__label--2{margin-top:11px}
+
+/* ---- 制作物の写真 ---- */
 .strans__shot{
-  margin-top:auto;
-  padding-top:17px;             /* 実測 本文→写真 25@1536 */
+  margin:34px 0 0;              /* 実測 本文の字面下から写真の上端まで 39.3 − 半行送り5.4 */
+  aspect-ratio:43 / 25;         /* 実測 367x213@1536 → 344x200＝1.72 */
+  background:var(--bg);
+  overflow:hidden;
 }
 .strans__shot img{
-  display:block;
   width:100%;
-  aspect-ratio:402 / 229;       /* 実測 402x229 */
+  height:100%;
   object-fit:cover;
+  display:block;
 }
 
-/* ---- 仕切り罫 ---- */
-.strans__rule{
-  height:1px;
-  margin:var(--_g3) 0 0;
-  border:0;
-  background:rgba(255,255,255,.22);  /* 実測 地18→輝度74相当 */
-}
-
-/* ---- 締め＋導線 ---- */
-.strans__foot{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:32px;
-  margin-top:var(--_g4);
-}
+/* ---- 締めの一文 ---- */
 .strans__close{
-  margin:0;
-  max-width:41em;               /* 実測 640px÷19px＝33.7字＋α。モックと同じ3行に折る */
-  font-family:var(--_gothic);
-  font-size:var(--lead);        /* 実測17.8@1440。モックはリードとほぼ同寸 */
-  line-height:1.9;
-  color:#fff;
+  margin:clamp(18px,1.74vw,25px) auto 0;  /* 実測 写真の下端から字面まで 30.9 − 半行送り6.4 */
+  max-width:56em;               /* 実測 1行目 868@1536＝53.5字。同じ2行に折る */
+  font-size:var(--body);        /* 実測 15.3@1440 → トークン16px */
+  line-height:1.72;             /* 実測 28 ÷ 16.3 */
+  color:var(--text);            /* 白地に 12.6:1 */
+  text-align:center;
 }
+
+/* ---- ボタン ---- */
 .strans__btn{
-  flex:none;
-  display:inline-flex;
+  position:relative;
+  display:flex;
   align-items:center;
   justify-content:center;
-  gap:17px;                     /* 実測 文字終わり1375→矢印始まり1393 */
-  min-width:280px;              /* 実測299@1536 */
-  height:53px;                  /* 実測57@1536 */
-  padding:0 28px;
-  background:#fff;
-  color:#1b1c20;                /* 実測 最暗5% */
-  font-family:var(--_gothic);
-  font-size:var(--lead);        /* 実測18.1@1440 */
-  line-height:1;
+  width:430px;                  /* 実測 459@1536 */
+  height:47px;                  /* 実測 50@1536 */
+  margin:13px auto 0;           /* 実測 締めの字面下からボタン上端まで 19.6 − 半行送り6.4 */
+  border:1px solid var(--blue);
+  font-size:var(--lead);        /* 実測 字送り 18.8@1440 → トークン18px */
+  letter-spacing:.06em;         /* 実測 字送り − 級数 ≒ 1px@1536 */
+  color:var(--blue);            /* 白地に 6.02:1 */
   text-decoration:none;
-  transition:background .2s ease;
+  transition:background-color .2s, color .2s;
 }
-.strans__btn:hover,
-.strans__btn:focus-visible{background:#eae7e3}
-.strans__btn svg{color:var(--brand);flex:none}
+.strans__btn svg{
+  position:absolute;
+  right:26px;                   /* 実測 山形の右端からボタン右辺まで 28@1536 */
+  top:50%;
+  transform:translateY(-50%);
+}
 
-/* ---- 折り返し ---- */
-@media (max-width:1000px){
-  .strans__grid{grid-template-columns:repeat(2,1fr)}   /* 3列だとカードが232pxまで痩せる */
+/* ---- 触ったときだけの表示。モックには無いが、リンクなので付けた ---- */
+@media (hover:hover){
+  .strans__card:hover .strans__name{color:var(--blue)}
+  .strans__btn:hover{background:var(--blue);color:var(--card)}  /* 白文字 6.02:1 */
 }
-@media (max-width:860px){
-  .strans__foot{flex-direction:column;align-items:stretch;gap:22px}
-  .strans__btn{min-width:0;width:100%}
+.strans__card:focus-visible,
+.strans__btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+/* ---- 幅が狭いとき ---- */
+@media (max-width:900px){
+  .strans__grid{grid-template-columns:1fr;grid-template-rows:none}
+  .strans__card{grid-row:auto;grid-template-rows:none;display:flex;flex-direction:column}
+  .strans__card + .strans__card{margin-top:clamp(28px,5vw,40px)}
+  .strans__card + .strans__card::before{display:none}
+  .strans__btn{width:100%;max-width:430px}
 }
-@media (max-width:660px){
-  .strans__grid{grid-template-columns:1fr;gap:16px}
-  .strans__shot{padding-top:14px}
-  .strans__lead,.strans__close{max-width:none}
+@media (max-width:700px){
+  .strans__nb{display:inline}   /* 文節の塊のままだと画面外へ溢れる */
+  .strans__panel{padding:clamp(20px,4vw,30px) var(--pad) clamp(28px,5vw,40px)}
 }
 /* ── 節4 ── */
-/* 4. 3つの安心 ── 地は白、箱は #f4f4f4 の塗りのみ。罫（枠線）は使わない */
+/* ── 4. 3つの安心 ──────────────────────────────────────────────
+   採用モック _lp/blue4.png（1536x1024）の実測から起こした。
+   換算：モック横1536 → 実装1440 は ×0.9375。
+        ただし桁は モック1420px幅（=横の92.4%）→ --wrap 1200px に絞ったので、
+        箱の内側の寸法はさらに ×0.845（1200/1420）を掛けてある。
+   地 #eff3fb → var(--bg) ／ 箱 #fefefe → var(--card)。輝度差 11.6（目標7〜12）。罫は無し。
+   級数はモックがポスター寸法（見出し70.6px@1440・本文17.4px@1440）なのでトークンに収めた。
+   ──────────────────────────────────────────────────────────── */
+
 .sassure{
-  background:#fff;
+  background:var(--bg);
   padding:var(--sec-y) var(--pad);
 }
 .sassure__inner{
@@ -540,378 +708,552 @@ a{color:inherit}
   margin:0 auto;
 }
 
-/* 見出し */
+/* ── 見出し ── 実測 字送り75.3px@1536（=70.6@1440）＝ポスター寸法。--h2 に収めた
+      色 実測 #0c223f → var(--navy)（地に対し 12.97:1） */
 .sassure__h2{
   margin:0;
   text-align:center;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
   font-weight:600;
   font-size:var(--h2);
-  line-height:1.24;
+  line-height:1.24;            /* 実測：単行のため行送りは取れず。他節と揃えた ※要確認 */
   letter-spacing:.04em;
-  color:var(--ink);
-}
-/* 見出し下の赤い短罫。実測 68x4px@1536 → 64x4px@1440 */
-.sassure__hrule{
-  display:block;
-  width:64px;
-  height:4px;
-  margin:19px auto 0;
-  background:var(--brand-ink);
+  color:var(--navy);
 }
 
-/* 箱の並び。実測 429px幅・間 35px@1536 → 幅の比 0.0816 を保って --wrap に収めた */
+/* ── 見出しの下の小さいラベル ── 実測 字送り27px@1536。ゴシック
+      色 実測 #104a97 → var(--blue)（地に対し 5.45:1）
+      位置 実測 H2字面の下端201 → ラベル上端236 ＝ 35px@1536（32.8@1440）。
+           級数が半分になったぶん詰めて 22px */
+.sassure__label{
+  margin:clamp(12px,1.53vw,22px) 0 0;
+  text-align:center;
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+  font-size:var(--lead);
+  line-height:1.5;
+  letter-spacing:.08em;
+  color:var(--blue);
+}
+
+/* ── ラベルの下の短い罫 ── 実測 x744-790 ＝ 47px幅・厚み1.33px・色#20609f
+      → 44px×1px・var(--blue)。位置 実測 ラベル下端260 → 罫291 ＝ 31px@1536（29@1440） */
+.sassure__rule{
+  display:block;
+  width:44px;
+  height:1px;
+  margin:clamp(15px,1.6vw,23px) auto 0;   /* 行箱ぶんを引いた値。字面間で29pxになる */
+  background:var(--blue);
+}
+
+/* ── 箱の並び ── 実測 箱 x59-517 / 542-996 / 1021-1478（幅459・455・458、間24px）
+      間 24px@1536 → ×0.9375×0.845 ＝ 20px */
 .sassure__grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:clamp(20px,2.28vw,33px);
-  margin-top:clamp(35px,4.1vw,59px);
-}
-.sassure__card{
-  background:#f4f4f4;              /* 白との輝度差 11 */
-  padding:45px clamp(22px,2.5vw,36px) 61px;
+  gap:clamp(14px,1.4vw,20px);
+  margin-top:clamp(24px,2.6vw,38px);   /* 実測 罫291 → 箱上端331 ＝ 40px@1536（37.5@1440） */
 }
 
-/* 通し番号 */
+/* ── 箱 ── 塗りだけ。罫（枠線）は使わない
+      角R 実測 4px@1536 → 4px
+      影 実測 箱の下に階調差5/255が8pxぶん・横に2/255。ごく薄いので同じ濃さで置いた
+      内余白 実測 上54 / 横45 / 下72（px@1536）→ ×0.845 で 46 / 38 / 61 */
+.sassure__card{
+  background:var(--card);              /* 地との輝度差 11.6 */
+  border-radius:4px;
+  box-shadow:0 3px 10px rgba(15,43,74,.045);
+  padding:clamp(30px,3.2vw,46px) clamp(22px,2.64vw,38px) clamp(36px,4.24vw,61px);
+}
+
+/* ── 通し番号のバッジ ── 実測 円の径45px・塗り#225a98・中の数字は高さ24px
+      モックでは 円＝箱幅の9.8%／数字の級数(33.3px)＝箱の見出し(34.1px)／数字の高さ＝円の53%。
+      級数を落としたぶん3つ同時には保てないので、
+      数字＝見出しと同級（22px）にし、円は 34px（箱幅の8.8%・数字の高さの2.15倍）で折り合わせた */
 .sassure__num{
   margin:0;
-  font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:400;
-  font-size:clamp(23px,2.36vw,34px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:clamp(28px,2.36vw,34px);
+  height:clamp(28px,2.36vw,34px);
+  border-radius:50%;
+  background:var(--blue);
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+  font-size:clamp(19px,1.53vw,22px);
+  font-weight:600;
   line-height:1;
-  letter-spacing:.02em;
-  color:var(--brand-ink);          /* #f4f4f4 上で 5.3:1 */
-}
-/* 番号下の赤い短罫。実測 48x2px@1536 → 45x2px@1440 */
-.sassure__nrule{
-  display:block;
-  width:45px;
-  height:2px;
-  margin:15px 0 0;
-  background:var(--brand);
+  color:#fff;                          /* var(--blue) 上で 6.02:1 */
 }
 
-/* 箱の見出し */
+/* ── 箱の見出し ── 実測 字送り34.1px@1536（32@1440）＝ポスター寸法。
+      節の見出しを --h2 に収めた以上そのままは入らないので、--lead と --h2 の間に置いた
+      色 実測 #0e438c → var(--blue)（白の上で 6.02:1）
+      行送り 実測 54px / 34.1px ＝ 1.58（比なのでそのまま使える）
+      位置 実測 バッジ下端430 → 見出し上端473 ＝ 43px@1536 → ×0.845 で 36px */
 .sassure__title{
-  margin:36px 0 0;
+  margin:clamp(20px,2.22vw,32px) 0 0;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
   font-weight:600;
-  font-size:clamp(19px,1.94vw,28px);
-  line-height:1.5;
-  letter-spacing:.02em;
-  color:var(--ink);
+  font-size:clamp(19px,1.53vw,22px);
+  line-height:1.58;
+  letter-spacing:.03em;
+  color:var(--blue);
 }
 
-/* 箱の本文。モックは両端揃え（1行目20字・3行目19字が同じ右端で終わっている） */
+/* ── 箱の本文 ── 実測 字送り18.53px@1536（17.4@1440）＝ポスター寸法。--body に収めた
+      行送り 実測 43.25px / 18.53px ＝ 2.33
+      色 実測 最頻#2c2e32 → var(--text)（白の上で 12.59:1）
+      両端揃え：モックの各行の右端が3〜6pxしかばらついていない（20字組）
+      位置 実測 見出し下端558 → 本文上端615。行箱ぶんを引いて 32px@1536 → ×0.845 で 26px */
 .sassure__text{
-  margin:17px 0 0;
+  margin:clamp(16px,1.81vw,26px) 0 0;
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
   font-size:var(--body);
-  line-height:2.1;
-  color:var(--nav);                /* #f4f4f4 上で 12.6:1 */
+  line-height:2.33;
+  letter-spacing:.02em;
+  color:var(--text);
   text-align:justify;
   text-justify:inter-character;
 }
 
+/* 狭い画面。モックの改行位置（.sassure__br）は 375px でも 320px でも収まるので残す。
+   外すと「一緒に探／します」のように語の途中で折れた */
 @media (max-width:860px){
   .sassure__grid{grid-template-columns:1fr;gap:16px}
-  .sassure__card{padding:32px 24px 36px}
-  .sassure__title{margin-top:28px}
+  .sassure__card{padding:30px 24px 34px}
+  .sassure__text{line-height:2.1}     /* モックは2.33。縦に伸びすぎるので狭い画面だけ詰めた */
 }
 /* ── 節5 ── */
-/* ===== 第5節 実績と規模 =====================================================
-   モック sec5a.png（1536x1024）実測 → 1440実装（横 x0.9375）
-   地・箱ともに #fff。箱の強度は上辺の var(--brand) 2px のみ。写真なし。
-   🚨 TOKENS.css は --body を「色 #0e0d0e」→「級数 clamp()」で後勝ちに再定義しているため、
-      var(--body) は級数としてのみ使う。色は var(--ink) / var(--nav) を使う。
+/* ===== 第5節 実績と規模 ／ 青系 ==============================================
+   採用モック _lp/blue5.png（1536x1024）を実測 → 1440実装（横 x0.9375）
+   地も箱も var(--bg)。箱の強度は上辺の var(--blue) 2px だけ。写真なし。
+   色は TOKENS_BLUE.css の変数のみ。赤は使わない。
+   実測の要点（@1536 → @1440）
+     桁     箱の左右端 x203-1331 ＝ 幅1129 → 1058。中心 767（画面中心768＝中央揃え）
+     見出し 字送り71.5／級数63（字面比で算出）→ ls 0.135em。ポスター寸法なので var(--h2) へ
+     本文   字送り21〜23／級数20〜22 → var(--body)
+     地     #eff4fb（＝--bg #eff4fa）
    ========================================================================== */
 .srecord{
-  background:#fff;
+  background:var(--bg);
   padding:var(--sec-y) var(--pad);
   color:var(--ink);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
 }
-.srecord__wrap{ max-width:var(--wrap); margin-inline:auto; }
+.srecord__wrap{
+  max-width:var(--wrap);   /* 実測は1058px@1440。節をまたいだ桁を揃えるため --wrap を採る */
+  margin-inline:auto;
+  text-align:center;       /* 実測 全ブロックが中心767＝中央揃え */
+}
 
-/* --- 見出し／リード -------------------------------------------------------
-   実測 見出し字送り 80px@1536 = 75px@1440 → ポスター寸法なので実務値 var(--h2)=48px へ
-   実測 リード字送り 25px@1536 = 23.4px@1440 → var(--lead)=19px へ
-   実測 見出し墨下端→リード墨上端 39px@1536 = 36.6px@1440 */
+/* --- 見出し ---------------------------------------------------------------
+   実測 級数63px@1536（字面 実59/績61/規61/模62 ÷ 同書体100pxの字面94/96/98/98）
+   実測 字送り71.5px@1536 → letter-spacing = 71.5-63 = 8.5px ＝ 0.135em
+   実測 墨 #0b1a3b → var(--navy)
+   実測 見出し墨下端152 → 罫上端181 ＝ 29px@1536 = 27px@1440
+   実測 罫 x734-800（幅67 → 62@1440）／濃さは --blue 2px 相当 */
 .srecord__h{
   margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
   font-weight:600;
   font-size:var(--h2);
   line-height:1.34;
-  letter-spacing:.02em;
-  color:var(--ink);
+  letter-spacing:.135em;
+  text-indent:.135em;      /* 字間の追い込み分だけ中心がずれるのを戻す */
+  color:var(--navy);
 }
+.srecord__h::after{
+  content:"";
+  display:block;
+  width:62px; height:2px;
+  margin:clamp(11px,1.32vw,19px) auto 0;   /* 撮って測り直し 目標27／余白19+行間8 */
+  background:var(--blue);
+}
+
+/* --- リード ---------------------------------------------------------------
+   実測 字送り21px@1536／級数20 → var(--lead)
+   実測 罫下端182 → リード墨上端222 ＝ 40px@1536 = 37px@1440
+   実測 墨 #000000 → var(--ink) */
 .srecord__lead{
-  margin:clamp(11px,1.39vw,20px) 0 0;
+  margin:clamp(18px,2.08vw,30px) 0 0;      /* 撮って測り直し 目標37／余白30+行間7 */
   font-size:var(--lead);
   line-height:1.75;
   color:var(--ink);
 }
 
-/* --- 取引先の帯 -----------------------------------------------------------
-   実測 字送り 24.5px@1536 = 23px@1440 → 実務値 var(--body)=16px へ
-   実測 罫は各項目の中間に立つ 1px（#dedede ≒ var(--rule)）
-   実測 1行目墨上端 324 → 2行目墨上端 405 ＝ 行送り 81px@1536 = 76px@1440
-   実測 リード墨下端 251 → 帯1行目墨上端 324 ＝ 73px@1536 = 68px@1440 */
+/* --- ロゴ帯の見出し行 -----------------------------------------------------
+   実測 罫 y310 の1px。左 x203-712／右 x821-1331 ＝ 左右等長（ラベルは中央）
+   実測 ラベル墨 x738-796／字送り20＝級数20（追い込みなし）／墨 #1f57a0 → var(--blue)
+   実測 罫の端 → ラベル墨 25px@1536 = 23px@1440
+   実測 リード墨下端242 → ラベル墨上端298 ＝ 56px@1536 = 52px@1440
+   実測 罫の色 #afc4de。トークンの細罫 var(--line) を採る（→ 決定事項に記載） */
+.srecord__bandhead{
+  margin-top:clamp(24px,2.78vw,40px);      /* 撮って測り直し 目標52／余白40+行間12 */
+  display:flex;
+  align-items:center;
+  gap:clamp(14px,1.6vw,23px);
+}
+.srecord__bandhead::before,
+.srecord__bandhead::after{
+  content:"";
+  flex:1 1 0;
+  height:1px;
+  background:var(--line);
+}
+.srecord__bandlabel{
+  margin:0;
+  font-size:var(--body);
+  font-weight:700;
+  line-height:1.5;
+  color:var(--blue);
+}
+
+/* --- ロゴ帯の本体 ---------------------------------------------------------
+   実測 ラベル墨下端318 → 1行目墨上端354 ＝ 36px@1536 = 34px@1440
+   実測 1行目墨上端354 → 2行目墨上端402 ＝ 行送り48px。級数21に対し比2.29
+        → 級数が var(--body)16px に下がるので比で移す（1.9 + 行間6px ≒ 36px）
+   実測 ／ は名前より淡い（最暗 #615d5d）→ var(--mute)（地に対し 4.95:1）
+   実測 ／ の前後の空き 27〜32px@1536 ＝ 級数の約1.4倍 → 左右 .55em */
 .srecord__clients{
-  margin-top:clamp(28px,3.89vw,56px);
+  margin-top:clamp(13px,1.53vw,22px);      /* 撮って測り直し 目標34／余白22+行間12 */
   display:flex;
   flex-direction:column;
-  gap:clamp(28px,3.61vw,52px);
+  gap:6px;
 }
 .srecord__row{
   margin:0; padding:0; list-style:none;
   display:flex;
-  align-items:center;
-  justify-content:space-between;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:baseline;
   font-size:var(--body);
-  line-height:1.5;
+  line-height:1.9;
   color:var(--ink);
 }
 .srecord__row li{ white-space:nowrap; }
 .srecord__sep{
-  flex:0 0 1px;
-  align-self:stretch;
-  background:var(--rule);
+  color:var(--mute);
+  margin:0 .55em;
 }
-/* 実測 「ほか」は帯本文の 0.7倍。可読の下限として var(--navfs) に置いた */
-.srecord__etc{
-  margin-left:.9em;
-  font-size:var(--navfs);
-  color:var(--nav);
-}
+/* 実測「ほか」は帯本文と同級（字面38px／2字＝字送り19-20）。／ を挟まず空きだけ */
+.srecord__etc{ margin-left:1.1em; }
 
-/* --- 定量表現の3桁 --------------------------------------------------------
-   実測 桁の縦罫 x=539.5 / 971.5（1536）＝ 箱幅 113-1422 のほぼ3等分
-   実測 罫から本文までの左余白 56.5px@1536 = 53px@1440
-   実測 見出し 69px@1536 = 64.7px@1440 → 見出し 48px との比 0.88 を掛けて 42px
-   実測 小見出し字送り 24px（本文26の0.92）→ var(--pt)=14px
-   実測 帯2行目墨下端 428 → 小見出し墨上端 520 ＝ 92px@1536 = 86px@1440 */
+/* --- 定量の3桁 ------------------------------------------------------------
+   実測 縦罫 x573.5／x946.5 の1px、y490-635（高さ146 → 137@1440）
+   実測 各桁の中心 375／760／1140 ＝ 桁を3等分した中央揃え
+   実測 帯2行目墨下端422 → 縦罫上端490 ＝ 68px@1536 = 64 → var(--g-body)
+   実測 縦罫上端490 → ラベル墨上端503 ＝ 13px@1536 = 12px@1440
+   実測 ラベル墨下端522 → 短罫539 ＝ 17px@1536 = 16px@1440
+   実測 短罫539 → 大書き墨上端575 ＝ 36px@1536 = 34px@1440
+   実測 大書き墨下端614 → 縦罫下端635 ＝ 21px@1536 = 20px@1440 */
 .srecord__stats{
-  margin:var(--g-body) 0 0;
+  margin:calc(var(--g-body) - 4px) 0 0;    /* 撮って測り直し 目標64／余白56+行間8 */
   display:grid;
   grid-template-columns:repeat(3,1fr);
 }
-.srecord__stat{ min-width:0; }
-.srecord__stat + .srecord__stat{
-  border-left:1px solid var(--rule);
-  padding-left:clamp(18px,3.68vw,53px);
+/* 上下の余白は「縦罫が文字からどれだけ張り出すか」。実測 上12／下（最下行の墨から）10 */
+.srecord__stat{
+  min-width:0;
+  padding:clamp(6px,.63vw,9px) clamp(10px,1.4vw,20px) clamp(4px,.35vw,5px);
 }
+.srecord__stat + .srecord__stat{ border-left:1px solid var(--line); }
+
+/* 実測 ラベル 級数20.4（字面19 ÷ 同書体太字100pxの字面93）／字送り23
+        → letter-spacing = 23-20.4 = 2.6px ＝ 0.127em。墨 #144794 → var(--blue) */
 .srecord__stat dt{
   margin:0;
-  font-size:var(--pt);
+  font-size:var(--body);
+  font-weight:700;
   line-height:1.5;
-  color:var(--nav);
+  letter-spacing:.127em;
+  text-indent:.127em;
+  color:var(--blue);
 }
-.srecord__stat dt::before{ content:"- "; }
+/* 実測 短罫 幅37px@1536 = 35px@1440 ／ 濃さは --blue 1px 相当 */
+.srecord__stat dt::after{
+  content:"";
+  display:block;
+  width:36px; height:1px;
+  margin:clamp(7px,.7vw,10px) auto 0;      /* 撮って測り直し 目標16／余白10+行間6 */
+  background:var(--blue);
+}
 .srecord__stat dd{
-  /* 実測 小見出し墨下端 541 → 見出し墨上端 569 ＝ 28px@1536 = 26px@1440 */
-  margin:clamp(8px,1.11vw,16px) 0 0;
-  color:var(--ink);
+  margin:clamp(18px,2.01vw,29px) 0 0;      /* 撮って測り直し 目標34／余白29+行間5 */
+  color:var(--navy);
 }
+
+/* 実測 大書き 級数41px@1536（字面 累36/計41/件40 ÷ 同書体100pxの字面88/96/97）
+        字送り48.25 → letter-spacing = 7.25px ＝ 0.177em
+        見出し63との比 0.65。ただし本文比では 2.0 になる。
+        両者の中間 var(--h2)×0.82 に置いた（→ 決定事項に記載） */
 .srecord__fig{
+  position:relative;          /* ※要確認 を絶対配置で逃がし、大書きの中心をずらさない */
+  display:inline-block;
   font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
   font-weight:600;
-  font-size:calc(var(--h2) * .88);
-  line-height:1.28;
-  letter-spacing:.01em;
+  font-size:calc(var(--h2) * .82);
+  line-height:1.3;
+  letter-spacing:.16em;
+  text-indent:.16em;
 }
+/* 実測 列2の「20」だけ大きい。字面高46 ÷ 同書体100pxの字面高78 ＝ 級数59px@1536。
+   周りの漢字（級数39.8）に対し 1.48倍。節見出し var(--h2) を超えないため 1.22倍で止めた */
+.srecord__num{
+  font-size:var(--h2);
+  letter-spacing:.04em;
+}
+/* 実測 列3だけ本文組み。字送り22／行送り38 ＝ 比1.78。墨 #00000b → var(--ink) */
 .srecord__note{
-  margin:0;
+  font-family:inherit;
   font-size:var(--body);
-  line-height:1.8;
+  font-weight:400;
+  line-height:1.78;
+  letter-spacing:.02em;
+  color:var(--ink);
 }
-/* 読点で折る。和文は任意位置で折れるので nowrap の塊＋wbr で改行位置を握る */
-.srecord__nb{ white-space:nowrap; }
 /* 数字が未確定の箇所。ここは埋めない */
 .srecord__tbc{
-  display:inline-block;
-  margin-left:.7em;
-  vertical-align:.25em;
+  position:absolute;
+  left:100%; top:50%;
+  transform:translateY(-45%);
+  margin-left:.5em;
+  white-space:nowrap;
+  text-indent:0;
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
   font-weight:400;
-  font-size:var(--navfs);
+  font-size:var(--small);
+  line-height:1;
   letter-spacing:.04em;
-  color:var(--nav);
+  color:var(--mute);
 }
 
 /* --- 業種一覧の箱 ---------------------------------------------------------
-   実測 箱 x113-1422（＝コンテンツ幅いっぱい）、上辺の赤罫 y699-701
-   実測 見出し墨下端 637 → 赤罫 699 ＝ 62px@1536 = 58px@1440
-   実測 赤罫 700 → 本文1行目墨上端 754 ＝ 54px@1536 = 51px@1440
-   実測 本文3行目墨下端 870 → 箱の下端 920 ＝ 50px@1536 = 47px@1440
-   実測 見出し列 x113-439 ＝ 箱幅の24.9% → 25%
-   実測 本文の行送り 44px / 字送り 24.4px（@1440）＝ 1.80 */
+   実測 箱 x203-1331（＝桁いっぱい）／上辺 y699-700 の2px #094390 → var(--blue)
+   実測 左右辺 x203.5・x1330.5／下辺 y955 の1px #cbd4e6 → var(--line)
+   実測 縦罫下端635 → 箱上辺699 ＝ 64px@1536 = 60 → var(--g-body)
+   実測 箱上辺700 → ラベル墨上端730 ＝ 30px@1536 = 28px@1440
+   実測 ラベル墨下端750 → 短罫770 ＝ 20px@1536 = 19px@1440
+   実測 短罫770 → 本文1行目墨上端797 ＝ 27px@1536 = 25px@1440
+   実測 本文3行目墨下端914 → 箱下端955 ＝ 41px@1536 = 38px@1440 */
 .srecord__box{
-  margin-top:clamp(27px,3.4vw,49px);
-  background:#fff;
-  border-top:2px solid var(--brand);
-  padding:clamp(24px,3.06vw,44px) 0 clamp(22px,2.85vw,41px);
-  display:grid;
-  grid-template-columns:25% 1fr;
-  align-items:center;
-  column-gap:0;
+  margin-top:var(--g-body);
+  background:var(--bg);                 /* 地と同色。輝度差0 */
+  border:1px solid var(--line);
+  border-top:2px solid var(--blue);
+  /* 撮って測り直し 上 目標28／余白24+行間4、下 目標38／余白27+行間11 */
+  padding:clamp(16px,1.67vw,24px) var(--pad) clamp(17px,1.88vw,27px);
 }
+/* 実測 ラベル 級数22.3（字面21 ÷ 同書体太字100pxの字面95）／字送り27.3
+        → letter-spacing = 5px ＝ 0.22em。墨は --blue */
 .srecord__boxlabel{
   margin:0;
-  text-align:center;
-  font-size:calc(var(--body) * 1.3);
-  line-height:1.5;
-  letter-spacing:.13em;
-  text-indent:.13em;
-  color:var(--ink);
-}
-.srecord__boxbody{
-  margin:0;
-  padding-right:var(--pad);
   font-size:var(--body);
-  line-height:1.8;
+  font-weight:700;
+  line-height:1.5;
+  letter-spacing:.22em;
+  text-indent:.22em;
+  color:var(--blue);
+}
+/* 実測 短罫 x747-786（幅40 → 37@1440）／ --blue 1px 相当 */
+.srecord__boxlabel::after{
+  content:"";
+  display:block;
+  width:36px; height:1px;
+  margin:clamp(8px,.9vw,13px) auto 0;      /* 撮って測り直し 目標19／余白13+行間6 */
+  background:var(--blue);
+}
+/* 実測 本文 字送り23.2／級数22.3／行送り48 ＝ 比2.15。墨 #000000 → var(--ink) */
+.srecord__boxbody{
+  margin:clamp(11px,1.18vw,17px) 0 0;      /* 撮って測り直し 目標25／余白17+行間8 */
+  font-size:var(--body);
+  line-height:2.1;
+  letter-spacing:.04em;
   color:var(--ink);
 }
+/* 和文は任意位置で折れる。読点の塊を nowrap で括り、wbr で折る位置を握る */
+.srecord__nb{ white-space:nowrap; }
 
 /* --- 狭い幅 --------------------------------------------------------------- */
 @media (max-width:860px){
-  .srecord__row{
-    flex-wrap:wrap;
-    justify-content:center;
-    column-gap:clamp(16px,4.4vw,34px);
-    row-gap:.5em;
-  }
+  /* 折り返すと ／ が行末に残る。狭い幅では ／ を落として空きで切る */
   .srecord__sep{ display:none; }
-  .srecord__clients{ gap:.5em; }
+  .srecord__row{ column-gap:1.5em; row-gap:.2em; }
   .srecord__stats{ grid-template-columns:1fr; }
+  .srecord__stat{ padding-inline:0; }
   .srecord__stat + .srecord__stat{
     border-left:0;
-    border-top:1px solid var(--rule);
-    padding-left:0;
-    padding-top:clamp(18px,3.5vw,28px);
+    border-top:1px solid var(--line);
     margin-top:clamp(18px,3.5vw,28px);
+    padding-top:clamp(18px,3.5vw,28px);
   }
-  .srecord__box{
-    grid-template-columns:1fr;
-    row-gap:clamp(14px,2.6vw,22px);
-  }
-  .srecord__boxlabel{ text-align:left; }
-  .srecord__boxbody{ padding-right:0; }
+  .srecord__box{ padding-inline:clamp(16px,4vw,32px); }
+  .srecord__h{ letter-spacing:.08em; text-indent:.08em; }
+  .srecord__fig{ letter-spacing:.1em; text-indent:.1em; }
+  .srecord__boxlabel{ letter-spacing:.16em; text-indent:.16em; }
 }
 /* ── 節6 ── */
-/* ── 第6節「進め方」 ───────────────────────────────────────────
-   地は #fff。区切りは --rule の 1px 罫だけ。写真・背景画像なし。
-   桁の位置はモック(1536px)実測を 1440px 実装へ換算し、--wrap(1200px) に正規化した。
-     罫 x114–1420 → 内容幅1224 → --wrap 1200 に正規化
-     縦罫   x278 → 左から 151px（＝1桁目の右端）
-     見出し桁 x318 → 左から 187px（2桁目 151–451px の中で 36px 逃がす）
-     本文桁   x605 → 左から 451px（＝3桁目の左端）
-     番号桁   x173 → 左から  54px
-   ※ グリッド項目の % パディングは「その桁の幅」に対して解決されるので、
-     54/151＝35.7%、36/300＝12% と桁基準で書いてある（wrap基準ではない）。
+/* ── 第6節「進め方」 青系 ─────────────────────────────────────────
+   採用モック _lp/blue6.png（1536x1024）の実測から起こした。
+   地は var(--bg) のみ。面も箱も置かず、var(--line) 1px の罫だけで区切る。写真なし。
+
+   ■ 横（モック1536px → 罫の内容幅 x79–1450＝1371px を --wrap 1200px に正規化。×0.8753）
+     罫の左右端      x79 / x1450      → 内容幅 1371px → 1200px
+     番号の左端      x102–105         → 左から 24px  → 21px（＝--sflow-indent 1.75%）
+     縦罫            x189–190（2px）  → 左から 110.5 → 96.7px（＝--sflow-c1 8.06%）
+     段見出しの左端  x239–244         → 左から 160   → 140px（桁2の左端）
+     本文の左端      x578–580         → 左から 499   → 437px（＝c1+c2 36.40%）
+     補足文の左端    x105             → 番号と同じ 21px
+     小見出しの罫    x80–154（幅74）  → 字の幅と同じ＝border-bottom で出す
+
+   ■ 縦（モック1536px幅 → 1440px 実装。×0.9375）
+     小見出し 字の下端 y74 → 罫 y96          … 22px → 12px（級数を縮めた分だけ詰めた）
+     罫 y96 → 見出し 字の上端 y127           … 31px → 29px ＝ --g-eyebrow
+     見出し 字の下端 y179 → 「5ステップ」y210 … 31px → 箱の間で 17px
+     「5ステップ」下端 y237 → 表の先頭 y267   … 30px → 22px
+     罫の位置 y363 / 460 / 597 / 687 / 780 / 886（6本。表の上には罫なし・最下部にもなし）
+     1行の段の罫→罫  97 / 90 / 93px         … 内容＋上下パディング。パディング実測 21.2px → 24px
+     本文の行送り     36px（字送り19.8px）    … 比 1.8
+     縦罫の丈         段の高さの 56%（上下 22% 空き）
+     補足文 罫→字     18.5 / 15.5px          … 上下パディング 16px
+
+   ■ 級数（モックはポスター寸法。トークンへ収めた）
+     見出し   字送り 56.1px → var(--h2)
+     5ステップ 字送り 28.5px → var(--lead)
+     段見出し 字送り 25.8px → var(--lead)
+     本文     字送り 19.8px → var(--body)
+     小見出し 字送り 25.0px → var(--small)
+     番号     字高 36px（見出し字高53pxの0.68） → calc(var(--h2)*.88)
+
+   ■ 色（実測の最暗画素 → トークン）
+     見出し     #02142e → var(--navy) 地に対し 12.97:1
+     小見出し   #28548d ┐
+     5ステップ  #245994 ├→ var(--blue) 地に対し 5.40:1
+     番号       #1e4f8a ┘
+     段見出し   #0e4683 → var(--blue)
+     本文・補足 #000000 → var(--text) 地に対し 11.39:1
+     罫         #d1dbe9 → var(--line)
    ------------------------------------------------------------------ */
 .sflow{
-  --sflow-c1:12.6%;    /* 番号桁の右端＝縦罫の位置 */
-  --sflow-c2:25%;      /* 見出し桁の幅（151→451） */
-  --sflow-numpad:35.7%;/* 番号の左インデント 54px＝1桁目(151px)の35.7% */
-  --sflow-titlepad:12%;/* 見出しの左インデント 36px＝2桁目(300px)の12% */
-  --sflow-step:clamp(17px,1.53vw,22px); /* 段の見出し。実測25.3px@1440を実務値へ落とした */
-  background:#fff;
+  --sflow-c1:8.06%;        /* 番号桁の右端＝縦罫の位置。実測 110.5px → 96.7px */
+  --sflow-c2:28.34%;       /* 段見出し桁の幅。実測 160→499px を 140→437px へ */
+  --sflow-indent:1.75%;    /* 番号・補足文の左インデント。実測 24px → 21px */
+  --sflow-numpad:21.7%;    /* 21px ÷ 1桁目 96.7px */
+  --sflow-titlepad:12.7%;  /* 43.3px ÷ 2桁目 340.1px */
+  --sflow-num:calc(var(--h2) * .88);          /* 番号。実測比 0.68（字高36/53）から */
+  --sflow-rowpad:clamp(18px,1.65vw,24px);     /* 段の上下パディング。実測 21.2px@1440 */
+  --sflow-notepad:clamp(13px,1.25vw,18px);    /* 補足文の上下パディング。実測 19.5/15.5px@1536 → 18/14.5px */
+  --sflow-bar:22%;                            /* 縦罫の上下の空き。実測 21〜24% */
+
+  background:var(--bg);
+  color:var(--text);
   padding:var(--sec-y) var(--pad);
-  color:var(--nav);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
 }
 .sflow__wrap{max-width:var(--wrap);margin:0 auto}
 
-/* ── 小見出し・見出し ── */
+/* ── 小見出し「進め方」 ── */
 .sflow__eyebrow{
-  margin:0;text-align:center;
-  color:var(--brand-ink);           /* 淡地に赤文字。#fff 5.87:1 */
-  font-size:var(--lead);font-weight:700;letter-spacing:.1em;line-height:1.4;
+  margin:0;
+  font-size:var(--small);font-weight:700;letter-spacing:.16em;line-height:1.4;
+  color:var(--blue);              /* 地 #eff4fa に対し 5.40:1 */
 }
+.sflow__eyebrow span{
+  display:inline-block;
+  padding-bottom:12px;            /* 実測 字の下端→罫 22px@1536 を級数比で詰めた */
+  border-bottom:1px solid var(--line);
+}
+
+/* ── 見出し ── */
 .sflow__h2{
-  margin:var(--g-eyebrow) 0 0;text-align:center;
-  color:var(--ink);
+  margin:var(--g-eyebrow) 0 0;    /* 実測 罫→字 31px@1536 → 29px */
+  color:var(--navy);              /* 実測 #02142e。地に対し 12.97:1 */
   font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
   font-size:var(--h2);font-weight:400;letter-spacing:.02em;line-height:1.3;
+}
+.sflow__sub{                      /* 「5ステップ」。モックはここだけゴシック */
+  display:block;
+  margin-top:clamp(9px,1.18vw,17px);   /* 実測 箱の間 17px */
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+  font-size:var(--lead);font-weight:700;letter-spacing:.06em;line-height:1.4;
+  color:var(--blue);              /* 5.40:1 */
 }
 
 /* ── 5ステップの表 ── */
 .sflow__list{
-  margin:var(--g-lead) 0 0;padding:0;list-style:none;
-  border-top:1px solid var(--rule);
+  margin:clamp(14px,1.53vw,22px) 0 0;  /* 実測 「5ステップ」の下端→表の先頭 22px */
+  padding:0;list-style:none;
 }
 .sflow__row{
   position:relative;
   display:grid;
   grid-template-columns:var(--sflow-c1) var(--sflow-c2) 1fr;
   align-items:center;
-  padding:29px 0;                    /* 実測：罫→字 41/39px@1536 → 行高 106/144px */
-  border-bottom:1px solid var(--rule);
+  padding:var(--sflow-rowpad) 0;
+  border-bottom:1px solid var(--line);  /* 実測 6本のうち上5本。表の上には罫なし */
 }
-.sflow__row::before{                 /* 番号と見出しを分ける縦罫。行高の 52% */
-  content:"";position:absolute;left:var(--sflow-c1);top:24%;bottom:24%;
-  width:1px;background:var(--rule);
+.sflow__row::before{                    /* 番号と段見出しを分ける縦罫。実測 x189・丈56% */
+  content:"";position:absolute;
+  left:var(--sflow-c1);top:var(--sflow-bar);bottom:var(--sflow-bar);
+  width:1px;background:var(--line);
 }
 .sflow__num{
   padding-left:var(--sflow-numpad);
-  color:var(--ink);
+  color:var(--blue);                    /* 実測 #1e4f8a。5.40:1 */
   font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
-  font-size:var(--h2);font-weight:400;line-height:1;letter-spacing:0;
+  /* line-height 1.35 は段の丈あわせ。番号が 51px→30px に縮んだ分、
+     行箱で補って 罫→罫 を実測の 87px（1行の段）に戻している */
+  font-size:var(--sflow-num);font-weight:400;line-height:1.35;letter-spacing:0;
 }
 .sflow__step{
   margin:0;padding-left:var(--sflow-titlepad);
-  color:var(--ink);
-  font-size:var(--sflow-step);font-weight:500;letter-spacing:.02em;line-height:1.5;
+  color:var(--blue);                    /* 実測 #0e4683。5.40:1 */
+  font-size:var(--lead);font-weight:700;letter-spacing:.06em;line-height:1.5;
 }
 .sflow__do{margin:0}
 .sflow__do p{
   margin:0;
-  color:var(--nav);
-  font-size:var(--body);font-weight:400;letter-spacing:.02em;line-height:1.8;
+  color:var(--text);                    /* 11.39:1 */
+  font-size:var(--body);font-weight:400;letter-spacing:.02em;line-height:1.8;  /* 実測 36/19.8＝1.8 */
 }
 
 /* ── 補足文 ── */
-.sflow__foot{
-  margin:var(--g-lead) 0 0;
-  padding-left:2.3%;                 /* 実測 x145 → 28px */
+.sflow__note{
+  margin:0;padding:var(--sflow-notepad) 0 var(--sflow-notepad) var(--sflow-indent);
+  color:var(--text);
+  font-size:var(--body);font-weight:400;letter-spacing:.02em;line-height:1.8;
 }
-.sflow__footrow{
-  display:grid;grid-template-columns:9% 1fr;align-items:baseline;
-  font-size:var(--body);line-height:1.8;letter-spacing:.02em;
-}
-.sflow__footrow + .sflow__footrow{margin-top:28px}
-.sflow__footrow dt{color:var(--ink);font-weight:700;white-space:nowrap}
-.sflow__footrow dd{margin:0;color:var(--nav)}
+.sflow__note + .sflow__note{border-top:1px solid var(--line)}  /* 実測 罫 y886 */
+
+/* 原稿の改行はPC用。幅が詰まったら切って自然に折り返させる */
+@media (max-width:820px){ .sflow__brp{display:none} }
 
 /* ── 幅が詰まったら 2桁へ ── */
 @media (max-width:1000px){
-  .sflow{--sflow-c1:11%;--sflow-numpad:0px;--sflow-titlepad:1.4em}
+  /* 番号を桁の左端へ寄せるので、補足文の左端も 0 に合わせる（実測の「補足文＝番号と同じ左端」を維持） */
+  .sflow{--sflow-c1:11%;--sflow-numpad:0px;--sflow-titlepad:1.4em;--sflow-indent:0px}
   .sflow__row{
     grid-template-columns:var(--sflow-c1) 1fr;
     align-items:start;
     row-gap:10px;
   }
-  .sflow__num{align-self:start}
+  .sflow__num{align-self:start;line-height:1.2}
   .sflow__step{grid-column:2}
   .sflow__do{grid-column:2;padding-left:var(--sflow-titlepad)}
-  .sflow__footrow{grid-template-columns:5.5em 1fr}
 }
 @media (max-width:600px){
-  .sflow{--sflow-c1:2.6em;--sflow-numpad:0px;--sflow-titlepad:.7em}
-  .sflow__row{padding:22px 0}
-  .sflow__row::before{top:14px;bottom:auto;height:calc(100% - 28px)}
-  .sflow__foot{padding-left:0}
-  .sflow__footrow{grid-template-columns:1fr;row-gap:4px}
-  .sflow__footrow + .sflow__footrow{margin-top:20px}
+  .sflow{--sflow-c1:2.6em;--sflow-titlepad:.7em;--sflow-indent:0px}
+  .sflow__row{padding:20px 0}
+  .sflow__row::before{top:6px;bottom:auto;height:calc(100% - 26px)}
 }
 /* ── 節7 ── */
-/* 7. 料金 ── 地=#fff／箱=#f4f4f4（実測 100.00 / 90.47・輝度差 9.5）。写真なし・罫なし */
+/* 7. 料金 ── 青系
+   地=var(--bg) #eff4fa／箱=var(--card) #fff（輝度差 89.96 vs 100.00 ＝ 10.0）
+   モック blue7.png（1536x1024）実測 → 1440実装は 横 x0.9375
+   写真なし・罫（ボーダー）なし。塗りの濃淡と余白だけで組む */
 .sprice{
-  background:#fff;
+  background:var(--bg);
   padding-block:var(--sec-y);
-  color:var(--nav);
+  color:var(--text);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
   -webkit-font-smoothing:antialiased;
 }
@@ -920,129 +1262,168 @@ a{color:inherit}
   margin-inline:auto;
 }
 
-/* 見出し「料金」＝明朝＋赤の縦棒（モック実測 棒5×51px／字送り56px） */
+/* 見出し「料金」＝明朝・濃紺。下に短い青の横棒
+   実測 字送り59px／棒 x167-245（幅79・太さ4）／見出し下端121→棒上端157（36）
+   級数はトークンへ落とす（--h2）。棒は見出しに対する比で持つ：79/59=1.34em */
 .sprice__h2{
-  display:flex;
-  align-items:center;
   margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
   font-weight:600;
   font-size:var(--h2);
   line-height:1.2;
-  letter-spacing:.02em;
-  color:var(--ink);
+  letter-spacing:.04em;
+  color:var(--navy);
 }
-.sprice__h2::before{
+.sprice__h2::after{
   content:"";
-  flex:none;
-  width:5px;
-  height:.9em;
-  margin-right:clamp(10px, 1.11vw, 16px);
-  background:var(--brand);
+  display:block;
+  width:1.34em;              /* 実測 棒79px ÷ 字送り59px */
+  height:.09em;              /* 実測 4px ÷ 59px */
+  margin-top:.82em;          /* 実測 見出し下端121→棒上端157＝36px。再測して +4px 詰まっていたので補正 */
+  background:var(--blue);
 }
 
-/* 節の主張（明朝） */
+/* 節の主張（明朝・濃紺）。実測 字送り34px＝ポスター寸法なので --lead に収める */
 .sprice__sub{
-  margin:clamp(18px, 1.88vw, 27px) 0 0;
+  margin:clamp(22px, 2.37vw, 34px) 0 0;   /* 実測 棒下端160→字上端205＝45 */
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
   font-weight:600;
   font-size:var(--lead);
   line-height:1.6;
-  letter-spacing:.02em;
-  color:var(--ink);
+  letter-spacing:.03em;
+  color:var(--navy);
 }
 
-/* リード（ゴシック・2行） */
+/* リード（ゴシック・2行）。実測 字送り16.4px／行送り32px＝lh 1.95 */
 .sprice__lead{
-  margin:clamp(13px, 1.32vw, 19px) 0 0;
+  margin:clamp(14px, 1.46vw, 21px) 0 0;   /* 実測 主張下端237→リード上端273＝36（→1440で33.8） */
   font-size:var(--body);
-  line-height:2;
+  line-height:1.95;
 }
 
-/* 箱 */
+/* 箱＝白。実測 x165-1369（幅1204）／y358-898（高さ541）／角丸16px／下に薄い影 */
 .sprice__panel{
-  margin-top:clamp(20px, 1.88vw, 27px);
-  padding:clamp(20px,2.01vw,29px) clamp(16px,2.92vw,42px) clamp(18px,1.6vw,23px);
-  background:#f4f4f4;
-  border-radius:6px;
+  margin-top:clamp(16px, 1.6vw, 23px);    /* 実測 リード下端323→箱上端358＝35 */
+  padding:clamp(18px,1.74vw,25px) clamp(16px,2.64vw,38px) clamp(20px,1.95vw,28px);
+  background:var(--card);
+  border-radius:15px;                     /* 実測 16px@1536 */
+  box-shadow:0 3px 9px rgba(15,43,74,.06);/* 実測 箱の下 1px で 245→237（-8/255） */
 }
 
-/* 料金表。帯は奇数行だけ（モック実測：行ピッチ56px・帯50px） */
+/* 料金表
+   実測 帯 x206-1329（箱の内側いっぱい）／ヘッダ帯 y385-441（h57）
+        行ピッチ61.2px・帯の高さ60px（＝行間の隙間 約1.5px）
+        価格列の左端 x944 ＝ 帯幅1124 の 65.7% */
 .sprice__table{
   width:100%;
   border-collapse:separate;
-  border-spacing:0 6px;
+  border-spacing:0 2px;                   /* 実測 行間 約1.5px */
   font-size:var(--body);
   text-align:left;
 }
 .sprice__table th,
 .sprice__table td{
-  padding-block:11px;
   font-weight:400;
+  line-height:1.6;
 }
+.sprice__table td{ padding-block:15px; }  /* 実測 行の帯 60px@1536 ≒ 56px@1440 */
 .sprice__table th{
-  padding-block:0 13px;
+  padding-block:14px;                     /* 実測 ヘッダ帯 57px@1536 ≒ 53px@1440 */
   font-weight:600;
-  color:var(--ink);
+  color:var(--blue);                      /* 実測 #0d4e98 → --blue。帯の上で 5.44:1 */
+  background:var(--bg);                   /* 実測 ヘッダ帯＝地と同じ淡い青 */
 }
 .sprice__table th:first-child,
 .sprice__table td:first-child{
-  width:57.5%;
-  padding-left:clamp(12px, 1.53vw, 22px);
+  width:65.7%;                            /* 実測 価格列の左端が帯幅の65.7% */
+  padding-left:34px;                      /* 実測 帯左206→文字左242＝36 */
 }
 .sprice__table th:last-child,
 .sprice__table td:last-child{
-  padding-right:clamp(12px, 1.53vw, 22px);
+  padding-right:34px;
 }
-.sprice__table tbody tr:nth-child(odd) td{ background:#fafafa; }
+.sprice__table th:first-child{ border-radius:4px 0 0 4px; }
+.sprice__table th:last-child{ border-radius:0 4px 4px 0; }
 
-/* 「A4二つ折り」と「4ページ」の間（モック実測 26px＝約1.2em） */
-.sprice__spec{ word-spacing:.9em; }
+/* 縞は偶数行だけ。実測 #f6f9fd ＝ 淡い青と白の中間（＝地と箱の中間 #f6f9fc）
+   1行目は color-mix 非対応ブラウザ向けの控え */
+.sprice__table tbody tr:nth-child(even) td{
+  background:var(--bg);
+  background:color-mix(in srgb, var(--bg) 55%, var(--card));
+}
+.sprice__table tbody tr:nth-child(even) td:first-child{ border-radius:4px 0 0 4px; }
+.sprice__table tbody tr:nth-child(even) td:last-child{ border-radius:0 4px 4px 0; }
 
-/* 注記。※ を字下げの外にぶら下げる（モック実測 ※ x=193／本文 x=218） */
+/* 「A4二つ折り」と「4ページ」の間（実測 24px 送り ＝ 通常19.3px ＋ 約0.25em） */
+.sprice__spec{ word-spacing:.2em; }
+
+/* 注記。※ を字下げの外にぶら下げる
+   実測 ※ x211（＝帯の左端）／本文 x232 ＝ 21px ≒ 1.5em／行送り34.5px */
 .sprice__notes{
-  margin:15px 0 0;
+  margin:clamp(10px, 1vw, 14px) 0 0;
   padding:0;
   list-style:none;
-  font-size:var(--pt);
-  line-height:2.3;
+  font-size:var(--small);
+  line-height:2.4;
+  color:var(--mute);                      /* 白の上で 5.48:1 */
 }
 .sprice__notes li{
-  padding-left:1.67em;
-  text-indent:-1.67em;
-  word-spacing:.4em;
+  padding-left:1.5em;
+  text-indent:-1.5em;
 }
 
-/* 表の下の一文 */
+/* 表の下の一文。実測 字送り18px・1行で x173-1333 */
 .sprice__close{
-  margin:clamp(22px, 2.22vw, 32px) 0 0;
+  margin:clamp(18px, 1.95vw, 28px) 0 0;   /* 実測 箱下端898→字上端938＝40 */
   font-size:var(--body);
-  line-height:2;
+  line-height:1.95;
 }
 
-@media (max-width:600px){
+@media (max-width:820px){
   .sprice__table th:first-child,
-  .sprice__table td:first-child{ width:55%; }
-  .sprice__spec{ word-spacing:.6em; }
+  .sprice__table td:first-child{ width:62%; padding-left:14px; }
+  .sprice__table th:last-child,
+  .sprice__table td:last-child{ padding-right:14px; }
+  .sprice__table td{ padding-block:12px; }
+  .sprice__table th{ padding-block:11px; }
+}
+@media (max-width:600px){
+  /* 一番長い「コーポレートサイト 5ページ」が1行に収まる幅を確保する */
+  .sprice__panel{ padding-inline:12px; }
+  .sprice__table th:first-child,
+  .sprice__table td:first-child{ width:64%; padding-left:8px; }
+  .sprice__table th:last-child,
+  .sprice__table td:last-child{ padding-right:8px; }
+  .sprice__spec{ word-spacing:normal; word-break:keep-all; }
+  .sprice__notes{ line-height:2.1; }
 }
 /* ── 節8 ── */
-/* ── 第8節「他の選択肢との違い」──────────────────────────────
-   モック _lp/sec8a.png（1536x1024）の実測を 1440px 実装へ ×0.9375 で換算。
-   写真・イメージなし。組みと余白だけで見せる節。 */
+/* ── 第8節「他の選択肢との違い」（青系）────────────────────────
+   採用モック _lp/blue8.png（1536x1024）の実測を 1440px 実装へ ×0.9375 で換算。
+   写真・イメージ画像なし。地 var(--bg) の上に var(--navy) の箱を面で置き、中は白。
+   実測 地 #e6eff8 → var(--bg) ／ 箱 #0b2f52 → var(--navy) ／ 文字 最明5% #fefefe → 白
+   輝度差（0-255）地243.4 − 箱39.3 ＝ 204。白文字と箱は 14.34:1、箱と地は 12.97:1
+   写真・イメージ画像・背景画像は一切なし。組みと余白だけで見せる節 */
 
 .scompare{
-  --scompare-ground:#eeecea;      /* 地 */
-  --scompare-box:#23232a;         /* 表頭の箱。白文字 15.6:1 */
-  background:var(--scompare-ground);
+  background:var(--bg);
   padding:var(--sec-y) 0;
-  color:var(--nav);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
 }
 
-.scompare__in{
-  /* 実測：表幅 1248/1536 → 1170px@1440。左右は --pad で受ける */
-  width:min(1170px, calc(100% - var(--pad) * 2));
+.scompare__box{
+  /* 実測：箱 x78-1456（幅1379）→ 幅1293@1440。左右の余りは --pad 71 とほぼ一致（実測73.1） */
+  width:min(1293px, calc(100% - var(--pad) * 2));
   margin-inline:auto;
+  box-sizing:border-box;
+  /* 実測：内側の余白 上49→46 ／ 左67・右66→62 ／ 下51→48（いずれも墨から箱の縁まで）。
+     行箱の余りを引いた指定値が 上39 / 下40（再測で墨の位置 上46・下48 に一致）。
+     左右は 62/1440 ＝ 4.3vw で縮める（固定62pxのままだと900px以下で表の桁が足りなくなる） */
+  padding:39px clamp(22px, 4.3vw, 62px) 40px;
+  background:var(--navy);
+  /* 実測：角の丸みは6-7px@1536（y77で6px入り、y83で0）→ 6px */
+  border-radius:6px;
+  color:#fff;
 }
 
 /* ── 見出し ───────────────────────────────── */
@@ -1050,249 +1431,362 @@ a{color:inherit}
   margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
   font-weight:600;
-  font-size:var(--h2);              /* 実測 54px@1536 → 50.6px@1440 を実務値 48px に */
-  line-height:1.32;
-  letter-spacing:.06em;             /* 実測：字送り58.5 − 字面54.5 ≒ .07em */
-  color:var(--ink);
+  /* 実測：字送り 61.5px@1536（漢字間63-68・の→の5送り平均60.4）／ 墨の高さ53px
+     → 56.5px@1440。ポスター寸法なので節の見出しの実務値 var(--h2) 34px に落とす */
+  font-size:var(--h2);
+  line-height:1.4;
+  /* 実測：漢字の字面54.4（≒0.90em → 級数60.4）に対し漢字間の字送り64.5 → 差4.1px＝.068em */
+  letter-spacing:.06em;
   text-align:center;
 }
 
 .scompare__rule{
-  /* 実測：x730-805（幅76 → 71px）／ y170-174（3px）／ 最暗 #c90c0b */
-  width:71px;
-  height:3px;
-  margin:18px auto 0;
-  background:var(--brand);
+  /* 実測：y205 の1px ／ x735-799（幅65 → 61px@1440）／ 箱の中央（中心767 ＝ 箱の中心767）
+     色 (176,188,203) ＝ 濃紺の上に白 68% */
+  width:61px;
+  height:1px;
+  margin:16px auto 0;      /* 実測：見出しの墨の下端178 → 罫205 ＝ 27px → 25px@1440 */
   border:0;
+  background:rgba(255,255,255,.68);
 }
 
-.scompare__sub{
-  /* 実測 34px@1536 → 31.9px@1440。見出し 48 との比 0.625 を保って 30px */
-  margin:41px 0 0;
-  font-size:clamp(19px, 2.08vw, 30px);
+/* ── リード文 ─────────────────────────────── */
+.scompare__lead{
+  /* 実測：墨の高さ24px ／ 18字で字面498px → 字送り27.7px＝級数27.3・ls .02em
+     → 25.6px@1440。実務値 var(--lead) 18px に落とす */
+  margin:17px 0 0;          /* 実測：罫205 → リードの墨の上端227 ＝ 22px → 20.6px@1440 */
+  font-size:var(--lead);
   font-weight:700;
-  line-height:1.4;
+  line-height:1.5;
   letter-spacing:.02em;
-  color:var(--ink);
   text-align:center;
 }
 
-.scompare__lead{
-  /* 実測 24px@1536 → 22.5px@1440 だがポスター寸法。実務値 19px へ。
-     行送りは実測 35px@1536 = 32.8px@1440 を保つ → 19 × 1.75 = 33.25px */
-  margin:13px 0 0;
-  font-size:var(--lead);
-  line-height:1.75;
+/* ── 表の前の説明 ─────────────────────────── */
+.scompare__note{
+  /* 実測：墨の高さ19px ／ 49字で字面991px → 級数21.6 → 20.2px@1440。実務値 var(--body) 16px */
+  margin:23px 0 0;          /* 実測：リードの墨の下端250 → 説明の墨の上端287 ＝ 37px → 34.7px@1440 */
+  font-size:var(--body);
+  font-weight:400;          /* 濃地の白文字は太らせない（滲んで見えるため。決定欄参照） */
+  line-height:1.8;
   text-align:center;
 }
 
 /* ── 比較表 ───────────────────────────────── */
 .scompare__scroll{
-  margin-top:var(--g-lead);         /* 実測 42px@1440 */
+  /* 実測：説明の墨の下端305 → 表頭行の上端329.6 ＝ 24.6px → 23px@1440 */
+  margin-top:15px;
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
 }
 
 .scompare__table{
+  /* 実測：横罫 x145-1390（幅1246 → 1168px@1440）＝ 箱の内寸いっぱい */
   width:100%;
   table-layout:fixed;
   border-collapse:collapse;
-  font-size:var(--body);            /* 実測 21px@1536 → 19.7px@1440 を実務値 16px に */
+  /* 実測：漢字の墨の高さ19px → 級数21.6 → 20.2px@1440。実務値 var(--body) 16px */
+  font-size:var(--body);
 }
 
-.scompare__table col{ width:20%; }  /* 実測 246/244/263/249/245 ≒ 5等分 */
+/* 実測：表頭の字面の中心 x551 / 804 / 1043 / 1290（送り平均246.3）、項目名の左端156。
+   モック側は中身の総幅1268に対し罫が1246しかなく内部で閉じていないので、
+   実測の比率を 1246 に正規化した 22.4% ＋ 19.4%×4 ＝ 100.0% を採る */
+.scompare__table col{ width:19.4%; }
+.scompare__table col:first-child{ width:22.4%; }
 
 .scompare__table th,
 .scompare__table td{
-  padding:13px 12px;
-  line-height:1.75;
+  /* 実測：罫から罫まで 59.4px@1536 → 55.7px@1440（表頭行も同じ高さ・上下中央） */
+  padding:14px 12px;
+  line-height:1.66;
   text-align:center;
   vertical-align:middle;
 }
 
-/* 表頭の箱 */
 .scompare__table thead th{
-  /* 実測：y389-438（高さ50 → 46.9px@1440）／ 塗り #1e2027 → 指定の #23232a */
-  height:46px;
-  padding-block:10px;
-  background:var(--scompare-box);
-  color:#fff;
-  font-weight:600;
-  line-height:1.6;
-  letter-spacing:.08em;             /* 実測：ADS の字送り17px（字面12-13px） */
-  border-right:1px solid #fff;      /* 実測：帯の中の仕切りは #fbfafa の1px */
+  font-weight:700;
+  /* 実測：表頭下の罫は本文の罫より濃い（白の被せ量 0.83-0.88 対 0.45-0.53） */
+  border-bottom:1px solid rgba(255,255,255,.85);
 }
-.scompare__table thead th:last-child{ border-right:0; }
 
-/* 本体 */
 .scompare__table tbody th,
 .scompare__table tbody td{
-  border-bottom:1px solid var(--rule);   /* 実測 #cecdcc */
-  border-right:1px solid var(--rule);    /* 実測：x389/633/897/1146 に縦罫 */
+  /* 実測：本文の横罫は全7行に1本ずつ（費用の下にもある）。濃紺の上に白 50% */
+  border-bottom:1px solid rgba(255,255,255,.5);
 }
-.scompare__table tbody th:last-child,
-.scompare__table tbody td:last-child{ border-right:0; }
 
-.scompare__table .scompare__row{
-  /* 実測：行の高さ 59px@1536 → 55.3px@1440（罫込み） */
-  font-weight:400;
+/* 実測：縦罫は1本も無い（y440/499/558/617/676/736/795 を横に走査して明るい画素0） */
+
+/* th の指定（.scompare__table th）より詳細度を上げないと text-align:center に負ける */
+.scompare__table tbody th.scompare__row{
+  /* 実測：罫の左端145 → 項目名の墨の左端156 ＝ 11px → 10px@1440 */
+  padding-left:10px;
+  font-weight:700;
   text-align:left;
-  padding-left:19px;                /* 実測：表の左端144 → 字面164 の20px */
-  color:var(--nav);
 }
-
-.scompare__mark{ font-feature-settings:normal; }
 
 /* ── 締めの一文 ───────────────────────────── */
 .scompare__close{
-  /* 実測：行送り 37px@1536 = 34.7px@1440 → 19 × 1.85 = 35.2px */
-  margin:33px 0 0;
+  /* 実測：墨の高さ23-24px → リード文と同じ級数27.3 → var(--lead) 18px
+     行送り 37px@1536 ＝ 34.7px@1440 → 18 × 1.9 = 34.2px */
+  margin:21px 0 0;          /* 実測：最終罫804.5 → 締めの墨の上端836 ＝ 31.5px → 29.5px@1440 */
   font-size:var(--lead);
-  line-height:1.85;
+  font-weight:700;
+  line-height:1.9;
   text-align:center;
 }
 
 /* 和文の折り返し。inline-block で句のまとまりを守り、境目に wbr を置く */
 .scompare__nb{ display:inline-block; }
 
-@media (max-width:959px){
-  /* 幅が縮むと 20% では「特色の読み解きと提案」が折り返すので、項目名の桁だけ広げる */
-  .scompare__table col{ width:18%; }
-  .scompare__table col:first-child{ width:25%; }
-  /* 実測：768〜825px で「クラウドソーシング」が2行になり「グ」が1字だけ落ちていた。
-     この幅の本文は --body の下限 13.5px。字送り.03em の字面 125.1px に対し、
-     18.5% だと桁の内寸は 116.1px（@768）しかない。最終桁を 21% にして 133.4px 確保する */
-  .scompare__table col:last-child{ width:21%; }
-  /* 桁が狭まると「クラウドソーシング」が2行になるので、字送りと左右の余白を詰める */
-  .scompare__table thead th{ letter-spacing:.03em; padding-inline:6px; }
+@media (max-width:1099px){
+  /* この幅から --body は下限の14px。桁の内寸を稼ぐため、セルの左右だけ詰める
+     （14px×9字＝126pxの「クラウドソーシング」が1行で収まる下限を確保する） */
+  .scompare__table th,
+  .scompare__table td{ padding-inline:8px; }
+}
+
+@media (max-width:899px){
+  /* 実測：この幅より下は 5桁 × 14px×9字 が箱の内寸に入らない（900pxで内寸734px、必要740px）。
+     級数を落とさず横スクロールに逃がす。表の中身はモックのまま */
+  .scompare__box{ padding-block:32px 34px; border-radius:5px; }
+  /* min-width は「899pxの箱の内寸732px」に合わせてある。これより大きくすると
+     切り替わった瞬間に数pxだけの横スクロールが出る */
+  .scompare__table{ min-width:732px; }
+  .scompare__table col{ width:19%; }
+  .scompare__table col:first-child{ width:24%; }
+  .scompare__table th,
+  .scompare__table td{ padding:12px 5px; }
+  .scompare__table tbody th.scompare__row{ padding-left:4px; }
 }
 
 @media (max-width:767px){
-  /* この幅では5桁が入りきらないので、横スクロールに逃がす */
-  .scompare__table{ font-size:14px; min-width:780px; }
-  .scompare__table th,
-  .scompare__table td{ padding:11px 8px; }
-  .scompare__table thead th{ letter-spacing:.02em; }
-  .scompare__table .scompare__row{ padding-left:12px; }
+  /* 締めの <br> はPCの改行位置。スマホでは切って自然に折り返させる */
+  .scompare__close br{ display:none; }
 }
 /* ── 節9 ── */
-/* ── 第9節「よくあるご質問」──────────────────────────────────
-   モック _lp/sec9a.png（1536x1024）の実測を 1440px 実装へ ×0.9375 で換算。
-   地は #fff。区切りは 1px の細いグレー罫だけ。写真・背景画像なし。
+/* ===== 第9節 よくあるご質問 ／ 青系 ==========================================
+   採用モック _lp/blue9.png（1536x1024）を実測 → 1440実装（換算率 x0.9375）
+   方向：納得いくまで寄り添う → 誠実さ。写真・イメージ画像なし。
+   地も行も var(--bg)。区切りは var(--line) の1pxの罫だけ。面の輝度差 0。
+   色は TOKENS_BLUE.css の変数のみ。赤は使わない。
 
-   実測（@1536 → @1440）
-     罫の桁       x236–1286 幅1051 → 985px（中心は761で6px左寄りだが、中央に正規化）
-     Q.の桁       x259      → 罫左端から 23 → 22px
-     文字の桁     x310      → 罫左端から 74 → 69px（＝22 + 47）
-     文字の右端   最長 x1214（A1の2行目）
-     見出し       字送り39.8 / 質の字面39x37 → 級数 約40 → 37.5px ※節見出しに統一
-     赤罫         y105–106（2px）／ x708–778 幅71 → 67px ／ #dd1216
-     Q.           cap高15・ベースライン180 → 級数 約20.8 → 19.5px（並字）
-     質問         字送り19.7 → 18.5px（太字）／ 予の字面17
-     答え         字送り17.5 → 16.4px ／ 行送り27.5 → 25.8px（＝1.61）
-     見出し字面下79 → 赤罫105 ＝ 26 → 箱で16px
-     赤罫106 → 最初の罫136 ＝ 30 → 29px
-     罫 → 質問の字面上 23.1（平均）→ 箱で16px
-     質問の字面上 → 答えの字面上 38 → 35.6px（＝上下の余白を除いて 8px）
-     答えの字面下 → 次の罫 21.3（平均）→ 箱で12px
-     罫のピッチ 132/127/128/124/118/115（下へ行くほど詰まる生成ゆれ）平均124 → 116px
-     色 見出し#000 ／ 質問#000 ／ Q.#030106 ／ 答え#191a1a → var(--nav)
-   ------------------------------------------------------------------ */
+   ── 実測（@1536 → @1440）─────────────────────────────────
+   地        最頻 #eff4fa（左余白・右余白とも同値）＝ var(--bg)。段ごとの塗り分けなし
+   桁        罫 x205-1330 ＝ 幅1126、中心767.5（画面中心768＝中央揃え）→ 1055.6@1440
+             ※ blue5 と同値。節をまたいだ桁を揃えるため var(--wrap) を採る（決定欄）
+   見出し    字面(漢字)39x40 → 級数44.3、字送り 漢字間47 → ls .06em
+             平均字送り43.7 → 41.0@1440。ポスター寸法なので var(--h2) 34px に落とす
+             墨 最暗5% #041d46 → var(--navy)
+   Q.        x209-236（幅28）y137-164。Qのキャップ高21（上137・ベースライン158）
+             → 級数29.5 ＝ 27.7@1440。質問の級数19.7に対し 1.50倍 → calc(var(--lead)*1.5)
+             墨 #0f5faf → var(--blue)。ピリオドは y155-158（質問文とベースライン共有）
+   質問      字面高18／漢字間の字送り20.5／字面から級数19.7 → 18.5@1440 → var(--lead) 18px
+             ls .02em（字送り20.5 − 級数20.0）。明朝。墨 最暗5% #0b1b42 → var(--navy)
+   回答      53字で字面850 → 級数16.2 ＝ 15.2@1440 → 本文は var(--body) 16px
+             ls .02em。ゴシック。墨 最暗5% #1a1a1f・最頻 #25262b → var(--text)
+             行送り 27／26／26／25／25／25／25（上から。下へ行くほど詰まるのは生成側のドリフト）
+             上2件の27を採る → 比 27÷16.2 ＝ 1.667
+             最長行53字（幅850）→ 桁の右端まで流さず 54em で止める
+   右マーク  x1278-1296（幅19 → 17.8@1440）／被覆量1.93px（y148 .83＋y149 1.0＋y150 .10）
+             → 幅18px・太さ2px。墨 #0f61ac → var(--blue)。中心y149 ＝ 質問の字面中心148.5
+   罫        6本のみ。y245.5／381／512.5／639／764／882。1問目の上・7問目の下には無い
+             芯 y245 #d0dbe9（2行にまたがる1px）→ var(--line)
+   縦        見出し墨下端88 → 1問目の質問墨上端137 ＝ 49 → 45.9@1440
+             罫 → 質問墨上端 27.5／28／25.5／27／23／24（上2件の27.75を採る）→ 26.0@1440
+             質問墨下端 → 回答1行目墨上端 21／21／20／18／18／17／18 → 上2件21 → 19.7@1440
+             回答最終行墨下端 → 罫 26.5／26／24.5／25／24／21 → 上2件26.25 → 24.6@1440
+   コントラスト（対 var(--bg) #eff4fa）
+             var(--navy) 12.97:1 ／ var(--text) 11.39:1 ／ var(--blue) 5.45:1（算出）
+
+   ── 再測（1440で撮って同じ物差しで測り直した結果。目標との差）──────────
+             見出し墨下端 → 1問目の質問墨上端  46.0（目標45.9 ／ +0.1）
+             罫 → 質問墨上端                   26／26／26／26／26／26（目標26.0 ／ 0）
+             質問墨下端 → 回答1行目墨上端      20（7問すべて。目標19.7 ／ +0.3）
+             回答の行送り                      26.6（級数16×比1.667＝26.7 ／ -0.1）
+             回答最終行墨下端 → 罫             24／25／25／25／23／25 平均24.5（目標24.6 ／ -0.1）
+             マークの中心 211.5-212 対 質問の字面中心 211.5（モックは字面中心の0.5下）
+             閉じた問の 質問墨下端 → 罫        25（目標24.6 ／ +0.4）
+             375/320/768/900px で横溢れなし（scrollWidth ＝ viewport）
+   ========================================================================== */
+
 .sfaq{
-  --sfaq-rule:#e4e2df;                       /* 指定の罫色。#fff との輝度差はほぼ0 */
-  --sfaq-indent:clamp(0px, 1.53vw, 22px);    /* 罫の左端 → Q. の桁 */
-  --sfaq-gutter:clamp(30px, 3.34vw, 48px);   /* Q. の桁 → 文字の桁 */
-  background:#fff;
-  padding:var(--sec-y) 0;
-  color:var(--nav);
+  /* 実測：Q.の左端209 → 質問文の字面左端275 ＝ 70px@1536 = 65.6 → 66px@1440
+     狭い幅では 66/1440 ＝ 4.58vw で縮める */
+  --sfaq-q:clamp(34px,4.58vw,66px);
+  background:var(--bg);
+  padding:var(--sec-y) var(--pad);
+  color:var(--text);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
 }
-
-.sfaq__in{
-  /* 実測：罫幅 1051/1536 → 985px@1440。左右は --pad で受ける */
-  width:min(985px, calc(100% - var(--pad) * 2));
+.sfaq__wrap{
+  max-width:var(--wrap);   /* 実測は1055.6px@1440。節をまたいだ桁を揃えるため --wrap を採る */
   margin-inline:auto;
 }
 
-/* ── 見出し ───────────────────────────────── */
-.sfaq__h2{
+/* ── 節の見出し ──────────────────────────────────────────── */
+.sfaq__h{
   margin:0;
-  text-align:center;
-  color:var(--ink);
-  font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:400;
-  font-size:var(--h2);          /* 実測 37.5px@1440。ポスター寸法なので節見出しに統一 */
-  line-height:1.3;
-  letter-spacing:.02em;         /* 実測：字送り39.8 ≒ 字面。仮名の側余白で空いて見える */
+  font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+  font-weight:600;
+  font-size:var(--h2);
+  line-height:1.35;
+  letter-spacing:.06em;
+  color:var(--navy);
 }
 
-.sfaq__rule{
-  /* 実測：x708–778（幅71 → 67px）／ y105–106（2px）／ 最暗 #dd1216 */
-  width:67px;
-  height:2px;
-  margin:16px auto 0;
-  background:var(--brand);
-  border:0;
-}
+/* 撮って測り直し：見出し墨下端 → 1問目の質問墨上端 目標45.9（実測 46） */
+.sfaq__list{ margin-top:13px; }
 
-/* ── Q&Aの並び ────────────────────────────── */
-.sfaq__list{
-  margin:clamp(20px, 2.01vw, 29px) 0 0;   /* 実測：赤罫 → 最初の罫 29px */
-  padding:0;
-}
+/* ── 1問 ─────────────────────────────────────────────────
+   罫は問と問のあいだだけ。1問目の上・7問目の下には引かない（実測どおり） */
+.sfaq__item + .sfaq__item{ border-top:1px solid var(--line); }
 
-.sfaq__item{
-  border-top:1px solid var(--sfaq-rule);
-  padding:17px 0 12px;                    /* 実測：罫→質問の字面 21.7px ／ 答え→次の罫 20px */
-}
-/* モックには最後の項目の下に罫がない。閉じ罫は足さない */
-
+/* ── 質問の行 ────────────────────────────────────────────
+   実測：Q.・質問文・右マークが1行に並ぶ。Q.と質問文はベースライン共有、
+         マークだけ質問の字面中心（y149 対 148.5）に乗る */
 .sfaq__q{
   display:grid;
-  grid-template-columns:var(--sfaq-gutter) 1fr;
-  align-items:baseline;                   /* 実測：Q.と漢字のベースラインは同じ180 */
-  padding-left:var(--sfaq-indent);
-  margin:0;
-  color:var(--ink);
-  font-size:var(--lead);                  /* 実測 18.5px@1440 */
-  line-height:1.4;
-  letter-spacing:.02em;
+  grid-template-columns:var(--sfaq-q) minmax(0,1fr) 18px;
+  align-items:baseline;
+  /* 撮って測り直し：罫 → 質問墨上端 目標26.0 */
+  padding:17px 0 0;
+  cursor:pointer;
+  list-style:none;
+}
+.sfaq__q::-webkit-details-marker{ display:none; }
+.sfaq__q::marker{ content:""; }
+.sfaq__q:focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+
+.sfaq__qmark{
+  font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+  font-weight:600;
+  font-size:calc(var(--lead) * 1.5);   /* 実測 質問の級数の1.50倍 */
+  line-height:1;
+  color:var(--blue);
 }
 
+.sfaq__qtext{
+  font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+  font-weight:600;
+  font-size:var(--lead);
+  line-height:1.5;
+  letter-spacing:.02em;
+  color:var(--navy);
+  /* 実測：モックはマークの右に34px（＝31.9@1440）空きがある。
+     桁を --wrap に正規化した都合でマークは桁の右端に寄せ、その空きを質問文の側へ移した */
+  padding-right:32px;
+}
+
+/* ── 右のマーク ──────────────────────────────────────────
+   実測：幅19（→18）・被覆量1.93px（→2px）・色 #0f61ac（→var(--blue)）
+   モックは全問ひらいた状態なので横棒だけ。閉じたときに縦棒を足して「＋」にする */
 .sfaq__mark{
-  font-weight:400;                        /* 実測：質問より細い */
-  letter-spacing:0;
+  position:relative;
+  /* 質問が2行以上になる幅でも1行目に乗せたいので start ＋ 1行ぶんの箱にする */
+  align-self:start;
+  /* Q.（--lead×1.5・行送り1）とベースラインを揃えると質問の行箱がその分だけ下がる。
+     実測 3.5px@--lead 18px → 級数に比例させて .194em */
+  margin-top:calc(var(--lead) * .194);
+  width:18px;
+  height:calc(var(--lead) * 1.5);   /* 質問1行ぶんの行送り。その中心にマークを置く */
 }
+.sfaq__mark::before,
+.sfaq__mark::after{
+  content:"";
+  position:absolute;
+  left:50%; top:50%;
+  background:var(--blue);
+}
+.sfaq__mark::after{ width:18px; height:2px;  margin:-1px 0 0 -9px; }
+.sfaq__mark::before{ width:2px;  height:18px; margin:-9px 0 0 -1px; visibility:hidden; }
+.sfaq__item:not([open]) .sfaq__mark::before{ visibility:visible; }
 
-.sfaq__qt{ font-weight:700; }
+/* 閉じた問は回答が無いぶん下が空かない。回答の下余白と同じ間隔を質問の側で持たせる
+   撮って測り直し：質問墨下端 → 次の罫 目標24.6（回答最終行のときと同じ） */
+.sfaq__item:not([open]) .sfaq__q{ padding-bottom:19px; }
 
+/* ── 回答 ────────────────────────────────────────────────
+   実測：字面左端は質問文と同じ x275。行送り比 1.667
+   撮って測り直し：質問墨下端 → 回答1行目墨上端 目標19.7 ／ 回答最終行墨下端 → 罫 目標24.6 */
 .sfaq__a{
-  margin:7px 0 0;                         /* 実測：質問の字面上 → 答えの字面上 35.6px */
-  padding-left:calc(var(--sfaq-indent) + var(--sfaq-gutter));
-  color:var(--nav);
-  font-size:var(--body);                  /* 実測 16.4px@1440 */
-  line-height:1.65;                       /* 実測：行送り25.8px ÷ 16px */
+  margin:0;
+  padding:9px 0 17px var(--sfaq-q);
+  /* 実測 最長行53字。桁いっぱい（約71字）まで流さず 54字で止める */
+  max-width:calc(54em + var(--sfaq-q));
+  font-size:var(--body);
+  line-height:1.67;
   letter-spacing:.02em;
+  color:var(--text);
 }
 
-/* 和文の折り返し。inline-block で句のまとまりを守り、境目に wbr を置く */
-.sfaq__nb{ display:inline-block; }
+/* 和文は任意位置で折れる。句のまとまりを nowrap で括り、境目に wbr を置く */
+.sfaq__nb{ white-space:nowrap; }
 
+/* ── 狭い幅 ──────────────────────────────────────────── */
 @media (max-width:767px){
-  .sfaq__item{ padding:14px 0 11px; }
-  .sfaq__a{ margin-top:6px; }
+  .sfaq__qtext{ padding-right:16px; }
+  .sfaq__q{ padding-top:15px; }
+  .sfaq__a{ padding-bottom:16px; }
 }
 /* ── 節10 ── */
-/* ── 第10節「会社情報」──────────────────────────────────────────
-   採用モック _lp/sec10a.png（1536x1024）の実測を 1440px 実装へ換算。
-   縦は ×0.9375。横は桁位置を --wrap(1200px) に正規化（実測の桁幅 1313/1536 は
-   1440換算で 1231px となり --wrap を超えるため、比率だけ保って 1200 に収めた）。
-   写真・イメージなし。地も箱も #fff、箱は上辺の赤 2px だけ。輝度差 0。 */
+/* ── 第10節「会社情報」（青系）─────────────────────────────────
+   採用モック _lp/blue10.png（1536x1024）の実測から起こした。
+   換算率：縦 ×0.9375（1440/1536）。
+           横は桁を --wrap 1200px に正規化 ×0.8869（＝1200/1353。
+           実測の桁幅 x92-1444＝1353px は1440換算で1268pxとなり --wrap を超えるため、
+           比率だけ保って1200に収めた。sec10/blue6 と同じ扱い）。
+
+   写真・イメージ画像は一切なし。地も箱も var(--bg) のまま（輝度差0）。
+   実測 地 最頻 #eef2f8（407,226px）→ var(--bg) #eff4fa
+   上段の箱は上辺の2px罫だけ（実測 y326-327・最暗 (9,75,134)）→ var(--blue)
+   下段は1pxの薄罫のみ（実測 y642 横罫 (208,213,219)／x622 縦罫 (215,220,227)）→ var(--line)
+
+   【色の実測 → 採用】
+     H2「会社情報」  最頻濃色 (8,39,73) → var(--navy) #0f2b4a（地に 12.97:1）
+     箱の見出し      最頻濃色 (12,55,113) → var(--blue) #1765ab（地に 5.45:1）
+     リード・本文    最暗 (0,0,0) → var(--text) #2b3440（地に 11.39:1）
+
+   【級数（字送りで実測。モックはポスター寸法なので実務値へ落とした）】
+     H2      字送り 65.7px@1536（会93→社157→情225→報290）→ 61.6@1440 → var(--h2) 34px
+     リード   字送り 20.2px@1536 → 18.9@1440 → var(--lead) 18px
+     箱の見出し 字送り 25.0px@1536 → 23.4@1440 → var(--lead) 18px（決定欄2）
+     本文     字送り 18.8px@1536 → 17.6@1440 → var(--body) 16px
+
+   【行の縦位置（実測@1536 → @1440）】
+     H2の墨          134-192 → 125.6-180.0
+     リードの墨       229-248 → 214.7-232.5
+     青罫（2px）      326-327 → 305.6
+     箱の見出しの墨    358-380 → 335.6-356.3
+     本文1行目の墨     412-428 → 386.3-401.3
+     薄罫（1px）      642     → 601.9
+     下段の見出しの墨  680-702 → 637.5-658.1
+     下段の本文1行目   739-756 → 692.8-708.8
+     縦罫の下端       934     → 875.6
+
+   【墨から墨の間（＝この節のリズム）】
+     H2→リード 37→34.7 ／ リード→青罫 78→73.1 ／ 青罫→箱の見出し 30→28.1
+     箱の見出し→本文 32→30.0 ／ 事業内容の最終行→薄罫 67→62.8
+     薄罫→下段の見出し 38→35.6 ／ 下段の見出し→本文 37→34.7 ／ 最終行→縦罫の下端 87→81.6
+
+   【行送り】
+     所在地 30→28.1（16px×1.75＝28）
+     事業内容の項目 36.8→34.5（16px×1.75＝28 ＋ 項目間6.5）
+     対応エリア 34→31.9（16px×2.0＝32）
+     制作体制 44→41.25（16px×2.0＝32 ＋ 段落間9）
+
+   【桁の幅と位置（実測@1536 → 1200px正規化）】
+     上段4桁 x92-352 / 383-711 / 742-1041 / 1072-1444（幅 261/329/300/373・桁間30）
+       → fr比 261:329:300:373、桁間 26px（30×0.8869）
+     下段2桁 縦罫 x622 ＝ 左端から530px → 470px（39.2%）／右 822px → 729px（60.8%）
+     箱の内側の余白 左 24→21 ／ 下段左 29→26 ／ 下段右（縦罫から）55→49
+     箇条の点 x1099・字面 x1108（箱の左から24/36）→ 点0・字面11 */
 
 .scompany{
-  background:#fff;
+  background:var(--bg);
+  color:var(--text);
   padding:var(--sec-y) 0;
-  color:var(--nav);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
 }
 
@@ -1301,80 +1795,113 @@ a{color:inherit}
   margin-inline:auto;
 }
 
-/* ── 見出し ───────────────────────────────────────────────── */
+/* ── 見出し・リード ───────────────────────────────────────── */
 .scompany__h{
-  /* 実測：字送り57px／字面49px@1536 → 実寸 53px。節見出しの上限 48px に収めた。
-     tracking は実測 (57-53)/53 = .07em をそのまま保つ */
+  /* 実測：字面 x93-347／墨 y134-192。桁の左端 x92 とほぼ一致＝左揃え */
   margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:600;
+  /* 実測：縦画の太さ 4-6px／級数65.7 ＝ .076em → W3寄り。600だと太る */
+  font-weight:500;
   font-size:var(--h2);
-  line-height:1.32;
-  letter-spacing:.07em;
-  color:var(--ink);
-  text-align:center;
+  line-height:1.4;
+  /* 実測：漢字の字面58px・字送り65.7 → 級数64.4・差1.3px＝.020em */
+  letter-spacing:.02em;
+  color:var(--navy);
 }
 
 .scompany__lead{
-  /* 実測：字送り21px@1536 → 19.7px@1440 を実務値 19px（--lead）へ。
-     行送り実測 38px@1536 = 35.6px@1440 → 19 × 1.875
-     見出し字面下(173) → リード字面上(226) は 53px@1536 = 49.7px@1440。
-     行箱の空きを差し引いて margin 29px */
-  margin:32px 0 0;
+  /* 実測：字面 x92-569（26字）／墨 y229-248。
+     H2の墨の下端192 → リードの墨の上端229 ＝ 37px → 34.7@1440。
+     行箱の余り（H2下8.5＋リード上8.1）を引いて margin 18px */
+  margin:18px 0 0;
   font-size:var(--lead);
-  line-height:1.875;
-  text-align:center;
+  line-height:1.8;
+  letter-spacing:.02em;
 }
 
-/* ── 6枚の桁 ──────────────────────────────────────────────── */
+/* ── 上段：4桁 ─────────────────────────────────────────── */
 .scompany__grid{
-  /* 実測：リード字面下(283) → 赤罫(373) は 90px@1536 = 84px@1440。--g-body(77px) で受ける */
-  margin:var(--g-body) 0 0;
+  /* 実測：リードの墨の下端248 → 青罫326 ＝ 78px → 73.1@1440。
+     var(--g-body) 60px だけだと再測で68px（-5.1）だったので、リードの行箱の余りぶん5pxを足す */
+  margin:calc(var(--g-body) + 5px) 0 0;
   display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  /* 実測：桁 425.3px・桁間 18px・段間 21px@1536。
-     桁間比 18/1313 を --wrap(1200) に掛けて 16px、段間は 19px */
-  column-gap:16px;
-  row-gap:19px;
+  /* 実測の幅比をそのまま fr に。桁間は 30×0.8869 = 26px */
+  grid-template-columns:minmax(0,261fr) minmax(0,329fr) minmax(0,300fr) minmax(0,373fr);
+  column-gap:26px;
+  /* モックは1段なので段間の実測値は無い。折り返した時だけ効く値（桁間26pxより広く取った） */
+  row-gap:32px;
 }
 
 .scompany__card{
-  /* 実測：箱の上辺だけに赤の罫。y373-375（3px@1536）→ 2px@1440。最暗 #db0d15 → --brand
-     実測：1段目の箱の高さ 225px@1536 = 211px@1440。中身より高いので min-height で受ける */
-  border-top:2px solid var(--brand);
-  background:#fff;
-  /* 実測：字面左 147 − 箱左 111 = 36px@1536 → 桁の正規化ぶんを掛けて 33px
-     上：赤罫 → 見出し字面上 45px@1536 相当 → 行箱の空きを引いて 35px
-     下：最終行字面下 → 箱下 43px@1536 = 40px@1440 → 38px */
-  padding:35px 33px 38px;
-  min-height:210px;
   margin:0;
+  /* 実測：箱の上辺だけに青の2px罫（y326-327）。地も箱も var(--bg) のまま＝輝度差0 */
+  border-top:2px solid var(--blue);
+  /* 実測：青罫 → 見出しの墨の上端 30px → 28.1@1440。見出しの行箱の余り4.5を引いて24px
+     左：見出しの字面 x116 − 箱の左 x92 ＝ 24px → 21px（横は×0.8869） */
+  padding:24px 21px 0;
+  box-sizing:border-box;
 }
 
+/* ── 下段：2桁 ─────────────────────────────────────────── */
+.scompany__grid2{
+  /* 実測：事業内容の最終行の墨の下端575 → 薄罫642 ＝ 67px → 62.8@1440。
+     本文の行箱の余り6.8を引いて56px */
+  margin:56px 0 0;
+  /* 実測：y642 の1px 横罫。x92-1444＝桁いっぱい。色 (208,213,219) → var(--line) */
+  border-top:1px solid var(--line);
+  display:grid;
+  /* 実測：縦罫 x622 ＝ 桁の左端から530px。1200正規化で 470 : 729 */
+  grid-template-columns:minmax(0,470fr) minmax(0,729fr);
+}
+
+.scompany__cell{
+  margin:0;
+  box-sizing:border-box;
+  /* 実測：薄罫642 → 見出しの墨の上端680 ＝ 38px → 35.6@1440。行箱の余り4.5を引いて31px
+     下：最終行の墨の下端847 → 縦罫の下端934 ＝ 87px → 81.6@1440。余り8.8を引いて73px
+     左：見出しの字面 x121 − 桁の左端 x92 ＝ 29px → 26px */
+  padding:31px 21px 73px 26px;
+}
+
+.scompany__cell--r{
+  /* 実測：x622 の1px 縦罫（y642-934）。色 (215,220,227) → var(--line)
+     左：見出しの字面 x678 − 縦罫 x622 ＝ 56px → 49px（罫の1pxを含む） */
+  border-left:1px solid var(--line);
+  padding-left:49px;
+}
+
+/* ── 見出し（社名・所在地…）───────────────────────────── */
 .scompany__k{
-  /* 実測：字送り30px／字面24px@1536 → 実寸 26px、1440換算 24px。
-     tracking は実測 (30-26)/26 = .15em を .14em で保つ */
   margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
   font-weight:600;
-  font-size:clamp(20px, 1.67vw, 24px);
+  font-size:var(--lead);
   line-height:1.4;
-  letter-spacing:.14em;
-  color:var(--ink);
+  /* 実測：漢字の字面21.5px・字送り25.0 → 級数23.9・差1.1px＝.046em */
+  letter-spacing:.05em;
+  color:var(--blue);
 }
 
+/* ── 中身 ─────────────────────────────────────────────── */
 .scompany__v{
-  /* 実測：字送り17.5px@1536 → 16.4px@1440 を実務値 16px（--body）へ。
-     行送り実測 34.5px@1536 = 32.3px@1440 → 16 × 2.0
-     見出し字面上 → 本文字面上 53〜56px@1536 → 行箱の空きを引いて margin 12px */
-  margin:12px 0 0;
+  /* 実測：見出しの墨の下端380 → 本文の墨の上端412 ＝ 32px → 30.0@1440。
+     行箱の余り（見出し下4.5＋本文上6.8）を引いて19px */
+  margin:19px 0 0;
   font-size:var(--body);
-  line-height:2;
-  color:var(--nav);
-  /* 実測：モックの仮名の字送りは 15px、漢字は 17.5px@1536 と差がある＝プロポーショナル。
-     palt を入れないと1行が入りきらず、モックの改行位置が再現できない */
-  font-feature-settings:"palt";
+  /* 実測：所在地の行送り 30px@1536 → 28.1@1440 ＝ 16 × 1.75 */
+  line-height:1.75;
 }
+
+/* 下段は行送りが広い（実測 対応エリアの行送り 34→31.9 ＝ 16 × 2.0） */
+.scompany__cell .scompany__v{ line-height:2; }
+
+/* 実測：下段の見出しの墨の下端702 → 本文の墨の上端739 ＝ 37px → 34.7@1440。
+   見出しの直後の1つだけに効かせる。段落間（下の隣接セレクタ）に負けないよう
+   クラス3つで詳細度を上げてある（順序に依存させない） */
+.scompany__cell .scompany__k + .scompany__v{ margin-top:21px; }
+
+/* 制作体制。実測の段落間 44px@1536 → 41.25@1440。行箱32pxを引いて9px */
+.scompany__v + .scompany__v{ margin-top:9px; }
 
 /* 事業内容の箇条 */
 .scompany__ul{
@@ -1384,206 +1911,219 @@ a{color:inherit}
 }
 
 .scompany__li{
-  position:relative;
-  /* 実測：点の墨 147-150（4px）／字面の左 160 → 差 13px@1536 = 12px@1440 */
-  padding-left:12px;
+  /* 実測：点の墨 x1099／字面 x1108／箱の左 x1072・内側の余白24 → 点は内側0・字面は内側12px
+     → 1200正規化で 点0・字面11。全角中黒の墨は em の中央にあるので、
+     text-indent -1em で中黒の枠を -5px に置くと 墨が1-5px・後続の字が11px に来る。
+     -16px 固定にすると級数が縮む幅（--body 14px）で折り返し行と2pxずれるので em で書く */
+  padding-left:11px;
+  text-indent:-1em;
 }
 
-.scompany__li::before{
-  /* 実測：点は径4px@1536、行の字面（718-733）の中心 725.5 ＝ 字面のど真ん中に置かれている */
-  content:"";
-  position:absolute;
-  left:0;
-  top:.75em;
-  width:4px;
-  height:4px;
-  border-radius:50%;
-  background:currentColor;
+.scompany__li::before{ content:"・"; }
+
+/* 実測：項目の送り 36.8px@1536 → 34.5@1440。行箱28pxを引いて6.5px */
+.scompany__li + .scompany__li{ margin-top:6.5px; }
+
+/* 和文の折り返し。句のまとまりを inline-block で守り、境目に wbr を置く。
+   inline-block はブロックコンテナなので text-indent が継承して効いてしまう。
+   箇条の -16px が中の1行目まで引っぱって中黒が前の字に重なったので、ここで戻す */
+.scompany__nb{ display:inline-block; text-indent:0; }
+
+/* ── 折り返し ─────────────────────────────────────────── */
+@media (max-width:1080px){
+  /* 4桁のままだと「社名」桁が200pxを切って中身が折れるので2桁で受ける */
+  .scompany__grid{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    column-gap:24px;
+    row-gap:34px;
+  }
 }
 
-/* 和文の折り返し。句のまとまりを inline-block で守り、境目に wbr を置く */
-.scompany__nb{ display:inline-block; }
-
-@media (max-width:1000px){
-  .scompany__grid{ grid-template-columns:repeat(2, 1fr); }
+@media (max-width:820px){
+  .scompany__grid2{ grid-template-columns:minmax(0,1fr); }
+  .scompany__cell{ padding:28px 0 34px; }
+  .scompany__cell--r{
+    /* 縦に積むので仕切りは上辺へ移す */
+    border-left:0;
+    border-top:1px solid var(--line);
+    padding-left:0;
+    padding-top:28px;
+  }
+  .scompany__cell:first-child{ padding-bottom:30px; }
 }
 
-@media (max-width:640px){
-  .scompany__grid{ grid-template-columns:1fr; row-gap:16px; }
-  .scompany__card{ min-height:0; padding:24px 20px 26px; }
-  .scompany__k{ letter-spacing:.08em; }
+@media (max-width:560px){
+  .scompany__grid{
+    grid-template-columns:minmax(0,1fr);
+    row-gap:26px;
+  }
+  .scompany__card{ padding:20px 0 0; }
+  .scompany__v{ margin-top:15px; }
+  .scompany__cell .scompany__k + .scompany__v{ margin-top:16px; }
+  .scompany__grid2{ margin-top:40px; }
+  .scompany__cell{ padding:26px 0 30px; }
+  .scompany__cell--r{ padding-top:26px; }
 }
 /* ── 節11 ── */
-/* ── 第11節「クロージングとフォーム」────────────────────────────
-   モック _lp/sec11a.png（1536x1024）の実測を 1440px 実装へ ×0.9375 で換算。
-   写真・イメージ画像なし。地は炭、箱は白。組みと余白だけで見せる節。
+/* ── 第11節「クロージングとフォーム」（青系）──────────────────────────
+   採用モック _lp/blue11.png（1536x1024）の実測を 1440px 実装へ ×0.9375 で換算。
+   写真・イメージ画像なし。組みと余白だけで見せる節。
 
-   実測（@1536 → @1440）
-   ────────────────────────────────────────────────────────────
-   地                    #17181c（最頻）        → 指定の #17171a
-   箱                    #fefefe（最頻）        → #fff（輝度差 232）
-   小見出しの罫          x549-625 y92 1px #848485   幅77 → 72
-   小見出し 字送り       20.7                   → 19.4（実務値 16px＋.1em）
-   見出し 字送り         49.0（行1 14送り／行2 8送り）→ 45.9（トークン --h2 48）
-   見出し 行送り         69                     → 64.7（48 × 1.35 = 64.8）
-   リード 字送り         20.0                   → 18.8（トークン --lead 19）
-   リード 行送り         36                     → 33.8（19 × 1.8 = 34.2）
-   CTA箱                 x567-968 y403-478      → 377 × 71
-   CTA字 字送り          27.8（明朝）           → 26.1
-   CTA矢印               x931-939 y434-448 #e3141f → 8.4 × 14、右余白 27
-   白箱                  x199-1337 y518-910     → 1068 × 368
-   箱内の後押し 字送り   19.7                   → 18.5（--lead 19）
-   ラベル 字送り         17.0                   → 15.9（--body 16）
-   入力枠                306/314/314 × 61       → 287/294/294 × 57、桁間 36
-   入力枠の罫            #e1e1e3 1px、角丸 約4px
-   自由記述              664 × 107（2桁ぶん）   → 622 × 100
-   箱の内側              左62 右69 上38 下41     → 左右 61 / 上 26 / 下 38
-   追従CTA               x1098-1502 y910-991    → 380 × 77、右32 下31、角丸 約8
-   追従CTA 塗り          #d4010f（最頻）        → トークン --brand
-   追従CTA 1行目 字送り  18.5                   → 17.3（--body 16 / 600）
-   追従CTA 2行目 字送り  16.6                   → 15.6（--pt 14）
-   ────────────────────────────────────────────────────────────
-   白文字はすべて #fff。#17171a に対して 17.5:1、--brand に対して 4.84:1。
-   節の上下は実測 78/107 だったが、他節と縦のリズムを合わせるため --sec-y を使う。 */
+   地と箱の強度（実測）
+     地   最頻 #06284b（輝度 35.3）→ var(--navy) #0f2b4a
+     箱   最頻 #fefefe（輝度 254.0）→ var(--card) #fff
+     輝度差 218.7（要求 80以上）
+     箱の中の文字は墨。--ink #111 は白に対し 18.9:1／--text #2b3440 は 12.6:1／
+     --blue #1765ab は 6.02:1。白文字 on --blue も 6.02:1
+
+   主な実測（@1536 → @1440）
+     白箱          x72-1463（幅1392）y65-894（高さ830） → 幅1305・左右余白67.5
+     白箱の角丸    7〜8px（y65でx79、y73でx72）         → 6
+     箱の内側      左112 右113 上111（縁→最初の墨） 下84 → 左右105 上104 下79
+     左カラム左端  x184（罫・ボタン・字がここで揃う）    → 172.5
+     桁            左585 ＋ 桁間65 ＋ 右516 ＝ 内寸1166  → 548 ＋ 61 ＋ 484 ＝ 1093
+     見出し        字送り45 行送り70（比1.556）          → 42.2／65.6（→ 級数は --h2 へ落とす）
+     リード        字送り18.7 行送り35（比1.87）         → 17.5／32.8（--lead 18）
+     後押し文      字送り18.7 行送り33（比1.76）         → 17.5／30.9（リードと同寸）
+     小見出し      字送り18.3                            → 17.2（--body 16 ＋ .07em）
+     罫            x184-239（幅56・太さ2）2本            → 幅53・太さ2
+     CTAボタン     x184-490 y579-642（307×64）字送り25.3 → 288×60・角丸4
+     入力枠        x835-1350（幅516）高さ53・角丸3-4     → 484×50・角丸4
+     自由記述      高さ148                               → 139
+     追従CTA       x1069-1511 y914-1000（443×87）        → 415×82・右22・下22
+
+   色の実測 → トークン
+     小見出し・罫・ボタン・追従CTA 最暗 #0b5099／最頻 #0c5497 → var(--blue)
+     見出し 最暗 #181c24 ／ ラベル 最暗 #131519             → var(--ink)
+     リード 最暗 #2a2c31 ／ 後押し 最暗 #282b30             → var(--text)
+     入力枠の罫 最頻 #dddddd                                → var(--line)
+     追従CTAの1px縁 (233,244,249)                           → var(--bg)              */
 
 .scontact{
-  --scontact-ground:#17171a;        /* 地。実測 #17181c → 指定値 */
-  --scontact-line:#e1e1e3;          /* 入力枠の罫。実測 */
-  --scontact-rule:#848485;          /* 小見出しの罫。実測 */
-  background:var(--scontact-ground);
-  padding:var(--sec-y) 0;
-  color:#fff;
+  background:var(--navy);
+  padding-block:var(--sec-y);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
 }
 
-.scontact__in{
-  /* 実測：白箱の幅 1139/1536 → 1068px@1440。左右は --pad で受ける */
-  width:min(1068px, calc(100% - var(--pad) * 2));
+/* ── 白い箱 ─────────────────────────────────── */
+.scontact__card{
+  /* 実測：箱 幅1392@1536 → 1305@1440。左右の余り67.5 ＝ 4.69vw */
+  width:min(1305px, calc(100% - 2 * clamp(16px,4.69vw,67px)));
   margin-inline:auto;
+  box-sizing:border-box;
+  /* 実測：内側 上111（縁→最初の墨）→ 104。小見出しの行箱の余りを引いて101（撮り直して補正）。
+     下84 → 79 ／ 左右112・113 → 105 */
+  padding:clamp(32px,7.01vw,101px) clamp(20px,7.29vw,105px) clamp(28px,5.49vw,79px);
+  border-radius:6px;
+  background:var(--card);
 }
 
-/* ── 小見出し（罫 ─ 文字 ─ 罫）────────────────── */
+.scontact__cols{
+  display:grid;
+  /* 実測：左585 ／ 桁間65 ／ 右516（＠1536）＝ 548 ／ 61 ／ 484（＠1440） */
+  grid-template-columns:minmax(0,548fr) minmax(0,484fr);
+  column-gap:clamp(28px,4.24vw,61px);
+  align-items:start;
+}
+
+/* ── 左：小見出し ───────────────────────────── */
 .scontact__eyebrow{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:clamp(14px,2.01vw,29px);      /* 実測：罫の右端625 → 字の左端656 ＝ 31 → 29 */
   margin:0;
-  font-size:var(--body);            /* 実測 字送り20.7@1536＝19.4@1440。ポスター寸法なので実務値 16px へ */
-  letter-spacing:.1em;              /* 落とした級数のぶんを字送りで受ける（16×1.1＝17.6） */
+  /* 実測 字送り18.3@1536 ＝ 17.2@1440。ポスター寸法なので実務値 --body 16 に落とし、
+     足りない1.1pxを字送りで受ける（16 × 1.07 ＝ 17.1） */
+  font-size:var(--body);
+  letter-spacing:.07em;
   line-height:1.4;
-  color:#fff;
-}
-.scontact__eyebrow::before,
-.scontact__eyebrow::after{
-  content:"";
-  flex:0 0 auto;
-  width:clamp(40px,5vw,72px);       /* 実測 77px → 72 */
-  height:1px;
-  background:var(--scontact-rule);
+  color:var(--blue);
 }
 
-/* ── 見出し ───────────────────────────────── */
+.scontact__rule{
+  /* 実測：x184-239（幅56・太さ2）。左カラムの左端に揃う */
+  width:53px;
+  height:2px;
+  margin:11px 0 0;          /* 実測 小見出しの墨下端192 → 罫209 ＝ 17 → 16。行箱の余り5pxを引く */
+  border:0;
+  background:var(--blue);
+}
+
+/* ── 左：見出し ─────────────────────────────── */
 .scontact__h{
-  /* トークン --g-eyebrow は「墨間」の値。素のマージンだと行送りのぶん17px開いて
-     墨間59になったので、見出しの行送りぶん .35em を引いて墨間を45に戻す */
-  margin:calc(var(--g-eyebrow) - .35em) 0 0;   /* 実測 墨間45@1536 ＝ 42@1440 */
+  margin:35px 0 0;          /* 実測 罫210 → 見出しの墨上端259 ＝ 49 → 46。行箱の余り11pxを引く */
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:400;
-  font-size:var(--h2);              /* 実測 字送り49@1536 ＝ 45.9@1440 を節見出しトークンへ */
-  line-height:1.35;                 /* 実測 行送り69@1536 ＝ 64.7@1440 → 48×1.35＝64.8 */
+  font-weight:400;          /* 実測：縦画3px／字送り45 ＝ 細い。太らせない */
+  /* 実測 字送り45@1536 ＝ 42.2@1440。ポスター寸法なので節の見出しの実務値 --h2 34 へ */
+  font-size:var(--h2);
+  line-height:1.55;         /* 実測 行送り70 ÷ 字送り45 ＝ 1.556 */
   letter-spacing:.02em;
-  text-align:center;
-  color:#fff;
-  /* モックは15字＋9字の2行組み。幅が広いと1行になってしまうので、
-     1行目の15字ぶん（15字 × 1.02em ＝ 15.3em、余裕をみて15.8em）で
-     measure を止め、どの幅でも15字＋9字で折り返るようにする */
-  max-width:calc(var(--h2) * 15.8);
-  margin-inline:auto;
+  color:var(--ink);
 }
 
-/* ── リード ───────────────────────────────── */
+/* ── 左：リード ─────────────────────────────── */
 .scontact__lead{
-  /* 同じく墨間で合わせる。リード1文字ぶん（1em＝19px）が行送りの余り */
-  margin:calc(var(--g-lead) - 1em) 0 0;        /* 実測 墨間45@1536 ＝ 42@1440 */
-  font-size:var(--lead);            /* 実測 字送り20@1536 ＝ 18.8@1440 */
-  line-height:1.8;                  /* 実測 行送り36@1536 ＝ 33.8@1440 */
-  letter-spacing:.02em;
-  text-align:center;
-  color:#fff;
+  margin:64px 0 0;          /* 実測 見出しの墨下端372 → リードの墨上端464 ＝ 92 → 86。
+                               上下の行箱の余り22pxを引く */
+  /* 実測 字送り18.7@1536 ＝ 17.5@1440 → --lead 18（字送りは足さない） */
+  font-size:var(--lead);
+  line-height:1.85;         /* 実測 行送り35 ÷ 字送り18.7 ＝ 1.87 */
+  color:var(--text);
 }
 
-/* ── CTAボタン ────────────────────────────── */
+/* ── 左：CTAボタン ──────────────────────────── */
 .scontact__ctawrap{
-  margin-top:clamp(22px,2.5vw,36px);    /* 実測 リード墨下端355 → 箱上端403 ＝ 48 → 45。
-                                           リードの行送りの余り9pxを引いて36 */
-  text-align:center;
+  margin:51px 0 0;          /* 実測 リードの墨下端515 → 箱の上端579 ＝ 64 → 60（--g-body と一致）。
+                               行箱の余り9pxを引く */
 }
 .scontact__cta{
-  position:relative;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:min(377px, 100%);           /* 実測 402@1536 → 377 */
-  height:71px;                      /* 実測 76@1536 → 71 */
+  /* 実測 307×64@1536 → 288×60。字面はボタンの中央（箱の中心337 対 字の中心335.5） */
+  width:min(288px,100%);
+  height:60px;
   box-sizing:border-box;
-  padding-inline:clamp(20px,2.85vw,41px);
-  border-radius:4px;                /* 実測：角の立ち上がりは4px程度 */
-  background:#fff;
-  color:var(--scontact-ground);     /* 実測 最暗 #161619 ＝ 地と同じ墨。白地に 17.5:1 */
+  padding-inline:16px;
+  border-radius:4px;        /* 実測：角の立ち上がりは3〜4px */
+  background:var(--blue);
+  color:#fff;               /* 6.02:1 */
   text-decoration:none;
-  font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-size:clamp(18px,1.81vw,26px);/* 実測 字送り27.8@1536 ＝ 26.1@1440 */
-  letter-spacing:.01em;             /* 26 × 1.01 ＝ 26.3。実測の字送りに合わせる */
+  /* 実測 字送り25.3@1536 ＝ 23.7@1440。見出しと同じ率で実務値へ落として --lead */
+  font-size:var(--lead);
+  font-weight:400;
+  letter-spacing:.03em;     /* 実測 漢字の字面22 ÷ 字送り25.3 ＝ 0.87 */
   line-height:1;
   transition:background-color .2s;
 }
-.scontact__cta:hover{ background:#eae7e3; }
-.scontact__cta:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
-.scontact__arrow{
-  position:absolute;
-  right:27px;                       /* 実測：矢印の右端939 → 箱の右端968 ＝ 29 → 27 */
-  width:9.6px;                      /* 実測 9 × 15 → 墨で 8.4 × 14。線幅ぶん外側に取る */
-  height:16px;
-  color:var(--brand);               /* 実測 #e3141f */
-}
+.scontact__cta:hover{ background:var(--blue-dark); }
+.scontact__cta:focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
 
-/* ── 白い箱（フォーム）──────────────────────── */
-.scontact__panel{
-  margin-top:clamp(26px,2.6vw,37px);    /* 実測 箱下端478 → 白箱上端518 ＝ 40 → 37.5 */
-  border-radius:4px;
-  background:#fff;
-  color:var(--nav);
-  padding:clamp(20px,1.81vw,26px) clamp(20px,4.24vw,61px) clamp(24px,2.64vw,38px);
+/* ── 左：後押し文言 ─────────────────────────── */
+.scontact__rule--2{
+  margin-top:73px;          /* 実測 ボタンの下端642 → 罫720 ＝ 78 → 73 */
 }
-
 .scontact__note{
-  /* 実測 字送り19.7@1536 ＝ 18.5@1440。上のリードとほぼ同寸なので同じトークン */
-  margin:0;
+  margin:11px 0 0;          /* 実測 罫721 → 後押しの墨上端742 ＝ 21 → 20。行箱の余り9pxを引く */
+  /* 実測 字送り18.7＝リードと同寸。行送りだけ短い */
   font-size:var(--lead);
-  line-height:1.75;
-  letter-spacing:.02em;
-  text-align:center;
-  color:var(--nav);
+  line-height:1.72;         /* 実測 行送り33 ÷ 字送り18.7 ＝ 1.76 */
+  color:var(--text);
 }
 
-.scontact__grid{
-  margin-top:clamp(16px,1.53vw,22px);   /* 実測 後押し墨下端573 → ラベル墨上端611 ＝ 38 → 36（行送りぶんを引いて22） */
+/* ── 右：フォーム ───────────────────────────── */
+.scontact__form{
   display:grid;
-  grid-template-columns:repeat(3,1fr);  /* 実測 306/314/314 ＝ ほぼ3等分 */
-  column-gap:clamp(16px,2.5vw,36px);    /* 実測 桁間 38 → 36 */
-  row-gap:clamp(18px,1.88vw,27px);      /* 実測 枠下端700 → 次のラベル墨上端734 ＝ 34 → 32（行送りぶんを引いて27） */
+  row-gap:25px;             /* 実測 ラベルの墨上端どうしの送り 115/115/112/114 → 107.8/107.8/105/106.9。
+                               撮り直して1周期107になる値に合わせた */
 }
 .scontact__field{ min-width:0; }
-.scontact__field--wide{ grid-column:span 2; }   /* 実測：自由記述は2桁ぶん 664px */
 
 .scontact__label{
   display:block;
-  margin:0 0 8px;                   /* 実測 ラベル墨下端627 → 枠上端640 ＝ 13 → 12 */
-  font-size:var(--body);            /* 実測 字送り17@1536 ＝ 15.9@1440 */
-  letter-spacing:.02em;
+  margin:0 0 10px;          /* 実測 ラベルの墨下端 → 枠の上端 16/16/16/15/15 → 15。行箱の余り5pxを引く */
+  /* 実測 字送り17.0@1536 ＝ 15.9@1440 → --body 16 */
+  font-size:var(--body);
   line-height:1.4;
-  color:var(--nav);
+  color:var(--ink);         /* 実測 最暗 #131519 */
 }
 
 .scontact__input,
@@ -1591,252 +2131,203 @@ a{color:inherit}
   display:block;
   width:100%;
   box-sizing:border-box;
-  padding:0 14px;
-  border:1px solid var(--scontact-line);  /* 実測 #e1e1e3 */
-  border-radius:4px;
-  background:#fff;
+  border:1px solid var(--line);   /* 実測 最頻 #dddddd の1px */
+  border-radius:4px;              /* 実測：角の立ち上がりは3〜4px */
+  background:var(--card);
   color:var(--ink);
   font-family:inherit;
-  /* 🚨 --body は clamp(13.5px,1.11vw,16px)。1440未満では13.5pxまで落ちるので、
-     入力欄に使うと iOS が focus 時にページを拡大してしまう。16px で固定する
-     （@1440 の実効値 15.984px との差は0.016px。見た目は変わらない） */
+  /* 🚨 --body は1440未満で14pxまで落ちる。入力欄に使うと iOS が focus 時に拡大するので
+     16px で固定する（＠1440 の実効値15.98pxとの差は0.02px） */
   font-size:16px;
   line-height:1.6;
 }
 .scontact__input{
-  height:57px;                      /* 実測 61@1536 → 57 */
+  height:50px;              /* 実測 53@1536 → 49.7 */
+  padding:0 14px;
 }
 .scontact__textarea{
-  height:100px;                     /* 実測 107@1536 → 100 */
-  padding:14px;
+  height:139px;             /* 実測 148@1536 → 138.8 */
+  padding:12px 14px;
   resize:vertical;
 }
-.scontact__input:focus,
-.scontact__textarea:focus{
-  outline:2px solid var(--brand-ink);
+.scontact__input:focus-visible,
+.scontact__textarea:focus-visible{
+  outline:2px solid var(--blue);
   outline-offset:-1px;
 }
 
-/* ── 追従CTA（全画面共通）────────────────────── */
+/* ── 追従CTA（全画面共通）───────────────────── */
 .scontact__fixed{
   position:fixed;
-  right:32px;                       /* 実測 右端1502 → 画面右 ＝ 34 → 32 */
-  bottom:31px;                      /* 実測 下端991 → 画面下 ＝ 33 → 31 */
+  right:22px;               /* 実測 箱の右端1511 → 画面右 ＝ 24 → 22.5 */
+  bottom:22px;              /* 実測 箱の下端1000 → 画面下 ＝ 23 → 21.6 */
   z-index:60;
   display:flex;
   align-items:center;
-  gap:21px;                         /* 実測 アイコン右端1159 → 字の左端1182 ＝ 23 → 21 */
-  width:380px;                      /* 実測 405@1536 → 380 */
-  min-height:77px;                  /* 実測 82@1536 → 77 */
+  gap:21px;                 /* 実測 アイコンの右端1140 → 字の左端1162 ＝ 22 → 21 */
+  /* 実測 443@1536 → 415。ただし Hiragino のベタ組みだと1行目17字が306pxになり、
+     実測の余白（左右30・アイコン38・間21）を足すと427px要る。実測値を下限に置いて、
+     字が要るぶんだけ伸ばす（字を詰めて実測の箱に押し込むより、組みを優先した） */
+  min-width:415px;
+  width:max-content;
+  max-width:calc(100vw - 44px);
+  min-height:82px;          /* 実測 87@1536 → 81.6 */
   box-sizing:border-box;
-  padding:12px 21px 12px 25px;      /* 実測 アイコンの左余白 27 → 25 */
-  border-radius:8px;                /* 実測：角の立ち上がりは8px程度 */
-  background:var(--brand);          /* 実測 #d4010f → ブランド色。白文字 4.84:1 */
-  color:#fff;
+  padding:12px 30px;        /* 実測 箱の左端1069 → アイコン1101 ＝ 32 → 30。右も字の右端から32 → 30 */
+  border:1px solid var(--bg);   /* 実測 (233,244,249) の1px */
+  border-radius:5px;        /* 実測：角の立ち上がりは5〜6px */
+  background:var(--blue);   /* 実測 最頻 #0b5194 */
+  color:#fff;               /* 6.02:1 */
   text-decoration:none;
   transition:background-color .2s;
 }
-.scontact__fixed:hover{ background:var(--brand-dark); }
+.scontact__fixed:hover{ background:var(--blue-dark); }
 .scontact__fixed:focus-visible{ outline:2px solid #fff; outline-offset:3px; }
+
 .scontact__fixedicon{
   flex:0 0 auto;
-  width:33px;                       /* 実測 35 × 27 → 33 × 25 */
-  height:25px;
+  width:38px;               /* 実測 40×30@1536 → 37.5×28 */
+  height:28px;
 }
 .scontact__fixedtext{ min-width:0; }
 .scontact__fixedmain{
   display:block;
-  font-size:var(--body);            /* 実測 字送り18.5@1536 ＝ 17.3@1440 */
-  font-weight:600;
-  letter-spacing:.01em;
+  /* 実測 字送り19.5@1536 ＝ 18.3@1440 → --lead 18 */
+  font-size:var(--lead);
+  font-weight:400;          /* 実測：縦画は2行目と同じ2px。太らせない */
+  letter-spacing:0;         /* 実測の全角の字送り20@1536 ＝ 18.75 ≒ --lead 18。足さない */
   line-height:1.3;
+  white-space:nowrap;       /* 2行に折らない。折れる幅では帯ごと下部固定に切り替わる */
 }
 .scontact__fixedsub{
   display:block;
-  margin-top:5px;                   /* 実測 1行目墨上端929 → 2行目墨上端958 ＝ 29 → 27（行送りぶんを引いて5） */
-  font-size:var(--pt);              /* 実測 字送り16.6@1536 ＝ 15.6@1440 */
+  margin-top:6px;           /* 実測 1行目の墨上端935 → 2行目の墨上端966 ＝ 31 → 29（撮り直して補正） */
+  /* 実測 字送り17.5@1536 ＝ 16.4@1440 → --body 16 */
+  font-size:var(--body);
+  letter-spacing:.02em;
   line-height:1.3;
 }
 
 /* 和文の折り返し。inline-block で句のまとまりを守り、境目に wbr を置く */
 .scontact__nb{ display:inline-block; }
 
-@media (max-width:959px){
-  /* 3桁のままだと「メールアドレス」の枠が狭まりすぎるので、住所より先に桁を落とす */
-  .scontact__grid{ grid-template-columns:repeat(2,1fr); }
-  .scontact__field--wide{ grid-column:span 2; }
-  .scontact__fixed{ width:340px; gap:16px; padding-inline:18px; }
+@media (max-width:899px){
+  /* この幅より下は 左548 ＋ 右484 が桁に入らない。左を上、フォームを下に積む */
+  .scontact__cols{
+    grid-template-columns:1fr;
+    row-gap:clamp(32px,5vw,48px);
+  }
 }
 
 @media (max-width:767px){
-  .scontact__eyebrow{ gap:14px; letter-spacing:.06em; }
-  .scontact__grid{ grid-template-columns:1fr; }
-  .scontact__field--wide{ grid-column:auto; }
-  .scontact__cta{ width:100%; height:64px; }
-  .scontact__arrow{ right:20px; }
-  /* スマホは画面下部に固定。角丸を落として端まで伸ばす */
+  .scontact__lead{ margin-top:clamp(28px,7vw,48px); }
+  .scontact__ctawrap{ margin-top:clamp(24px,6vw,40px); }
+  .scontact__rule--2{ margin-top:clamp(32px,8vw,52px); }
+  .scontact__cta{ width:100%; }
+  /* 追従CTAは画面下部に固定（構成案：スマートフォンは画面下部固定） */
   .scontact__fixed{
     right:0; left:0; bottom:0;
     width:auto;
+    min-width:0;            /* PCの実測下限415pxを外す。残すと375px幅で横に溢れる */
+    max-width:none;
     min-height:66px;
+    gap:12px;
+    padding:10px 16px;
+    border-width:1px 0 0;
     border-radius:0;
     justify-content:center;
-    padding:10px 16px;
   }
+  .scontact__fixedicon{ width:30px; height:22px; }
+  /* 固定した帯が箱の下端を隠さないよう、節の下に帯のぶんを空ける */
+  .scontact{ padding-bottom:calc(var(--sec-y) + 66px); }
 }
 </style>
 </head>
 <body>
-<!--
-  第1節 ファーストビュー
-  出どころ： _lp/sec1a.png（1536x1024）を measure.py で実測。
-  1440px 実装への換算率 x0.9375。
-
-  実測（モックpx → CSS px@1440）
-  ─────────────────────────────────────────────────────────
-  地                        #fefefe            → #fff
-  箱（バッジ・信頼バー）    #f5f5f5 / #f6f6f6  → #f4f4f4（白との輝度差 11）
-  H1 墨                     #000000            → var(--ink)
-  H1 赤（デザイン）         #e4060c / #e6060d  → var(--brand) #e50012（白地 4.84:1）
-  リード墨（最暗5%）        #28313a            → var(--nav) #2c2a2b
-  マイクロコピー            #7a7f83            → 白地 4.05:1 で不足。--nav 70% へ寄せた（5.3:1）
-  副ボタンの枠              #d9d9da            → var(--rule) #d9d8d9
-
-  H1 字送り（全角漢字）      46〜47   → 43.1   ※--h1 の 46px を採用
-  H1 行送り                  68       → 63.8   ※46px x 1.48 = 68px
-  リード 字送り（全角）      19       → 17.8   ※--lead の 19px を採用
-  リード 行送り              37       → 34.7   ※19px x 1.85 = 35px
-  バッジのラベル 字送り      15.5〜16 → 14.8   ※--body の 16px を採用
-  ボタンのラベル 字送り      20       → 18.8   ※--lead の 19px を採用
-  マイクロコピー 字送り      15.5〜16 → 14.8   ※--body の 16px を採用
-
-  H1 1行目の墨の上端         169      → 158
-  H1 2行目の墨の上端         237      → 222
-  リード1行目の墨の上端      321      → 301   （H1の墨の下端274から 47 → 44 = --g-lead）
-  バッジの箱 上端/下端       494/602  → 463/564（高さ 101）
-  バッジの箱 左端 3つ    71/285/496  → 66/267/465（幅 199、隙間 14 → 幅186、隙間13）
-  バッジのアイコン           34x37    → 34x34
-  CTAボタン 上端/下端        649/710  → 608/666（高さ 58）
-  CTAボタン 主 x70-341       幅272    → 255
-  CTAボタン 副 x362-624      幅263    → 247（隙間 20 → 19）
-  マイクロコピー 墨の上端    734      → 688
-  信頼バー 地の上端          865      → 811
-  信頼バー ロゴの墨          914-963  → 857-903（高さ 47）
-  信頼バー ロゴの左右    150/1388    → 141/1301（幅1160 ≒ --wrap 1200）
-  左端（バッジの箱・ボタン） 71       → 66.6  ※--pad の 71px を採用
-  写真 左端/上端/下端    801/189/772 → 751/177/724
-  写真 は右端で切れている。見えている幅 735 → 689、実寸は 878 相当（1.274倍）
-  ─────────────────────────────────────────────────────────
-
-  🚨 写真の素材 ../fv/img/hero_spread.jpg は地が #f1f1f1〜#f6f6f6 で、
-     白地に置くと四角い灰色の板に見える。brightness で白へ飛ばして地となじませている。
-
-  実装後に 1440x1200 で撮って検算（目標＝モック換算値／実測＝この部品）2026-09-06
-  ─────────────────────────────────────────────────────────
-                        目標   実測
-  地／箱／輝度差    100/90.5/9.5  100.0/90.5/9.5  ※#fff と #f4f4f4 の塗りのみ。箱に罫は無し
-  H1 1行目 墨の上端      158    158
-  H1 行送り             63.8     67   ← 級数を 43.1→46（--h1）にした分
-  リード 行送り         34.7     35
-  バッジの箱 幅/隙間   186/13  185/13
-  バッジの箱 高さ        101    103   ← アイコン34＋間16＋札16＋上下padding37
-  CTAボタン 主/副 幅   255/247 255/247  ※2つで 255+19+247=521。1行に収まる
-  CTAボタン 上端         608    629   ← H1が大きい分が下へ積もった +21
-  写真 墨の上端/高さ   177/548 178/518
-  墨→墨の間（H1→リード／リード→箱／箱→ボタン／ボタン→注記）
-                     44/44/44/22 → 45/45.6/44.5/22
-  信頼バー 地の上端      811    834   ← 同上 +23
-  コントラスト：8組すべて合格。注記 5.39 ／ H1赤 4.84（大字3.0）／ リード 14.26 ／
-                赤地に白 4.84（大字3.0）／ バッジ札 12.96 ／ 副ボタン 14.26 ／ ほか 12.96
-  横溢れ：1440 / 1100 / 768 / 375 いずれも scrollWidth = 幅ちょうど。0px
-          （写真の右への出血は .sfv の overflow-x:clip で切れている）
-  ─────────────────────────────────────────────────────────
-
-  2026-09-06 の検算で直した3点（いずれも素のCSSに寄せた地雷。リセット非依存にした）
-  ・.sfv__btn に box-sizing が無く content-box。左右padding 92px が min-width に足されて
-    主255→347・副247→339 になり、2つのボタンが縦2行に折れていた
-  ・.sfv__badge も同じ理由で箱の高さが 101→138 に伸びていた
-  ・.sfv__btn に text-decoration:none が無く、素の a の下線がボタン文字に出ていた
--->
-
-
 <section class="sfv" id="fv">
-  <div class="sfv__grid">
+  <div class="sfv__top">
 
-    <div class="sfv__head">
-      <h1 class="sfv__h1"><span class="sfv__nb">御社の“らしさ”を読み解いて、</span><wbr><span class="sfv__nb">伝わる一冊に翻訳<span class="sfv__accent">（デザイン）</span>します</span></h1>
+    <figure class="sfv__art">
+      <!-- ※要確認：ASSETS.txt にある唯一の「開いたパンフレット1冊」。誌面に赤が入っている -->
+      <img src="../fv/img/hero_spread.jpg" width="1536" height="1024"
+           alt="開いた会社案内のパンフレット" fetchpriority="high" decoding="async">
+    </figure>
 
-      <p class="sfv__lead"><span class="sfv__nb">何を載せるかが決まっていない状態からでも構いません。</span><wbr><span class="sfv__nb">企画・取材・撮影・コピー・デザイン・印刷まで一貫対応。</span><wbr><span class="sfv__nb">デザインは3案以上、修正回数は無制限。</span><wbr><span class="sfv__nb">納得いただけるまでお付き合いします。</span></p>
+    <div class="sfv__copy">
 
+      <h1 class="sfv__h1">御社の“らしさ”を<br class="sfv__pcbr">読み解いて、<br class="sfv__pcbr">伝わる一冊に翻訳<span class="sfv__gloss">（デザイン）</span>します</h1>
+
+      <p class="sfv__lead">何を載せるかが決まっていない状態からでも構いません。<br class="sfv__pcbr">企画・取材・撮影・コピー・デザイン・印刷まで一貫対応。<br class="sfv__pcbr">デザインは3案以上、修正回数は無制限。<br class="sfv__pcbr">納得いただけるまでお付き合いします。</p>
+
+    </div>
+
+    <div class="sfv__act">
       <ul class="sfv__badges">
         <li class="sfv__badge">
-          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-            <rect x="13.2" y="5.2" width="15.6" height="15.6" stroke="currentColor" stroke-width="2"/>
-            <rect x="5.2" y="13.2" width="15.6" height="15.6" fill="#f4f4f4" stroke="currentColor" stroke-width="2"/>
-            <rect x="10.6" y="10.6" width="10.2" height="10.2" stroke="var(--brand)" stroke-width="2"/>
+          <!-- 実測：前後2枚の紙。前 x187-215 / 後 x196-224、高さ44@1536 -->
+          <svg viewBox="0 0 38 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="10" y="1" width="27" height="38"/>
+            <rect x="1" y="5" width="27" height="38" fill="#fff"/>
           </svg>
           <span>デザイン3案以上</span>
         </li>
         <li class="sfv__badge">
-          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-            <path d="M11.6 22.9A8 8 0 1 1 20.5 12.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M16.5 10.0 21.0 13.7 22.1 8.0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="19.6" cy="24.6" r="3.3" stroke="var(--brand)" stroke-width="2"/>
-            <circle cx="25.4" cy="24.6" r="3.3" stroke="var(--brand)" stroke-width="2"/>
+          <!-- 実測：中心(19.6,21.6) 半径19。線は 207.5°〜360° と 35.5°〜192.5°、矢は0°で下向き -->
+          <svg viewBox="0 0 45 44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2.75 12.83 A19 19 0 0 1 38.6 21.6"/>
+            <path d="M35.07 32.63 A19 19 0 0 1 1.05 17.49"/>
+            <path d="M34.9 19.4 L38.9 26.6 L43.4 19.0"/>
           </svg>
           <span>修正回数無制限</span>
         </li>
         <li class="sfv__badge">
-          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
-            <rect x="8" y="4" width="18" height="26" rx="2" stroke="currentColor" stroke-width="2"/>
-            <rect x="11.6" y="7.8" width="10.8" height="5.4" stroke="currentColor" stroke-width="1.6"/>
-            <circle cx="12.6" cy="19.2" r="1.5" fill="currentColor"/>
-            <circle cx="17" cy="19.2" r="1.5" fill="currentColor"/>
-            <circle cx="21.4" cy="19.2" r="1.5" fill="var(--brand)"/>
-            <circle cx="12.6" cy="24.6" r="1.5" fill="currentColor"/>
-            <circle cx="17" cy="24.6" r="1.5" fill="currentColor"/>
-            <circle cx="21.4" cy="24.6" r="1.5" fill="var(--brand)"/>
+          <!-- 実測：外枠 x593-628 y536-580、表示部 y543-550、キーは3x3 -->
+          <svg viewBox="0 0 35 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="1" y="1" width="33" height="42" rx="3"/>
+            <rect x="5.5" y="7.5" width="24" height="6.5"/>
+            <g stroke-width="1.6">
+              <rect x="7" y="19" width="4.6" height="4.2" rx="1"/>
+              <rect x="16" y="19" width="4.6" height="4.2" rx="1"/>
+              <rect x="24.8" y="19" width="4.6" height="4.2" rx="1"/>
+              <rect x="7" y="26.9" width="4.6" height="4.2" rx="1"/>
+              <rect x="16" y="26.9" width="4.6" height="4.2" rx="1"/>
+              <rect x="24.8" y="26.9" width="4.6" height="4.2" rx="1"/>
+              <rect x="7" y="34.3" width="4.6" height="4.2" rx="1"/>
+              <rect x="16" y="34.3" width="4.6" height="4.2" rx="1"/>
+              <rect x="24.8" y="34.3" width="4.6" height="4.2" rx="1"/>
+            </g>
           </svg>
           <span>ページ数別の明朗料金</span>
         </li>
       </ul>
-    </div>
 
-    <div class="sfv__photo">
-      <img src="../fv/img/hero_spread.jpg" width="1536" height="1024" alt="ADSが制作した会社案内の見開き" fetchpriority="high" decoding="async">
-    </div>
-
-    <div class="sfv__cta">
-      <div class="sfv__btns">
-        <a class="sfv__btn sfv__btn--main" href="#contact">無料で相談する<span class="sfv__arw" aria-hidden="true"><svg width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-        <a class="sfv__btn sfv__btn--sub" href="#price">料金を見る<span class="sfv__arw" aria-hidden="true"><svg width="8" height="14" viewBox="0 0 8 14" fill="none"><path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+      <div class="sfv__cta">
+        <a class="sfv__btn sfv__btn--main" href="#contact">無料で相談する</a>
+        <a class="sfv__btn sfv__btn--sub" href="#price">料金を見る</a>
       </div>
-      <p class="sfv__micro">ご相談・お見積もりは無料です。1営業日以内にご返信します。</p>
+
+      <p class="sfv__note">ご相談・お見積もりは無料です。1営業日以内にご返信します。</p>
     </div>
 
   </div>
 
-  <div class="sfv__trust">
+  <div class="sfv__bar">
     <ul class="sfv__logos">
-      <li><img src="../fv/img/cl_kankyo.webp" alt="環境省" loading="lazy" decoding="async"></li>
-      <li><img src="../fv/img/cl_recruit.webp" alt="リクルート" loading="lazy" decoding="async"></li>
-      <li><img src="../fv/img/cl_jfe.webp" alt="JFE鋼板" loading="lazy" decoding="async"></li>
-      <li><img src="../fv/img/cl_sonpo.webp" alt="損保ジャパン" loading="lazy" decoding="async"></li>
-      <li><img src="../fv/img/cl_toritsu.webp" alt="東京都立病院" loading="lazy" decoding="async"></li>
+      <li><img src="../fv/img/cl_kankyo.webp"  width="386" height="209" alt="環境省" loading="lazy"></li>
+      <li><img src="../fv/img/cl_recruit.webp" width="342" height="183" alt="リクルート" loading="lazy"></li>
+      <li><img src="../fv/img/cl_jfe.webp"     width="308" height="186" alt="JFE鋼板" loading="lazy"></li>
+      <li><img src="../fv/img/cl_sonpo.webp"   width="386" height="184" alt="損保ジャパン" loading="lazy"></li>
+      <li><img src="../fv/img/cl_toritsu.webp" width="444" height="205" alt="東京都立病院" loading="lazy"></li>
       <li class="sfv__etc">ほか</li>
     </ul>
   </div>
 </section>
 
 <section class="spain" id="pain">
-  <div class="spain__inner">
-    <p class="spain__label">共感・課題提起</p>
+  <div class="spain__box">
+    <h2 class="spain__h">こんな状態から、ご相談をいただいています</h2>
 
-    <h2 class="spain__h2">こんな状態から、ご相談をいただいています</h2>
-
-    <p class="spain__lead">会社案内の制作は数年に一度、あるいは初めての仕事です。<br>このような課題はありませんか。</p>
-
-    <hr class="spain__rule">
+    <p class="spain__lead">会社案内の制作は数年に一度、あるいは初めての仕事です。<br class="spain__brp">このような課題はありませんか。</p>
 
     <ul class="spain__list">
       <li class="spain__item">社長から、うちの会社案内は古いと言われたが、何から手をつければいいか分からない</li>
@@ -1846,70 +2337,90 @@ a{color:inherit}
       <li class="spain__item">自社の強みを説明しようとすると、どこにでもある言葉になってしまう</li>
     </ul>
 
-    <p class="spain__note">決まっているのは、作らなければならないという事実だけ。<br>その状態からご相談いただいて構いません。最後の一つについては、私たちの仕事そのものです。</p>
+    <p class="spain__close">決まっているのは、作らなければならないという事実だけ。<br class="spain__brp">その状態からご相談いただいて構いません。最後の一つについては、私たちの仕事そのものです。</p>
   </div>
 </section>
 
 <section class="strans" id="trans">
-  <div class="strans__wrap">
+  <div class="strans__panel">
 
-    <h2 class="strans__h2"><span class="strans__nb">御社“らしさ”を</span><wbr><span class="strans__nb">お伺いした上で</span><wbr><span class="strans__nb">デザインします。</span></h2>
+    <h2 class="strans__h2">御社“らしさ”をお伺いした上でデザインします。</h2>
 
-    <p class="strans__lead">会社の強みや理念は、そのまま並べても伝わりません。色、写真、構成、折り方、スローガン。私たちは、御社にしかない特色を、読み手に届く形へ翻訳します。実際の制作物で、何をどう変換したのかをご覧ください。</p>
+    <p class="strans__lead"><span class="strans__nb">会社の強みや理念は、そのまま並べても伝わりません。</span><wbr><span class="strans__nb">色、写真、構成、折り方、スローガン。</span><wbr><span class="strans__nb">私たちは、御社にしかない特色を、読み手に届く形へ翻訳します。実際の制作物で、</span><wbr><span class="strans__nb">何をどう変換したのかをご覧ください。</span></p>
 
     <div class="strans__grid">
 
       <a class="strans__card" href="https://ads-gc.co.jp/production-record/sample09/">
-        <h3 class="strans__co">木田工業株式会社</h3>
-        <p class="strans__spec">工業・製造／会社案内16P中とじ</p>
-        <p class="strans__label">特色（何を）</p>
-        <p class="strans__txt">都内最大級の生産設備。社員一人一人が日本のモノづくりへのポリシーを持つ</p>
-        <p class="strans__arrow" aria-hidden="true">↓</p>
-        <p class="strans__label strans__label--2">デザイン判断（どのように）</p>
-        <p class="strans__txt">その想いから Protect Japan Brand をスローガンとして提案。専門用語を避け、製造工程をフロア毎に図示</p>
-        <div class="strans__shot">
-          <img src="../fv/img/works/w7.webp" alt="木田工業株式会社の会社案内" loading="lazy" decoding="async">
+        <div class="strans__head">
+          <span class="strans__num" aria-hidden="true">1</span>
+          <div>
+            <h3 class="strans__name">木田工業株式会社</h3>
+            <p class="strans__spec">（工業・製造／会社案内16P中とじ）</p>
+          </div>
         </div>
+        <div class="strans__note-block">
+          <p class="strans__label">特色（何を）</p>
+          <p class="strans__txt">都内最大級の生産設備。社員一人一人が日本のモノづくりへのポリシーを持つ</p>
+          <svg class="strans__arrow" width="13" height="20" viewBox="0 0 13 20" fill="none" aria-hidden="true"><path d="M6.5 0v18.4M1 13.4l5.5 5.6 5.5-5.6" stroke="currentColor" stroke-width="1.4"/></svg>
+          <p class="strans__label">デザイン判断（どのように）</p>
+          <p class="strans__txt">その想いから Protect Japan Brand をスローガンとして提案。専門用語を避け、製造工程をフロア毎に図示</p>
+        </div>
+        <figure class="strans__shot">
+          <img src="../fv/img/works/w7.webp" alt="木田工業株式会社の会社案内" loading="lazy" decoding="async">
+        </figure>
       </a>
 
       <a class="strans__card" href="https://ads-gc.co.jp/production-record/sample04/">
-        <h3 class="strans__co">リスタートジャパン合同会社</h3>
-        <p class="strans__spec">不動産・空き家再生／A4・4P＋ポケットフォルダ</p>
-        <p class="strans__label">特色（何を）</p>
-        <p class="strans__txt">ニッポン再起動を掲げ、空き家再生で国内の住宅整備に貢献</p>
-        <p class="strans__arrow" aria-hidden="true">↓</p>
-        <p class="strans__label strans__label--2">デザイン判断（どのように）</p>
-        <p class="strans__txt">古来より日本人に愛されてきた桜をモチーフに、社会課題を親しみやすさへ変換。ポケットフォルダには更新頻度を考えて普遍情報のみ掲載</p>
-        <div class="strans__shot">
-          <!-- ※要確認：リスタートジャパン合同会社の制作物写真が ASSETS.txt に無い。
-               仮に hero_spread.jpg を置いている。差し替え時に alt も入れる -->
-          <img src="../fv/img/hero_spread.jpg" alt="" loading="lazy" decoding="async">
+        <div class="strans__head">
+          <span class="strans__num" aria-hidden="true">2</span>
+          <div>
+            <h3 class="strans__name">リスタートジャパン合同会社</h3>
+            <p class="strans__spec">（不動産・空き家再生／A4・4P＋ポケットフォルダ）</p>
+          </div>
         </div>
+        <div class="strans__note-block">
+          <p class="strans__label">特色（何を）</p>
+          <p class="strans__txt">ニッポン再起動を掲げ、空き家再生で国内の住宅整備に貢献</p>
+          <svg class="strans__arrow" width="13" height="20" viewBox="0 0 13 20" fill="none" aria-hidden="true"><path d="M6.5 0v18.4M1 13.4l5.5 5.6 5.5-5.6" stroke="currentColor" stroke-width="1.4"/></svg>
+          <p class="strans__label">デザイン判断（どのように）</p>
+          <p class="strans__txt">古来より日本人に愛されてきた桜をモチーフに、社会課題を親しみやすさへ変換。ポケットフォルダには更新頻度を考えて普遍情報のみ掲載</p>
+        </div>
+        <!-- ※要確認：リスタートジャパン合同会社の制作物写真が ASSETS.txt に無い。
+             仮に自社のスプレッド写真を置いている。差し替え候補は本番サイトの
+             assets/images/works/works-sample04/sample04_image01_sp.jpg -->
+        <figure class="strans__shot">
+          <img src="../fv/img/hero_spread.jpg" alt="" loading="lazy" decoding="async">
+        </figure>
       </a>
 
       <a class="strans__card" href="https://ads-gc.co.jp/production-record/sample06/">
-        <h3 class="strans__co">環球貿易株式会社</h3>
-        <p class="strans__spec">リサイクル／会社案内8P両観音折</p>
-        <p class="strans__label">特色（何を）</p>
-        <p class="strans__txt">未来の子供たちにも青い地球を残したい、が合言葉。買取から再生までの一貫体制</p>
-        <p class="strans__arrow" aria-hidden="true">↓</p>
-        <p class="strans__label strans__label--2">デザイン判断（どのように）</p>
-        <p class="strans__txt">訴求点を自然環境の保護と一貫体制の2点に絞り込み。両観音折の面積を活かして工程を図示し、日英併記</p>
-        <div class="strans__shot">
-          <!-- ※要確認：環球貿易株式会社の制作物写真が ASSETS.txt に無い。
-               仮に hero_covers.jpg を置いている。差し替え時に alt も入れる -->
-          <img src="../fv/img/hero_covers.jpg" alt="" loading="lazy" decoding="async">
+        <div class="strans__head">
+          <span class="strans__num" aria-hidden="true">3</span>
+          <div>
+            <h3 class="strans__name">環球貿易株式会社</h3>
+            <p class="strans__spec">（リサイクル／会社案内8P両観音折）</p>
+          </div>
         </div>
+        <div class="strans__note-block">
+          <p class="strans__label">特色（何を）</p>
+          <p class="strans__txt">未来の子供たちにも青い地球を残したい、が合言葉。買取から再生までの一貫体制</p>
+          <svg class="strans__arrow" width="13" height="20" viewBox="0 0 13 20" fill="none" aria-hidden="true"><path d="M6.5 0v18.4M1 13.4l5.5 5.6 5.5-5.6" stroke="currentColor" stroke-width="1.4"/></svg>
+          <p class="strans__label">デザイン判断（どのように）</p>
+          <p class="strans__txt">訴求点を自然環境の保護と一貫体制の2点に絞り込み。両観音折の面積を活かして工程を図示し、日英併記</p>
+        </div>
+        <!-- ※要確認：環球貿易株式会社の制作物写真が ASSETS.txt に無い。
+             仮に自社の見開き写真を置いている。差し替え候補は本番サイトの
+             assets/images/works/works-sample06/sample06_image01_sp.jpg -->
+        <figure class="strans__shot">
+          <img src="../fv/img/price_band.jpg" alt="" loading="lazy" decoding="async">
+        </figure>
       </a>
 
     </div>
 
-    <hr class="strans__rule">
+    <p class="strans__close"><span class="strans__nb">同じ業種でも企業様ごとに特色は異なり、その解釈が合っているかどうかは、デザインに起こしてみないと分かりません。</span><wbr><span class="strans__nb">だから私たちは3案以上をご提示し、納得いただけるまで何度でも作り直します。</span></p>
 
-    <div class="strans__foot">
-      <p class="strans__close">同じ業種でも企業様ごとに特色は異なり、その解釈が合っているかどうかは、デザインに起こしてみないと分かりません。だから私たちは3案以上をご提示し、納得いただけるまで何度でも作り直します。</p>
-      <a class="strans__btn" href="https://ads-gc.co.jp/production-record/">他の制作実績を見る<svg width="24" height="8" viewBox="0 0 24 8" fill="none" aria-hidden="true"><path d="M0 4h22M18.6 1 22 4l-3.4 3" stroke="currentColor" stroke-width="1.4"/></svg></a>
-    </div>
+    <a class="strans__btn" href="https://ads-gc.co.jp/production-record/">他の制作実績を見る<svg width="7" height="12" viewBox="0 0 7 12" fill="none" aria-hidden="true"><path d="M1 1l5 5-5 5" stroke="currentColor" stroke-width="1.4"/></svg></a>
 
   </div>
 </section>
@@ -1917,27 +2428,25 @@ a{color:inherit}
 <section class="sassure" id="assure">
   <div class="sassure__inner">
     <h2 class="sassure__h2">3つの安心</h2>
-    <span class="sassure__hrule" aria-hidden="true"></span>
+    <p class="sassure__label">3つの安心</p>
+    <span class="sassure__rule" aria-hidden="true"></span>
 
     <div class="sassure__grid">
       <article class="sassure__card">
-        <p class="sassure__num">01</p>
-        <span class="sassure__nrule" aria-hidden="true"></span>
-        <h3 class="sassure__title">御社の中にある答えを<br>一緒に探します</h3>
+        <p class="sassure__num">1</p>
+        <h3 class="sassure__title">御社の中にある答えを<br class="sassure__br">一緒に探します</h3>
         <p class="sassure__text">会社案内に何を載せるべきかは、業種と渡す相手によって変わります。まず御社の理念・現場・強みをお聞きし、そこから構成をご提案します。</p>
       </article>
 
       <article class="sassure__card">
-        <p class="sassure__num">02</p>
-        <span class="sassure__nrule" aria-hidden="true"></span>
-        <h3 class="sassure__title">費用の見通しが<br>最初に立ちます</h3>
+        <p class="sassure__num">2</p>
+        <h3 class="sassure__title">費用の見通しが<br class="sassure__br">最初に立ちます</h3>
         <p class="sassure__text">ページ数ごとの定価を公開しています。デザイン会社、ライター、カメラマン、印刷会社をそれぞれ手配する必要はなく、印刷費まで含めた総額を着手前にご提示するため、社内でのご説明にも困りません。</p>
       </article>
 
       <article class="sassure__card">
-        <p class="sassure__num">03</p>
-        <span class="sassure__nrule" aria-hidden="true"></span>
-        <h3 class="sassure__title">納得いくまで何度でも<br>作り直します</h3>
+        <p class="sassure__num">3</p>
+        <h3 class="sassure__title">納得いくまで<br class="sassure__br">何度でも作り直します</h3>
         <p class="sassure__text">デザインは3案以上をご提示し、修正回数に制限は設けていません。正確で適切な掲載情報になるまで徹底的に対応します。初めてのご依頼で、途中で方向性が変わっても問題ありません。</p>
       </article>
     </div>
@@ -1948,29 +2457,33 @@ a{color:inherit}
   <div class="srecord__wrap">
 
     <h2 class="srecord__h">実績と規模</h2>
-    <p class="srecord__lead">官公庁から大手企業まで。20分野以上の制作実績があります</p>
+    <p class="srecord__lead"><span class="srecord__nb">官公庁から大手企業まで。</span><wbr><span class="srecord__nb">20分野以上の制作実績があります</span></p>
+
+    <div class="srecord__bandhead">
+      <p class="srecord__bandlabel">ロゴ帯</p>
+    </div>
 
     <div class="srecord__clients">
       <ul class="srecord__row">
         <li>環境省</li>
-        <li class="srecord__sep" aria-hidden="true"></li>
+        <li class="srecord__sep" aria-hidden="true">／</li>
         <li>リクルート</li>
-        <li class="srecord__sep" aria-hidden="true"></li>
+        <li class="srecord__sep" aria-hidden="true">／</li>
         <li>JFE鋼板</li>
-        <li class="srecord__sep" aria-hidden="true"></li>
+        <li class="srecord__sep" aria-hidden="true">／</li>
         <li>損害保険ジャパン</li>
-        <li class="srecord__sep" aria-hidden="true"></li>
+        <li class="srecord__sep" aria-hidden="true">／</li>
         <li>日本労働組合総連合会</li>
       </ul>
       <ul class="srecord__row">
         <li>ILO駐日事務所</li>
-        <li class="srecord__sep" aria-hidden="true"></li>
+        <li class="srecord__sep" aria-hidden="true">／</li>
         <li>帝京大学医学部附属病院</li>
-        <li class="srecord__sep" aria-hidden="true"></li>
+        <li class="srecord__sep" aria-hidden="true">／</li>
         <li>東京都立病院</li>
-        <li class="srecord__sep" aria-hidden="true"></li>
+        <li class="srecord__sep" aria-hidden="true">／</li>
         <li>スバル興産</li>
-        <li class="srecord__sep" aria-hidden="true"></li>
+        <li class="srecord__sep" aria-hidden="true">／</li>
         <li>東京舞台照明<span class="srecord__etc">ほか</span></li>
       </ul>
     </div>
@@ -1978,12 +2491,12 @@ a{color:inherit}
     <dl class="srecord__stats">
       <div class="srecord__stat">
         <dt>制作実績</dt>
-        <!-- 累計制作点数は未確定。◯◯は埋めないこと -->
+        <!-- 累計の制作点数は未確定。◯◯は埋めないこと -->
         <dd class="srecord__fig">累計◯◯件<span class="srecord__tbc">※要確認</span></dd>
       </div>
       <div class="srecord__stat">
         <dt>対応業種</dt>
-        <dd class="srecord__fig">20分野以上</dd>
+        <dd class="srecord__fig"><span class="srecord__num">20</span>分野以上</dd>
       </div>
       <div class="srecord__stat">
         <dt>対応地域</dt>
@@ -2001,8 +2514,8 @@ a{color:inherit}
 
 <section class="sflow" id="flow">
   <div class="sflow__wrap">
-    <p class="sflow__eyebrow">進め方</p>
-    <h2 class="sflow__h2">プロジェクトの進め方 5ステップ</h2>
+    <p class="sflow__eyebrow"><span>進め方</span></p>
+    <h2 class="sflow__h2">プロジェクトの進め方<span class="sflow__sub">5ステップ</span></h2>
 
     <ol class="sflow__list">
       <li class="sflow__row">
@@ -2048,16 +2561,8 @@ a{color:inherit}
       </li>
     </ol>
 
-    <dl class="sflow__foot">
-      <div class="sflow__footrow">
-        <dt>補足文1</dt>
-        <dd>御社の特色を正しく読み取れているかは、形にしてご覧いただかないと分からないため、修正回数を無制限にしています。</dd>
-      </div>
-      <div class="sflow__footrow">
-        <dt>補足文2</dt>
-        <dd>原稿もお写真もお持ちでない状態から始まる案件がほとんどです。取材とカメラマンの手配も含めてご対応します。</dd>
-      </div>
-    </dl>
+    <p class="sflow__note">御社の特色を正しく読み取れているかは、形にしてご覧いただかないと分からないため、<br class="sflow__brp">修正回数を無制限にしています。</p>
+    <p class="sflow__note">原稿もお写真もお持ちでない状態から始まる案件がほとんどです。<br class="sflow__brp">取材とカメラマンの手配も含めてご対応します。</p>
   </div>
 </section>
 
@@ -2106,19 +2611,19 @@ a{color:inherit}
       </ul>
     </div>
 
-    <p class="sprice__close">追加費用が後から発生しないよう、着手前に総額をご提示します。<br>修正回数は無制限ですが、それによる追加費用はいただきません。</p>
+    <p class="sprice__close">追加費用が後から発生しないよう、着手前に総額をご提示します。修正回数は無制限ですが、それによる追加費用はいただきません。</p>
   </div>
 </section>
 
 <section class="scompare" id="compare">
-  <div class="scompare__in">
+  <div class="scompare__box">
 
     <h2 class="scompare__h">他の選択肢との違い</h2>
     <hr class="scompare__rule">
 
-    <p class="scompare__sub"><span class="scompare__nb">印刷通販や</span><wbr><span class="scompare__nb">クラウドソーシングとの違い</span></p>
+    <p class="scompare__lead"><span class="scompare__nb">印刷通販や</span><wbr><span class="scompare__nb">クラウドソーシングとの違い</span></p>
 
-    <p class="scompare__lead"><span class="scompare__nb">会社案内を作る手段は</span><wbr><span class="scompare__nb">いくつかあります。</span><br><span class="scompare__nb">それぞれに向き不向きがあるため、</span><wbr><span class="scompare__nb">比較のうえで</span><wbr><span class="scompare__nb">ご判断ください。</span></p>
+    <p class="scompare__note"><span class="scompare__nb">会社案内を作る手段は</span><wbr><span class="scompare__nb">いくつかあります。</span><wbr><span class="scompare__nb">それぞれに向き不向きがあるため、</span><wbr><span class="scompare__nb">比較のうえで</span><wbr><span class="scompare__nb">ご判断ください。</span></p>
 
     <div class="scompare__scroll">
       <table class="scompare__table">
@@ -2135,31 +2640,31 @@ a{color:inherit}
         <tbody>
           <tr>
             <th scope="row" class="scompare__row">構成から相談できる</th>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">×</td>
-            <td class="scompare__mark">△</td>
+            <td>○</td>
+            <td>○</td>
+            <td>×</td>
+            <td>△</td>
           </tr>
           <tr>
             <th scope="row" class="scompare__row">特色の読み解きと提案</th>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">×</td>
-            <td class="scompare__mark">△</td>
+            <td>○</td>
+            <td>○</td>
+            <td>×</td>
+            <td>△</td>
           </tr>
           <tr>
             <th scope="row" class="scompare__row">取材・撮影</th>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">×</td>
-            <td class="scompare__mark">△</td>
+            <td>○</td>
+            <td>○</td>
+            <td>×</td>
+            <td>△</td>
           </tr>
           <tr>
             <th scope="row" class="scompare__row">印刷まで一貫</th>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">×</td>
+            <td>○</td>
+            <td>○</td>
+            <td>○</td>
+            <td>×</td>
           </tr>
           <tr>
             <th scope="row" class="scompare__row">修正回数</th>
@@ -2170,10 +2675,10 @@ a{color:inherit}
           </tr>
           <tr>
             <th scope="row" class="scompare__row">法人としての責任</th>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">○</td>
-            <td class="scompare__mark">△</td>
+            <td>○</td>
+            <td>○</td>
+            <td>○</td>
+            <td>△</td>
           </tr>
           <tr>
             <th scope="row" class="scompare__row">費用</th>
@@ -2192,50 +2697,76 @@ a{color:inherit}
 </section>
 
 <section class="sfaq" id="faq">
-  <div class="sfaq__in">
+  <div class="sfaq__wrap">
 
-    <h2 class="sfaq__h2">よくあるご質問</h2>
-    <hr class="sfaq__rule">
+    <h2 class="sfaq__h">よくあるご質問</h2>
 
-    <dl class="sfaq__list">
+    <div class="sfaq__list">
 
-      <div class="sfaq__item">
-        <dt class="sfaq__q"><span class="sfaq__mark">Q.</span><span class="sfaq__qt"><span class="sfaq__nb">予算がまだ</span><wbr><span class="sfaq__nb">決まっていない段階でも</span><wbr><span class="sfaq__nb">相談できますか</span></span></dt>
-        <dd class="sfaq__a"><span class="sfaq__nb">はい、</span><wbr><span class="sfaq__nb">その状態でのご相談が</span><wbr><span class="sfaq__nb">多くいただく形です。</span><wbr><span class="sfaq__nb">ページ数ごとの参考価格を</span><wbr><span class="sfaq__nb">公開しておりますので、</span><wbr><span class="sfaq__nb">まずは規模感を</span><wbr><span class="sfaq__nb">ご確認ください。</span><wbr><span class="sfaq__nb">伝えたい内容と</span><wbr><span class="sfaq__nb">渡す相手をお聞きしたうえで、</span><wbr><span class="sfaq__nb">印刷費を含めた総額を</span><wbr><span class="sfaq__nb">お出しします。</span></dd>
-      </div>
+      <details class="sfaq__item" open>
+        <summary class="sfaq__q">
+          <span class="sfaq__qmark" aria-hidden="true">Q.</span>
+          <span class="sfaq__qtext"><span class="sfaq__nb">予算がまだ決まっていない</span><wbr><span class="sfaq__nb">段階でも相談できますか</span></span>
+          <span class="sfaq__mark" aria-hidden="true"></span>
+        </summary>
+        <p class="sfaq__a">はい、その状態でのご相談が多くいただく形です。ページ数ごとの参考価格を公開しておりますので、まずは規模感をご確認ください。伝えたい内容と渡す相手をお聞きしたうえで、印刷費を含めた総額をお出しします。</p>
+      </details>
 
-      <div class="sfaq__item">
-        <dt class="sfaq__q"><span class="sfaq__mark">Q.</span><span class="sfaq__qt"><span class="sfaq__nb">原稿や写真が</span><wbr><span class="sfaq__nb">まったくない状態からでも</span><wbr><span class="sfaq__nb">お願いできますか</span></span></dt>
-        <dd class="sfaq__a"><span class="sfaq__nb">はい、</span><wbr><span class="sfaq__nb">その状態から始まる案件が</span><wbr><span class="sfaq__nb">ほとんどです。</span><wbr><span class="sfaq__nb">原稿はこちらで執筆し、</span><wbr><span class="sfaq__nb">撮影はカメラマンの</span><wbr><span class="sfaq__nb">手配から対応します。</span><wbr><span class="sfaq__nb">お願いするのは、</span><wbr><span class="sfaq__nb">取材へのご対応と</span><wbr><span class="sfaq__nb">ご確認だけです。</span></dd>
-      </div>
+      <details class="sfaq__item" open>
+        <summary class="sfaq__q">
+          <span class="sfaq__qmark" aria-hidden="true">Q.</span>
+          <span class="sfaq__qtext"><span class="sfaq__nb">原稿や写真が</span><wbr><span class="sfaq__nb">まったくない状態からでも</span><wbr><span class="sfaq__nb">お願いできますか</span></span>
+          <span class="sfaq__mark" aria-hidden="true"></span>
+        </summary>
+        <p class="sfaq__a">はい、その状態から始まる案件がほとんどです。原稿はこちらで執筆し、撮影はカメラマンの手配から対応します。お願いするのは、取材へのご対応とご確認だけです。</p>
+      </details>
 
-      <div class="sfaq__item">
-        <dt class="sfaq__q"><span class="sfaq__mark">Q.</span><span class="sfaq__qt"><span class="sfaq__nb">修正回数が無制限と</span><wbr><span class="sfaq__nb">ありますが、</span><wbr><span class="sfaq__nb">追加費用はかかりませんか</span></span></dt>
-        <dd class="sfaq__a"><span class="sfaq__nb">修正による追加費用は</span><wbr><span class="sfaq__nb">いただきません。</span><wbr><span class="sfaq__nb">無制限としているのは、</span><wbr><span class="sfaq__nb">御社の特色を</span><wbr><span class="sfaq__nb">正しく読み取れているかは、</span><wbr><span class="sfaq__nb">形にしてご覧いただかないと</span><wbr><span class="sfaq__nb">分からないためです。</span></dd>
-      </div>
+      <details class="sfaq__item" open>
+        <summary class="sfaq__q">
+          <span class="sfaq__qmark" aria-hidden="true">Q.</span>
+          <span class="sfaq__qtext"><span class="sfaq__nb">修正回数が無制限とありますが、</span><wbr><span class="sfaq__nb">追加費用はかかりませんか</span></span>
+          <span class="sfaq__mark" aria-hidden="true"></span>
+        </summary>
+        <p class="sfaq__a">修正による追加費用はいただきません。無制限としているのは、御社の特色を正しく読み取れているかは、形にしてご覧いただかないと分からないためです。</p>
+      </details>
 
-      <div class="sfaq__item">
-        <dt class="sfaq__q"><span class="sfaq__mark">Q.</span><span class="sfaq__qt"><span class="sfaq__nb">途中で方向性を</span><wbr><span class="sfaq__nb">変えたくなった場合も</span><wbr><span class="sfaq__nb">対応いただけますか</span></span></dt>
-        <dd class="sfaq__a"><span class="sfaq__nb">対応します。</span><wbr><span class="sfaq__nb">作りながら伝えたいことが</span><wbr><span class="sfaq__nb">固まっていくケースは</span><wbr><span class="sfaq__nb">珍しくありません。</span><wbr><span class="sfaq__nb">変わった時点で</span><wbr><span class="sfaq__nb">お知らせいただければ、</span><wbr><span class="sfaq__nb">そこから組み直します。</span></dd>
-      </div>
+      <details class="sfaq__item" open>
+        <summary class="sfaq__q">
+          <span class="sfaq__qmark" aria-hidden="true">Q.</span>
+          <span class="sfaq__qtext"><span class="sfaq__nb">途中で方向性を変えたくなった場合も</span><wbr><span class="sfaq__nb">対応いただけますか</span></span>
+          <span class="sfaq__mark" aria-hidden="true"></span>
+        </summary>
+        <p class="sfaq__a">対応します。作りながら伝えたいことが固まっていくケースは珍しくありません。変わった時点でお知らせいただければ、そこから組み直します。</p>
+      </details>
 
-      <div class="sfaq__item">
-        <dt class="sfaq__q"><span class="sfaq__mark">Q.</span><span class="sfaq__qt"><span class="sfaq__nb">制作期間は</span><wbr><span class="sfaq__nb">どのくらいかかりますか</span></span></dt>
-        <dd class="sfaq__a"><span class="sfaq__nb">A4二つ折り4ページで約1か月、</span><wbr><span class="sfaq__nb">中綴じ16ページで約2か月が目安です。</span><wbr><span class="sfaq__nb">展示会や採用イベントなど</span><wbr><span class="sfaq__nb">動かせない期限がある場合は、</span><wbr><span class="sfaq__nb">そこから逆算して組みますので</span><wbr><span class="sfaq__nb">お申し付けください。</span></dd>
-      </div>
+      <details class="sfaq__item" open>
+        <summary class="sfaq__q">
+          <span class="sfaq__qmark" aria-hidden="true">Q.</span>
+          <span class="sfaq__qtext"><span class="sfaq__nb">制作期間は</span><wbr><span class="sfaq__nb">どのくらいかかりますか</span></span>
+          <span class="sfaq__mark" aria-hidden="true"></span>
+        </summary>
+        <p class="sfaq__a">A4二つ折り4ページで約1か月、中綴じ16ページで約2か月が目安です。展示会や採用イベントなど動かせない期限がある場合は、そこから逆算して組みますのでお申し付けください。</p>
+      </details>
 
-      <div class="sfaq__item">
-        <dt class="sfaq__q"><span class="sfaq__mark">Q.</span><span class="sfaq__qt"><span class="sfaq__nb">遠方ですが</span><wbr><span class="sfaq__nb">対応いただけますか</span></span></dt>
-        <dd class="sfaq__a"><span class="sfaq__nb">全国からご依頼いただけます。</span><wbr><span class="sfaq__nb">関東近県は直接お伺いし、</span><wbr><span class="sfaq__nb">それ以外はオンラインで進めます。</span><wbr><span class="sfaq__nb">取材や撮影が必要な場合は</span><wbr><span class="sfaq__nb">出張して対応します。</span></dd>
-      </div>
+      <details class="sfaq__item" open>
+        <summary class="sfaq__q">
+          <span class="sfaq__qmark" aria-hidden="true">Q.</span>
+          <span class="sfaq__qtext"><span class="sfaq__nb">遠方ですが</span><wbr><span class="sfaq__nb">対応いただけますか</span></span>
+          <span class="sfaq__mark" aria-hidden="true"></span>
+        </summary>
+        <p class="sfaq__a">全国からご依頼いただけます。関東近県は直接お伺いし、それ以外はオンラインで進めます。取材や撮影が必要な場合は出張して対応します。</p>
+      </details>
 
-      <div class="sfaq__item">
-        <dt class="sfaq__q"><span class="sfaq__mark">Q.</span><span class="sfaq__qt"><span class="sfaq__nb">制作したデータは</span><wbr><span class="sfaq__nb">納品してもらえますか</span></span></dt>
-        <dd class="sfaq__a"><span class="sfaq__nb">はい、</span><wbr><span class="sfaq__nb">ご希望に応じて納品します。</span><wbr><span class="sfaq__nb">増刷をご自身で</span><wbr><span class="sfaq__nb">手配いただくことも可能です。</span><wbr><span class="sfaq__nb">形式については、</span><wbr><span class="sfaq__nb">その後の運用方法をお聞きしたうえで</span><wbr><span class="sfaq__nb">ご相談させてください。</span></dd>
-      </div>
+      <details class="sfaq__item" open>
+        <summary class="sfaq__q">
+          <span class="sfaq__qmark" aria-hidden="true">Q.</span>
+          <span class="sfaq__qtext"><span class="sfaq__nb">制作したデータは</span><wbr><span class="sfaq__nb">納品してもらえますか</span></span>
+          <span class="sfaq__mark" aria-hidden="true"></span>
+        </summary>
+        <p class="sfaq__a">はい、ご希望に応じて納品します。増刷をご自身で手配いただくことも可能です。形式については、その後の運用方法をお聞きしたうえでご相談させてください。</p>
+      </details>
 
-    </dl>
-
+    </div>
   </div>
 </section>
 
@@ -2244,7 +2775,7 @@ a{color:inherit}
 
     <h2 class="scompany__h">会社情報</h2>
 
-    <p class="scompany__lead"><span class="scompany__nb">会社案内・パンフレットの</span><wbr><span class="scompany__nb">デザイン制作を通じて、</span><br><span class="scompany__nb">企業の価値や想いを、</span><wbr><span class="scompany__nb">伝わるかたちに整えます。</span></p>
+    <p class="scompany__lead"><span class="scompany__nb">ADSの基本情報と、</span><wbr><span class="scompany__nb">制作を支える体制を</span><wbr><span class="scompany__nb">ご紹介します。</span></p>
 
     <dl class="scompany__grid">
 
@@ -2255,35 +2786,41 @@ a{color:inherit}
 
       <div class="scompany__card">
         <dt class="scompany__k">所在地</dt>
-        <dd class="scompany__v">〒※要確認<br><span class="scompany__nb">東京都葛飾区青戸3-37-15&nbsp;3F</span></dd>
+        <dd class="scompany__v">〒※要確認<br><span class="scompany__nb">東京都葛飾区青戸3-37-15</span><br>3F</dd>
       </div>
 
       <div class="scompany__card">
         <dt class="scompany__k">電話番号</dt>
-        <dd class="scompany__v">03-6336-5425<br>受付時間：※要確認</dd>
+        <dd class="scompany__v">03-6336-5425</dd>
       </div>
 
       <div class="scompany__card">
         <dt class="scompany__k">事業内容</dt>
         <dd class="scompany__v">
           <ul class="scompany__ul">
-            <li class="scompany__li"><span class="scompany__nb">会社案内・</span><wbr><span class="scompany__nb">コーポレートパンフレットの</span><wbr><span class="scompany__nb">企画・制作</span></li>
-            <li class="scompany__li"><span class="scompany__nb">採用パンフレット・</span><wbr><span class="scompany__nb">入社案内の</span><wbr><span class="scompany__nb">企画・制作</span></li>
-            <li class="scompany__li"><span class="scompany__nb">サービス紹介パンフレットの</span><wbr><span class="scompany__nb">企画・制作</span></li>
-            <li class="scompany__li">印刷ディレクション</li>
-            <li class="scompany__li"><span class="scompany__nb">コピーライティング・</span><wbr><span class="scompany__nb">取材・撮影の</span><wbr><span class="scompany__nb">ディレクション</span></li>
+            <li class="scompany__li"><span class="scompany__nb">会社案内・</span><wbr><span class="scompany__nb">パンフレットの</span><wbr><span class="scompany__nb">企画・制作</span></li>
+            <li class="scompany__li">コピーライティング</li>
+            <li class="scompany__li">デザイン</li>
+            <li class="scompany__li"><span class="scompany__nb">印刷手配・納品</span></li>
+            <li class="scompany__li"><span class="scompany__nb">Webコンテンツの</span><wbr><span class="scompany__nb">企画・制作</span></li>
           </ul>
         </dd>
       </div>
 
-      <div class="scompany__card">
+    </dl>
+
+    <dl class="scompany__grid2">
+
+      <div class="scompany__cell">
         <dt class="scompany__k">対応エリア</dt>
         <dd class="scompany__v"><span class="scompany__nb">東京全域および</span><wbr><span class="scompany__nb">関東近県は訪問、</span><br><span class="scompany__nb">全国オンライン対応</span></dd>
       </div>
 
-      <div class="scompany__card">
+      <div class="scompany__cell scompany__cell--r">
         <dt class="scompany__k">制作体制</dt>
-        <dd class="scompany__v"><span class="scompany__nb">ディレクター、</span><wbr><span class="scompany__nb">デザイナー、</span><wbr><span class="scompany__nb">コピーライターが</span><wbr><span class="scompany__nb">チームで対応。</span><br><span class="scompany__nb">企画から取材・編集・</span><wbr><span class="scompany__nb">デザイン・印刷まで、</span><wbr><span class="scompany__nb">一貫してサポートします。</span></dd>
+        <dd class="scompany__v"><span class="scompany__nb">ディレクター、</span><wbr><span class="scompany__nb">コピーライター、</span><wbr><span class="scompany__nb">デザイナーが</span><wbr><span class="scompany__nb">専任で担当。</span></dd>
+        <dd class="scompany__v"><span class="scompany__nb">社内での情報共有を</span><wbr><span class="scompany__nb">密に行い、</span><wbr><span class="scompany__nb">品質管理を</span><wbr><span class="scompany__nb">徹底しています。</span></dd>
+        <dd class="scompany__v"><span class="scompany__nb">必要に応じて、</span><wbr><span class="scompany__nb">信頼するパートナーと連携し、</span><wbr><span class="scompany__nb">最適な体制で制作します。</span></dd>
       </div>
 
     </dl>
@@ -2292,52 +2829,55 @@ a{color:inherit}
 </section>
 
 <section class="scontact" id="contact">
-  <div class="scontact__in">
+  <div class="scontact__card">
+    <div class="scontact__cols">
 
-    <p class="scontact__eyebrow">クロージングとフォーム</p>
+      <div class="scontact__left">
+        <p class="scontact__eyebrow">クロージングとフォーム</p>
+        <hr class="scontact__rule">
 
-    <h2 class="scontact__h"><span class="scontact__nb">まだ何も決まっていない</span><wbr><span class="scontact__nb">段階でも</span><wbr><span class="scontact__nb">ぜひご相談ください</span></h2>
+        <h2 class="scontact__h"><span class="scontact__nb">まだ何も</span><wbr><span class="scontact__nb">決まっていない</span><br><span class="scontact__nb">段階でも</span><wbr><span class="scontact__nb">ぜひご相談ください</span></h2>
 
-    <p class="scontact__lead"><span class="scontact__nb">ページ数、部数、</span><wbr><span class="scontact__nb">載せる内容も</span><wbr><span class="scontact__nb">一緒に決めていきます。</span><br><span class="scontact__nb">まずは御社の現状と、</span><wbr><span class="scontact__nb">お困りごとから</span><wbr><span class="scontact__nb">お聞かせください。</span></p>
+        <p class="scontact__lead"><span class="scontact__nb">ページ数、</span><wbr><span class="scontact__nb">部数、</span><wbr><span class="scontact__nb">載せる内容も</span><wbr><span class="scontact__nb">一緒に決めていきます。</span><br><span class="scontact__nb">まずは御社の現状と、</span><wbr><span class="scontact__nb">お困りごとから</span><wbr><span class="scontact__nb">お聞かせください。</span></p>
 
-    <p class="scontact__ctawrap">
-      <a class="scontact__cta" href="#contact-form">無料で相談する<svg class="scontact__arrow" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M1 1l6.5 6.5L1 14"/></svg></a>
-    </p>
+        <p class="scontact__ctawrap"><a class="scontact__cta" href="#scontact-form">無料で相談する</a></p>
 
-    <div class="scontact__panel">
-      <p class="scontact__note"><span class="scontact__nb">ご相談・お見積もりは無料です。</span><wbr><span class="scontact__nb">1営業日以内にご返信します。</span></p>
+        <hr class="scontact__rule scontact__rule--2">
 
-      <!-- ※要確認：送信先（action / 受け口）が未定のため空けている -->
-      <form class="scontact__grid" id="contact-form" action="" method="post">
+        <p class="scontact__note"><span class="scontact__nb">ご相談・お見積もりは</span><wbr><span class="scontact__nb">無料です。</span><br><span class="scontact__nb">1営業日以内に</span><wbr><span class="scontact__nb">ご返信します。</span></p>
+      </div>
+
+      <!-- ※要確認：送信先（action の受け口）が未定のため空けている -->
+      <form class="scontact__form" id="scontact-form" action="" method="post">
         <div class="scontact__field">
           <label class="scontact__label" for="scontact-company">会社名</label>
-          <input class="scontact__input" id="scontact-company" name="company" type="text" autocomplete="organization" required>
+          <input class="scontact__input" id="scontact-company" name="company" type="text" autocomplete="organization">
         </div>
         <div class="scontact__field">
           <label class="scontact__label" for="scontact-name">お名前</label>
-          <input class="scontact__input" id="scontact-name" name="name" type="text" autocomplete="name" required>
+          <input class="scontact__input" id="scontact-name" name="name" type="text" autocomplete="name">
         </div>
         <div class="scontact__field">
           <label class="scontact__label" for="scontact-email">メールアドレス</label>
-          <input class="scontact__input" id="scontact-email" name="email" type="email" autocomplete="email" required>
+          <input class="scontact__input" id="scontact-email" name="email" type="email" autocomplete="email">
         </div>
         <div class="scontact__field">
           <label class="scontact__label" for="scontact-tel">電話番号（任意）</label>
           <input class="scontact__input" id="scontact-tel" name="tel" type="tel" autocomplete="tel">
         </div>
-        <div class="scontact__field scontact__field--wide">
+        <div class="scontact__field">
           <label class="scontact__label" for="scontact-message">ご相談内容（自由記述）</label>
           <textarea class="scontact__textarea" id="scontact-message" name="message" rows="3"></textarea>
         </div>
       </form>
-    </div>
 
+    </div>
   </div>
 
-  <a class="scontact__fixed" href="#contact-form">
-    <svg class="scontact__fixedicon" viewBox="0 0 33 25" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-      <rect x="1" y="1" width="31" height="23" rx="2"/>
-      <path d="M1.5 2.5L16.5 14 31.5 2.5"/>
+  <a class="scontact__fixed" href="#scontact-form">
+    <svg class="scontact__fixedicon" viewBox="0 0 38 28" fill="none" aria-hidden="true">
+      <rect x="1" y="1" width="36" height="26" rx="2" fill="#fff"/>
+      <path d="M2.5 2.5L19 16 35.5 2.5M2.5 25.5L14.5 15M35.5 25.5L23.5 15" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <span class="scontact__fixedtext">
       <span class="scontact__fixedmain">お問い合わせ｜デザイン相談（無料）</span>
