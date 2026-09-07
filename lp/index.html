@@ -289,13 +289,16 @@ body.cta-hide .scontact__fixed{
   padding-block:clamp(34px,4.44vw,64px) clamp(36px,4.03vw,58px);
   /* 🚨 この節には左右のパディングが無く、.sfv の content box が 0-1440 だった。
      そのため写真の right:0 が画面の縁（1440）になってしまう。
-     ほかの節と同じ「面の桁」（--pad の内側＝1440で 71-1369）を作る */
-  padding-inline:var(--pad);
+     🚨 面の桁（--pad 71）まで出すと画面の縁に寄りすぎた。
+     本文の桁（1440で120）と面の桁（71）の中間に、この節だけの余白を置く。
+     1440で96 → 96-1344（幅1248）。桁より24px外、縁からは96px */
+  --fv-pad:clamp(20px,6.67vw,96px);
+  padding-inline:var(--fv-pad);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
 }
 
 .sfv__top{
-  /* 🚨 この節だけ、左右とも「面の桁」（--pad の内側＝1440で 71-1369・幅1298）を使う。
+  /* 🚨 この節だけ、左右とも --fv-pad の内側（1440で 96-1344・幅1248）を使う。
      ほかの節と同じ 1200 の桁に収めると、写真だけが右へ出て右に寄って見えた。
      ヘッダーと本文の桁（120-1320）より外へ、左右そろって広がる */
   width:100%;                                       /* 親の content box いっぱい＝71-1369 */
@@ -433,8 +436,8 @@ body.cta-hide .scontact__fixed{
      100vw を使わないのでスクロールバーの有無でもズレない。
      🚨 absolute の基準になるのは親の padding box であって content box ではない。
      right:0 だと .sfv の padding の外側＝画面の縁(1440)になってしまうので、
-     --pad ぶん戻して面の右端(1369)に合わせる */
-  right:var(--pad);
+     --fv-pad ぶん戻してこの節の右端(1344)に合わせる */
+  right:var(--fv-pad);
   aspect-ratio:1536 / 1024;                          /* 素材そのままの比 */
   margin:0;
 }
@@ -475,6 +478,9 @@ body.cta-hide .scontact__fixed{
 
 /* ---- 1024px以下 ---- */
 @media (max-width:1024px){
+  /* 🚨 スマホでは FV だけ 26px、ほかの節は 20px と食い違っていた（実測 393px）。
+     幅が狭いところで桁を分ける意味は無いので、ほかの節と揃える */
+  .sfv{ --fv-pad:var(--pad); }
   /* 🚨 スマホ・タブレットは 見出し＋リード → 写真 → CTA の3ブロック。写真はCTAより上に置く */
   .sfv__top{ display:flex; flex-direction:column; }
   .sfv__copy{ order:1; max-width:none; }
