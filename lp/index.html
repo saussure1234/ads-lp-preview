@@ -1208,9 +1208,11 @@ body.cta-hide .scontact__fixed{
 }
 .srecord__logo{display:flex; align-items:center; justify-content:center}
 .srecord__logo img{
-  /* 素材の比が 0.97〜2.17 とばらつくので、幅と高さの両方で頭打ちにする */
-  max-width:clamp(96px,10.2vw,147px);
-  max-height:clamp(28px,2.92vw,42px);
+  /* 素材の比が 0.97〜2.17 とばらつくので、幅と高さの両方で頭打ちにする。
+     🚨 トップから持ってきた 42px のままだと、同じページのFVのロゴ帯（58px）より小さく、
+     後から出てくる主役のほうが弱く見えた。ここはロゴが主役の節なのでFVより上に置く */
+  max-width:clamp(128px,15.1vw,218px);
+  max-height:clamp(40px,4.31vw,62px);
   width:auto; height:auto; object-fit:contain; display:block;
   mix-blend-mode:multiply;   /* 素材に残る白地を地（淡い青）になじませる */
 }
