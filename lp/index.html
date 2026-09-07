@@ -1438,12 +1438,70 @@ body.cta-hide .scontact__fixed{
   font-size:var(--body); line-height:1.9; color:var(--text);
 }
 
-/* ── 表の箱（白）── */
-.sprice__card{
-  margin:clamp(22px,2.6vw,38px) 0 0;
+/* ── 4つの表をタブに畳む ────────────────────────────────────────
+   🚨 4表を縦に並べたら節が3,873px（4.3画面）になった（2026-09-07 ユーザー指摘）。
+   🚨 JS は使わない。この案件では IntersectionObserver も scroll も検証できない環境が
+      あったので、料金という一番大事な情報の表示をJSに預けない。
+      radio + :checked + 兄弟セレクタなら、スクリプトが1行も動かなくても切り替わる。
+   radio は見えなくするが display:none にはしない（キーボードで辿れなくなる）。 */
+.sprice__tabs{ margin:clamp(22px,2.6vw,38px) 0 0 }
+.sprice__radio{
+  position:absolute; width:1px; height:1px;
+  margin:0; padding:0; border:0; opacity:0;
+  clip-path:inset(50%); overflow:hidden;
+}
+.sprice__tablist{
+  display:flex; flex-wrap:wrap; gap:4px;
+}
+.sprice__tab{
+  display:inline-flex; align-items:center; min-height:44px;
+  padding:0 clamp(14px,1.6vw,23px);
+  border-radius:6px 6px 0 0;
+  background:transparent;
+  color:var(--mute);                 /* 地 #eff4fa に 4.95:1 */
+  font-size:var(--body); font-weight:700; letter-spacing:.04em; line-height:1.4;
+  cursor:pointer; user-select:none;
+  transition:background-color .18s, color .18s;
+}
+.sprice__tab:hover{ color:var(--blue) }
+.sprice__panel{ display:none }
+.sprice__panels{ margin:0 }
+
+/* 選択中のタブは白（下のパネルと地続きにする）*/
+#prtab-1:checked ~ .sprice__tablist .sprice__tab[for="prtab-1"],
+#prtab-2:checked ~ .sprice__tablist .sprice__tab[for="prtab-2"],
+#prtab-3:checked ~ .sprice__tablist .sprice__tab[for="prtab-3"],
+#prtab-4:checked ~ .sprice__tablist .sprice__tab[for="prtab-4"]{
+  background:var(--card);
+  color:var(--blue);                 /* 白地に 6.02:1 */
+}
+#prtab-1:checked ~ .sprice__panels .sprice__panel:nth-child(1),
+#prtab-2:checked ~ .sprice__panels .sprice__panel:nth-child(2),
+#prtab-3:checked ~ .sprice__panels .sprice__panel:nth-child(3),
+#prtab-4:checked ~ .sprice__panels .sprice__panel:nth-child(4){ display:block }
+
+/* キーボードで移動したときに、どこに居るかが見えるように */
+#prtab-1:focus-visible ~ .sprice__tablist .sprice__tab[for="prtab-1"],
+#prtab-2:focus-visible ~ .sprice__tablist .sprice__tab[for="prtab-2"],
+#prtab-3:focus-visible ~ .sprice__tablist .sprice__tab[for="prtab-3"],
+#prtab-4:focus-visible ~ .sprice__tablist .sprice__tab[for="prtab-4"]{
+  outline:2px solid var(--blue); outline-offset:2px;
+}
+
+/* パネル＝もとの白い箱。タブと地続きなので上の角は落とす */
+.sprice__panel{
   background:var(--card);            /* 地 #eff4fa に対し輝度差 10 */
-  border-radius:8px;
+  border-radius:0 8px 8px 8px;
   padding:clamp(18px,2.1vw,30px) clamp(14px,1.94vw,28px) clamp(16px,1.8vw,26px);
+}
+@media (max-width:600px){
+  /* 🚨 素の flex-wrap だと 3+1 に割れて座りが悪い。2×2に揃える */
+  .sprice__tab{
+    flex:1 1 calc(50% - 2px);
+    justify-content:center;
+    padding:0 10px; font-size:13px; min-height:42px;
+  }
+  .sprice__panel{ border-radius:0 0 8px 8px }
 }
 .sprice__cardh{
   margin:0 0 clamp(10px,1.1vw,16px);
@@ -2704,8 +2762,19 @@ body.cta-hide .scontact__fixed{
     <p class="sprice__sub">ページ数ごとの明朗料金。印刷費まで含めた総額でご提示します</p>
     <p class="sprice__lead">お問い合わせをいただく前に、おおよその費用がお分かりいただけます。<br>社内で予算をご申請いただく際の資料としても、そのままお使いください。</p>
 
-    <!-- ① パンフレット -->
-    <div class="sprice__card">
+    <div class="sprice__tabs">
+      <input class="sprice__radio" type="radio" name="prtab" id="prtab-1" checked>
+      <input class="sprice__radio" type="radio" name="prtab" id="prtab-2">
+      <input class="sprice__radio" type="radio" name="prtab" id="prtab-3">
+      <input class="sprice__radio" type="radio" name="prtab" id="prtab-4">
+      <div class="sprice__tablist" role="tablist">
+        <label class="sprice__tab" for="prtab-1">パンフレット</label>
+        <label class="sprice__tab" for="prtab-2">ホームページ</label>
+        <label class="sprice__tab" for="prtab-3">制作オプション</label>
+        <label class="sprice__tab" for="prtab-4">印刷オプション</label>
+      </div>
+      <div class="sprice__panels">
+      <div class="sprice__panel">
       <p class="sprice__cardh">パンフレットのデザイン・印刷費</p>
       <table class="sprice__table">
         <thead>
@@ -2754,9 +2823,7 @@ body.cta-hide .scontact__fixed{
         <li>※ 原稿作成・写真撮影費等は下の「制作オプション」をご参考ください</li>
       </ul>
     </div>
-
-    <!-- ② ホームページ -->
-    <div class="sprice__card">
+      <div class="sprice__panel">
       <p class="sprice__cardh">ホームページのデザイン（原稿ご支給時）・コーディング費</p>
       <table class="sprice__table">
         <thead>
@@ -2800,9 +2867,7 @@ body.cta-hide .scontact__fixed{
         <li>※ 地域、制作内容により交通費や別途進行管理費がかかります</li>
       </ul>
     </div>
-
-    <!-- ③ 制作オプション -->
-    <div class="sprice__card">
+      <div class="sprice__panel">
       <p class="sprice__cardh">制作オプション</p>
       <table class="sprice__table">
         <thead>
@@ -2846,9 +2911,7 @@ body.cta-hide .scontact__fixed{
         <li>※ 筆文字、CD、マンガ、マップ制作等も制作しています。お気軽にお問い合わせください</li>
       </ul>
     </div>
-
-    <!-- ④ 印刷オプション -->
-    <div class="sprice__card">
+      <div class="sprice__panel">
       <p class="sprice__cardh">印刷オプション</p>
       <table class="sprice__table">
         <thead>
@@ -2876,6 +2939,8 @@ body.cta-hide .scontact__fixed{
         <li>※ 部数・頁数・用紙にてお見積いたします</li>
         <li>※ 用紙銘柄や印刷仕様により組み合わせができない加工がございます。詳しくはお問い合わせください</li>
       </ul>
+    </div>
+      </div>
     </div>
 
     <p class="sprice__close">追加費用が後から発生しないよう、着手前に総額をご提示します。修正回数は無制限ですが、それによる追加費用はいただきません。</p>
