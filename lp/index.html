@@ -1266,6 +1266,8 @@ body.cta-hide .scontact__fixed{
 .sflow{
   --sflow-c1:8.06%;        /* 番号桁の右端＝縦罫の位置。実測 110.5px → 96.7px */
   --sflow-c2:28.34%;       /* 段見出し桁の幅。実測 160→499px を 140→437px へ */
+  --sflow-c4:216px;        /* 写真の桁。説明文が空けていた右の余りに置く */
+  --sflow-gap:clamp(16px,2.2vw,32px);
   --sflow-indent:1.75%;    /* 番号・補足文の左インデント。実測 24px → 21px */
   --sflow-numpad:21.7%;    /* 21px ÷ 1桁目 96.7px */
   --sflow-titlepad:12.7%;  /* 43.3px ÷ 2桁目 340.1px */
@@ -1316,7 +1318,8 @@ body.cta-hide .scontact__fixed{
 .sflow__row{
   position:relative;
   display:grid;
-  grid-template-columns:var(--sflow-c1) var(--sflow-c2) 1fr;
+  grid-template-columns:var(--sflow-c1) var(--sflow-c2) 1fr var(--sflow-c4);
+  column-gap:var(--sflow-gap);
   align-items:center;
   padding:var(--sflow-rowpad) 0;
   border-bottom:1px solid var(--line);  /* 実測 6本のうち上5本。表の上には罫なし */
@@ -1369,12 +1372,28 @@ body.cta-hide .scontact__fixed{
   .sflow__num{align-self:start;line-height:1.2}
   .sflow__step{grid-column:2}
   .sflow__do{grid-column:2;padding-left:var(--sflow-titlepad)}
+  /* 2桁組みでは写真を説明文の下に回す（横に置くと説明が読めない幅になる） */
+  .sflow__shot{grid-column:2;justify-self:start;width:min(216px,100%);
+               margin-left:var(--sflow-titlepad)}
 }
 @media (max-width:600px){
   .sflow{--sflow-c1:2.6em;--sflow-titlepad:.7em;--sflow-indent:0px}
   .sflow__row{padding:20px 0}
   .sflow__row::before{top:6px;bottom:auto;height:calc(100% - 26px)}
 }
+
+/* ── 各段の写真 ────────────────────────────────────────────────
+   🚨 説明文が左2/3で終わり、右が210pxほど空いていた。トップページの
+   5フェーズ（service1〜5）と段の中身が1対1で対応するので、そこへ入れる。
+   ヒアリング=1 ／ 企画・構成=2 ／ デザイン提案=3 ／ 取材・撮影=4 ／ 校正・印刷=5 */
+.sflow__shot{
+  margin:0;
+  justify-self:end;
+  width:min(216px, 100%);
+  aspect-ratio:1240 / 580;   /* 素材そのままの比。切らない */
+  overflow:hidden;
+}
+.sflow__shot img{width:100%; height:100%; object-fit:cover; display:block}
 /* ── 節7 ── */
 /* 7. 料金 ── 青系
    地=var(--bg) #eff4fa／箱=var(--card) #fff（輝度差 89.96 vs 100.00 ＝ 10.0）
@@ -1532,6 +1551,31 @@ body.cta-hide .scontact__fixed{
    実際に見るとスカスカ）。価格を右端に寄せて、表の幅を使い切る */
 .sprice__table th:last-child,
 .sprice__table td:last-child{ text-align:right; padding-right:clamp(14px,2.5vw,36px); }
+
+/* ── ページ数の図 ──────────────────────────────────────────────
+   🚨「A4二つ折り4ページ」「中綴じ8ページ」が字だけだと形が浮かばない。
+   トップの料金表で使っている折り本の線画（pr/fold_*）をそのまま持ってくる。
+   Webの2行（コーポレートサイト・LP）は冊子の形が無いので図を置かない（空欄で揃う） */
+/* 🚨 flex で並べると、図の無い行（コーポレートサイト・LP）だけ字が左端から始まり、
+   仕様名の頭が揃わなかった。図の桁を固定幅で切って、無い行も同じだけ空ける。
+   図は 4p=119x91 / 8p=208x92 / 16p=239x103 と幅がばらつくので、桁の中で中央に置く */
+.sprice__spec{
+  display:grid;
+  grid-template-columns:clamp(58px,5.8vw,84px) 1fr;
+  column-gap:clamp(10px,1.1vw,16px);
+  align-items:center;
+}
+.sprice__fold{
+  grid-column:1; justify-self:center;
+  max-width:100%; max-height:clamp(26px,2.5vw,36px);
+  width:auto; height:auto;
+  opacity:.85;                  /* 線が濃いので少し引く。字より前に出させない */
+}
+.sprice__specname{grid-column:2}
+@media (max-width:600px){
+  .sprice__spec{grid-template-columns:46px 1fr; column-gap:10px}
+  .sprice__fold{max-height:24px}
+}
 /* ── 節8 ── */
 /* ── 第8節「他の選択肢との違い」（青系）────────────────────────
    採用モック _lp/blue8.png（1536x1024）の実測を 1440px 実装へ ×0.9375 で換算。
@@ -2714,6 +2758,9 @@ body.cta-hide .scontact__fixed{
         <div class="sflow__do">
           <p>お願いすること：現状の課題と、渡す相手をお聞かせください</p>
         </div>
+        <figure class="sflow__shot">
+          <img src="../fv/img/service1.webp" alt="ヒアリングの様子" loading="lazy" decoding="async">
+        </figure>
       </li>
 
       <li class="sflow__row">
@@ -2722,6 +2769,9 @@ body.cta-hide .scontact__fixed{
         <div class="sflow__do">
           <p>お願いすること：構成案のご確認のみ。掲載内容はこちらからご提案します</p>
         </div>
+        <figure class="sflow__shot">
+          <img src="../fv/img/service2.webp" alt="ページ構成案を組んでいる様子" loading="lazy" decoding="async">
+        </figure>
       </li>
 
       <li class="sflow__row">
@@ -2732,6 +2782,9 @@ body.cta-hide .scontact__fixed{
           <p>修正回数に制限はありません。正確で適切な掲載内容になるまで、何度でも作り直します。</p>
           <p>お願いすること：方向性のお選びとご意見</p>
         </div>
+        <figure class="sflow__shot">
+          <img src="../fv/img/service3.webp" alt="デザイン作業の様子" loading="lazy" decoding="async">
+        </figure>
       </li>
 
       <li class="sflow__row">
@@ -2740,6 +2793,9 @@ body.cta-hide .scontact__fixed{
         <div class="sflow__do">
           <p>お願いすること：取材へのご対応。原稿の執筆は不要です</p>
         </div>
+        <figure class="sflow__shot">
+          <img src="../fv/img/service4.webp" alt="撮影の様子" loading="lazy" decoding="async">
+        </figure>
       </li>
 
       <li class="sflow__row">
@@ -2748,6 +2804,9 @@ body.cta-hide .scontact__fixed{
         <div class="sflow__do">
           <p>お願いすること：最終ご確認</p>
         </div>
+        <figure class="sflow__shot">
+          <img src="../fv/img/service5.webp" alt="印刷機で刷っている様子" loading="lazy" decoding="async">
+        </figure>
       </li>
     </ol>
 
@@ -2772,23 +2831,23 @@ body.cta-hide .scontact__fixed{
         </thead>
         <tbody>
           <tr>
-            <td><span class="sprice__spec">A4二つ折り 4ページ</span></td>
+            <td><span class="sprice__spec"><img class="sprice__fold" src="../fv/img/pr/fold_4p.png" alt="" loading="lazy" decoding="async" width="119" height="91"><span class="sprice__specname">A4二つ折り 4ページ</span></span></td>
             <td>18万円から</td>
           </tr>
           <tr>
-            <td><span class="sprice__spec">A4中綴じ 8ページ</span></td>
+            <td><span class="sprice__spec"><img class="sprice__fold" src="../fv/img/pr/fold_8p.png" alt="" loading="lazy" decoding="async" width="208" height="92"><span class="sprice__specname">A4中綴じ 8ページ</span></span></td>
             <td>※要確認</td>
           </tr>
           <tr>
-            <td><span class="sprice__spec">A4中綴じ 16ページ</span></td>
+            <td><span class="sprice__spec"><img class="sprice__fold" src="../fv/img/pr/fold_16p.png" alt="" loading="lazy" decoding="async" width="239" height="103"><span class="sprice__specname">A4中綴じ 16ページ</span></span></td>
             <td>43万円から</td>
           </tr>
           <tr>
-            <td><span class="sprice__spec">コーポレートサイト 5ページ</span></td>
+            <td><span class="sprice__spec"><span class="sprice__specname">コーポレートサイト 5ページ</span></span></td>
             <td>30万円から</td>
           </tr>
           <tr>
-            <td><span class="sprice__spec">ランディングページ</span></td>
+            <td><span class="sprice__spec"><span class="sprice__specname">ランディングページ</span></span></td>
             <td>20万円から</td>
           </tr>
         </tbody>
