@@ -1318,7 +1318,7 @@ body.cta-hide .scontact__fixed{
 .sflow__row{
   position:relative;
   display:grid;
-  grid-template-columns:var(--sflow-c1) var(--sflow-c2) 1fr var(--sflow-c4);
+  grid-template-columns:var(--sflow-c1) var(--sflow-c2) var(--sflow-c4) 1fr;
   column-gap:var(--sflow-gap);
   align-items:center;
   padding:var(--sflow-rowpad) 0;
@@ -1388,7 +1388,7 @@ body.cta-hide .scontact__fixed{
    ヒアリング=1 ／ 企画・構成=2 ／ デザイン提案=3 ／ 取材・撮影=4 ／ 校正・印刷=5 */
 .sflow__shot{
   margin:0;
-  justify-self:end;
+  justify-self:start;    /* 段見出しのすぐ右。右端に飛ばさない */
   width:min(216px, 100%);
   aspect-ratio:1240 / 580;   /* 素材そのままの比。切らない */
   overflow:hidden;
@@ -2755,58 +2755,58 @@ body.cta-hide .scontact__fixed{
       <li class="sflow__row">
         <span class="sflow__num">1.</span>
         <h3 class="sflow__step">ヒアリング</h3>
-        <div class="sflow__do">
-          <p>お願いすること：現状の課題と、渡す相手をお聞かせください</p>
-        </div>
         <figure class="sflow__shot">
           <img src="../fv/img/service1.webp" alt="ヒアリングの様子" loading="lazy" decoding="async">
         </figure>
+        <div class="sflow__do">
+          <p>お願いすること：現状の課題と、渡す相手をお聞かせください</p>
+        </div>
       </li>
 
       <li class="sflow__row">
         <span class="sflow__num">2.</span>
         <h3 class="sflow__step">企画・構成</h3>
-        <div class="sflow__do">
-          <p>お願いすること：構成案のご確認のみ。掲載内容はこちらからご提案します</p>
-        </div>
         <figure class="sflow__shot">
           <img src="../fv/img/service2.webp" alt="ページ構成案を組んでいる様子" loading="lazy" decoding="async">
         </figure>
+        <div class="sflow__do">
+          <p>お願いすること：構成案のご確認のみ。掲載内容はこちらからご提案します</p>
+        </div>
       </li>
 
       <li class="sflow__row">
         <span class="sflow__num">3.</span>
         <h3 class="sflow__step">デザイン提案</h3>
+        <figure class="sflow__shot">
+          <img src="../fv/img/service3.webp" alt="デザイン作業の様子" loading="lazy" decoding="async">
+        </figure>
         <div class="sflow__do">
           <p>複数の方向性から作成し、3案以上をご提示します。</p>
           <p>修正回数に制限はありません。正確で適切な掲載内容になるまで、何度でも作り直します。</p>
           <p>お願いすること：方向性のお選びとご意見</p>
         </div>
-        <figure class="sflow__shot">
-          <img src="../fv/img/service3.webp" alt="デザイン作業の様子" loading="lazy" decoding="async">
-        </figure>
       </li>
 
       <li class="sflow__row">
         <span class="sflow__num">4.</span>
         <h3 class="sflow__step">取材・撮影・原稿作成</h3>
-        <div class="sflow__do">
-          <p>お願いすること：取材へのご対応。原稿の執筆は不要です</p>
-        </div>
         <figure class="sflow__shot">
           <img src="../fv/img/service4.webp" alt="撮影の様子" loading="lazy" decoding="async">
         </figure>
+        <div class="sflow__do">
+          <p>お願いすること：取材へのご対応。原稿の執筆は不要です</p>
+        </div>
       </li>
 
       <li class="sflow__row">
         <span class="sflow__num">5.</span>
         <h3 class="sflow__step">校正・印刷・納品</h3>
-        <div class="sflow__do">
-          <p>お願いすること：最終ご確認</p>
-        </div>
         <figure class="sflow__shot">
           <img src="../fv/img/service5.webp" alt="印刷機で刷っている様子" loading="lazy" decoding="async">
         </figure>
+        <div class="sflow__do">
+          <p>お願いすること：最終ご確認</p>
+        </div>
       </li>
     </ol>
 
