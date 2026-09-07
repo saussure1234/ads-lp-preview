@@ -144,6 +144,17 @@ a{color:inherit}
 @media (max-width:900px){
   body{padding-bottom:70px}          /* 画面下に固定されるCTA（.scontact__fixed 66px）のぶん */
 }
+
+/* ══════ 追従CTAの出どころ ══════
+   🚨 position:fixed のままだとFVのロゴ帯（SOMPO・東京都立病院）に重なって隠す。
+   🚨 position:sticky + bottom は「下に行き過ぎたら引き上げる」挙動なので、
+      ページ最上部から画面下に貼りついてしまう。後から出す用途には使えない。
+   → JSでFVを抜けたかどうかを見る。ただし先に隠さない（下の script 参照）。
+      JSが動かない環境では、これまでどおり最初から出たまま＝導線は死なない */
+body.cta-hide .scontact__fixed{
+  opacity:0; visibility:hidden; pointer-events:none;
+}
+.scontact__fixed{transition:background-color .2s, opacity .3s, visibility .3s}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *{animation:none !important; transition:none !important}
@@ -249,8 +260,9 @@ a{color:inherit}
   background:var(--bg);
   color:var(--text);
   overflow-x:clip;                                  /* 写真が画面右へ抜ける分を切る */
-  padding-block:clamp(58px,8.40vw,121px) clamp(40px,4.88vw,70px);
-                                                    /* 実測 上116→121（墨位置を合わせた） / 下70 */
+  /* 🚨 モックには追従ヘッダーが無かったので上余白を121で組んだが、ヘッダー80pxが乗ると
+     見出しが y201 から始まり、上が空きすぎて第一画面が下に押し出される。上を詰める */
+  padding-block:clamp(34px,4.44vw,64px) clamp(36px,4.03vw,58px);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
 }
 
@@ -377,8 +389,9 @@ a{color:inherit}
      mix-blend-mode:darken が地に届かず、写真の周りに白い板（255,255,255）が出た。
      このファイルの冒頭に「z-index を付けるな」と書いてあるのと同じ罠。transform も同じ。
      縦は、冊子の下端を左カラムの下端に揃える（bottom基準）ことで合わせる */
-  top:auto;
-  bottom:0;
+  /* 冊子の上端を見出しの1行目に揃える。下寄せだと見出しの真横が空いて重心が下がった */
+  top:0;
+  bottom:auto;
   left:53.5%;                                        /* x762。見出し「します」の右端700から62px */
   right:calc(50% - 50vw + 16px);                     /* 画面の縁から16px。冊子は白地なので浅くてよい */
   aspect-ratio:1536 / 1024;                          /* 素材そのままの比 */
@@ -764,17 +777,10 @@ a{color:inherit}
   .strans__panel{padding:clamp(20px,4vw,30px) var(--pad) clamp(28px,5vw,40px)}
 }
 
-/* 🚨 3件のうち2件は、FVと料金セクションの画像を流用して埋めてあった（alt も空）。
-   実際の制作物ではないので外し、写真待ちの枠にした。素材が届いたらここに入れる */
-.strans__shot--todo{
-  display:grid; place-items:center;
-  border:1px dashed var(--line);
-  background:var(--bg);
-}
-.strans__todo{
-  font-size:var(--small); line-height:1.9; text-align:center;
-  color:var(--mute); letter-spacing:.04em;
-}
+/* 🚨 かつてFVと料金用の画像を流用して埋めてあった。ADSの実績ページ（production-record）から
+   本人の制作物に差し替え済み：
+     木田工業 = sample09 ／ リスタートジャパン = sample04 ／ 環球貿易 = sample06
+   3枚とも同じ「机に置いた見開き」の撮り方で揃えてある */
 /* ── 節4 ── */
 /* ── 4. 3つの安心 ──────────────────────────────────────────────
    採用モック _lp/blue4.png（1536x1024）の実測から起こした。
@@ -2498,8 +2504,8 @@ a{color:inherit}
           <p class="strans__label">デザイン判断（どのように）</p>
           <p class="strans__txt">その想いから Protect Japan Brand をスローガンとして提案。専門用語を避け、製造工程をフロア毎に図示</p>
         </div>
-        <figure class="strans__shot strans__shot--todo">
-          <span class="strans__todo">※ 木田工業株式会社の制作物写真<br>要提供</span>
+        <figure class="strans__shot">
+          <img src="../fv/img/works/s09.jpg" alt="木田工業株式会社の会社案内" loading="lazy" decoding="async">
         </figure>
       </a>
 
@@ -2521,8 +2527,8 @@ a{color:inherit}
         <!-- ※要確認：リスタートジャパン合同会社の制作物写真が ASSETS.txt に無い。
              仮に自社のスプレッド写真を置いている。差し替え候補は本番サイトの
              assets/images/works/works-sample04/sample04_image01_sp.jpg -->
-        <figure class="strans__shot strans__shot--todo">
-          <span class="strans__todo">※ リスタートジャパン合同会社の制作物写真<br>要提供</span>
+        <figure class="strans__shot">
+          <img src="../fv/img/works/s04.jpg" alt="リスタートジャパン合同会社の会社案内" loading="lazy" decoding="async">
         </figure>
       </a>
 
@@ -2544,8 +2550,8 @@ a{color:inherit}
         <!-- ※要確認：環球貿易株式会社の制作物写真が ASSETS.txt に無い。
              仮に自社の見開き写真を置いている。差し替え候補は本番サイトの
              assets/images/works/works-sample06/sample06_image01_sp.jpg -->
-        <figure class="strans__shot strans__shot--todo">
-          <span class="strans__todo">※ 環球貿易株式会社の制作物写真<br>要提供</span>
+        <figure class="strans__shot">
+          <img src="../fv/img/works/s06.jpg" alt="環球貿易株式会社の会社案内" loading="lazy" decoding="async">
         </figure>
       </a>
 
@@ -3014,7 +3020,17 @@ a{color:inherit}
     </div>
   </div>
 
-  <a class="scontact__fixed" href="#scontact-form">
+  <!-- 🚨 追従CTAはここから外し、節2の直後へ移した（build_lp.py）。
+       FVの中に居るとロゴ帯に重なるため、position:sticky でFVを抜けてから出す -->
+</section>
+<footer class="lpf">
+  <nav class="lpf__nav">
+    <a href="#trans">制作実例</a><a href="#record">実績</a><a href="#flow">進め方</a>
+    <a href="#price">料金</a><a href="#faq">よくあるご質問</a><a href="#company">会社情報</a>
+  </nav>
+  <p class="lpf__cr">Copyright © ads co.,ltd. All Rights Reserved.</p>
+</footer>
+<a class="scontact__fixed" href="#scontact-form">
     <svg class="scontact__fixedicon" viewBox="0 0 38 28" fill="none" aria-hidden="true">
       <rect x="1" y="1" width="36" height="26" rx="2" fill="#fff"/>
       <path d="M2.5 2.5L19 16 35.5 2.5M2.5 25.5L14.5 15M35.5 25.5L23.5 15" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -3024,13 +3040,22 @@ a{color:inherit}
       <span class="scontact__fixedsub">1営業日以内にご返信</span>
     </span>
   </a>
-</section>
-<footer class="lpf">
-  <nav class="lpf__nav">
-    <a href="#trans">制作実例</a><a href="#record">実績</a><a href="#flow">進め方</a>
-    <a href="#price">料金</a><a href="#faq">よくあるご質問</a><a href="#company">会社情報</a>
-  </nav>
-  <p class="lpf__cr">Copyright © ads co.,ltd. All Rights Reserved.</p>
-</footer>
+<script>
+/* 追従CTAは、FVを抜けてから出す（FVのロゴ帯に重なっていた）。
+   🚨 ここで先に cta-hide を付けてはいけない。監視が動かない環境だと
+   CTAが永久に消えたままになる＝問い合わせ導線が死ぬ。最初の判定が通って初めて触る */
+(function(){
+  var fv = document.getElementById('fv');
+  if (!fv) return;
+  var edge = 0;
+  var calc = function(){ edge = fv.offsetTop + fv.offsetHeight - 80; };
+  var sync = function(){ document.body.classList.toggle('cta-hide', window.scrollY < edge); };
+  var both = function(){ calc(); sync(); };
+  both();
+  addEventListener('scroll', sync, {passive:true});
+  addEventListener('resize', both, {passive:true});
+  addEventListener('load', both);
+})();
+</script>
 </body>
 </html>
