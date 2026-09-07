@@ -1394,8 +1394,13 @@ body.cta-hide .scontact__fixed{
    校正・校閲、翻訳、印刷オプション3行）も、踏襲の指示に従って全部入れた。
 
    図は既にある素材を割り当てる：
-     パンフレット … pr/fold_4p 〜 fold_24p（実ページの7段とページ数が1対1で一致）
-     ホームページ … pr/ic_corp（5/10/15ページ）／pr/ic_lp（LP）
+     パンフレット … pr/ic_p4 〜 ic_p24
+       🚨 もとは現行サイトの fold_4p〜24p を使っていたが、縦の折り目を数えたら
+          7種すべて3本＝「同じ2面の冊子を幅だけ変えたもの」で、ページ数の
+          描き分けになっていなかった（線の歪みもある）。紙の枚数＝背の厚みで
+          描き分けたものを作り直した（4p=二つ折り／6p=三つ折り／8p以降は厚みで段階）
+     ホームページ … pr/ic_w5 / ic_w10 / ic_w15（窓の枚数で描き分け）／pr/ic_lp
+       🚨 5/10/15ページで同じ絵を使い回していた。LPは生成時点で下端が切れていた
      ホームページの残り・オプション・印刷 … pr/ic_*（12種を新規に生成）
        🚨 po/plan・copy・photo・illust（白地の物撮り写真）も当てたが、
           fold_* の線画と画風が揃わず表の中で浮いたので外し、線画で作り直した
@@ -1593,6 +1598,16 @@ body.cta-hide .scontact__fixed{
      393pxでの内訳：左右パディング40 ＋ 図40 ＋ 間8 ＝ 88。項目名に265px 残る */
   .sprice{--pr-ico:40px; --pr-icoh:26px}
   .sprice__spec{column-gap:8px}
+}
+
+/* タブの見出しにもアイコン。小さく使うので中身を減らした専用の絵（tb_*） */
+.sprice__tabico{
+  height:clamp(18px,1.6vw,23px); width:auto;
+  margin-right:8px; opacity:.7;
+  flex:0 0 auto;
+}
+@media (max-width:600px){
+  .sprice__tabico{height:16px; margin-right:5px}
 }
 /* ── 節8 ── */
 /* ── 第8節「他の選択肢との違い」（青系）────────────────────────
@@ -2773,10 +2788,10 @@ body.cta-hide .scontact__fixed{
       <input class="sprice__radio" type="radio" name="prtab" id="prtab-3">
       <input class="sprice__radio" type="radio" name="prtab" id="prtab-4">
       <div class="sprice__tablist" role="tablist">
-        <label class="sprice__tab" for="prtab-1">パンフレット</label>
-        <label class="sprice__tab" for="prtab-2">ホームページ</label>
-        <label class="sprice__tab" for="prtab-3">制作オプション</label>
-        <label class="sprice__tab" for="prtab-4">印刷オプション</label>
+        <label class="sprice__tab" for="prtab-1"><img class="sprice__tabico" src="../fv/img/pr/tb_book.png" alt="" width="169" height="108" loading="lazy" decoding="async">パンフレット</label>
+        <label class="sprice__tab" for="prtab-2"><img class="sprice__tabico" src="../fv/img/pr/tb_web.png" alt="" width="143" height="108" loading="lazy" decoding="async">ホームページ</label>
+        <label class="sprice__tab" for="prtab-3"><img class="sprice__tabico" src="../fv/img/pr/tb_tool.png" alt="" width="256" height="108" loading="lazy" decoding="async">制作オプション</label>
+        <label class="sprice__tab" for="prtab-4"><img class="sprice__tabico" src="../fv/img/pr/tb_print.png" alt="" width="186" height="108" loading="lazy" decoding="async">印刷オプション</label>
       </div>
       <div class="sprice__panels">
       <div class="sprice__panel">
@@ -2787,37 +2802,37 @@ body.cta-hide .scontact__fixed{
         </thead>
         <tbody>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_4p.png" alt="" width="119" height="91" loading="lazy" decoding="async"><span class="sprice__specname">A4／4ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p4.png" alt="" width="168" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／4ページ</span></span></td>
             <td>二つ折り／500部／4c</td>
             <td><span class="sprice__price">￥180,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_6p.png" alt="" width="177" height="91" loading="lazy" decoding="async"><span class="sprice__specname">A4／6ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p6.png" alt="" width="130" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／6ページ</span></span></td>
             <td>三つ折り／500部／4c</td>
             <td><span class="sprice__price">￥220,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_8p.png" alt="" width="208" height="92" loading="lazy" decoding="async"><span class="sprice__specname">A4／8ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p8.png" alt="" width="177" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／8ページ</span></span></td>
             <td>中綴じ／500部／4c</td>
             <td><span class="sprice__price">￥280,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_12p.png" alt="" width="221" height="93" loading="lazy" decoding="async"><span class="sprice__specname">A4／12ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p12.png" alt="" width="172" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／12ページ</span></span></td>
             <td>中綴じ／500部／4c</td>
             <td><span class="sprice__price">￥360,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_16p.png" alt="" width="239" height="103" loading="lazy" decoding="async"><span class="sprice__specname">A4／16ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p16.png" alt="" width="192" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／16ページ</span></span></td>
             <td>中綴じ／500部／4c</td>
             <td><span class="sprice__price">￥430,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_20p.png" alt="" width="254" height="103" loading="lazy" decoding="async"><span class="sprice__specname">A4／20ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p20.png" alt="" width="184" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／20ページ</span></span></td>
             <td>中綴じ／500部／4c</td>
             <td><span class="sprice__price">￥510,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_24p.png" alt="" width="254" height="103" loading="lazy" decoding="async"><span class="sprice__specname">A4／24ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p24.png" alt="" width="172" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／24ページ</span></span></td>
             <td>中綴じ／500部／4c</td>
             <td><span class="sprice__price">￥590,000</span></td>
           </tr>
@@ -2836,22 +2851,22 @@ body.cta-hide .scontact__fixed{
         </thead>
         <tbody>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_corp.png" alt="" width="186" height="108" loading="lazy" decoding="async"><span class="sprice__specname">5ページ<span class="sprice__note">コーポレートサイト／採用サイト／販売サイト 等</span></span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_w5.png" alt="" width="134" height="108" loading="lazy" decoding="async"><span class="sprice__specname">5ページ<span class="sprice__note">コーポレートサイト／採用サイト／販売サイト 等</span></span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥300,000〜</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_corp.png" alt="" width="186" height="108" loading="lazy" decoding="async"><span class="sprice__specname">10ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_w10.png" alt="" width="150" height="108" loading="lazy" decoding="async"><span class="sprice__specname">10ページ</span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥400,000〜</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_corp.png" alt="" width="186" height="108" loading="lazy" decoding="async"><span class="sprice__specname">15ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_w15.png" alt="" width="156" height="108" loading="lazy" decoding="async"><span class="sprice__specname">15ページ</span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥600,000〜</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_lp.png" alt="" width="110" height="108" loading="lazy" decoding="async"><span class="sprice__specname">LP（ランディングページ）</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_lp.png" alt="" width="141" height="108" loading="lazy" decoding="async"><span class="sprice__specname">LP（ランディングページ）</span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥200,000〜</span></td>
           </tr>
