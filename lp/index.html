@@ -1412,8 +1412,15 @@ body.cta-hide .scontact__fixed{
           7種すべて3本＝「同じ2面の冊子を幅だけ変えたもの」で、ページ数の
           描き分けになっていなかった（線の歪みもある）。紙の枚数＝背の厚みで
           描き分けたものを作り直した（4p=二つ折り／6p=三つ折り／8p以降は厚みで段階）
-     ホームページ … pr/ic_w5 / ic_w10 / ic_w15（窓の枚数で描き分け）／pr/ic_lp
+       🚨 さらに、紙1枚ずつの線を描くと数えられてしまい、12P が6〜7枚に見えるなど
+          必ず食い違う。背を1つの面にして「厚みの段階」だけで見せる作りに変えた。
+          背の厚み（絵の高さに対する％）を実測して単調に増える組み合わせを選定：
+          8P 19.6% → 12P 23.4% → 16P 27.6% → 20P 34.3% → 24P 37.4%
+     ホームページ … pr/ic_w5 / ic_w10 / ic_w15（窓の枚数）／pr/ic_lp
        🚨 5/10/15ページで同じ絵を使い回していた。LPは生成時点で下端が切れていた
+       🚨 「5ページなのに窓が3枚」と数が合っていなかった（実測 5→3枚／10→6枚／15→11枚）。
+          w5 は数えて5枚になるものを選んだ。10枚・15枚は表示寸法（84x54px）では
+          個々が識別できず、正確な枚数を主張できないので「束の量」で段階を見せている
      ホームページの残り・オプション・印刷 … pr/ic_*（12種を新規に生成）
        🚨 po/plan・copy・photo・illust（白地の物撮り写真）も当てたが、
           fold_* の線画と画風が揃わず表の中で浮いたので外し、線画で作り直した
@@ -2825,27 +2832,27 @@ body.cta-hide .scontact__fixed{
             <td><span class="sprice__price">￥220,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p8.png" alt="" width="177" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／8ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p8.png" alt="" width="178" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／8ページ</span></span></td>
             <td>中綴じ／500部／4c</td>
             <td><span class="sprice__price">￥280,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p12.png" alt="" width="172" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／12ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p12.png" alt="" width="206" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／12ページ</span></span></td>
             <td>中綴じ／500部／4c</td>
             <td><span class="sprice__price">￥360,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p16.png" alt="" width="192" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／16ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p16.png" alt="" width="202" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／16ページ</span></span></td>
             <td>中綴じ／500部／4c</td>
             <td><span class="sprice__price">￥430,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p20.png" alt="" width="184" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／20ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p20.png" alt="" width="200" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／20ページ</span></span></td>
             <td>中綴じ／500部／4c</td>
             <td><span class="sprice__price">￥510,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p24.png" alt="" width="172" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／24ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_p24.png" alt="" width="184" height="108" loading="lazy" decoding="async"><span class="sprice__specname">A4／24ページ</span></span></td>
             <td>中綴じ／500部／4c</td>
             <td><span class="sprice__price">￥590,000</span></td>
           </tr>
@@ -2864,17 +2871,17 @@ body.cta-hide .scontact__fixed{
         </thead>
         <tbody>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_w5.png" alt="" width="134" height="108" loading="lazy" decoding="async"><span class="sprice__specname">5ページ<span class="sprice__note">コーポレートサイト／採用サイト／販売サイト 等</span></span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_w5.png" alt="" width="174" height="108" loading="lazy" decoding="async"><span class="sprice__specname">5ページ<span class="sprice__note">コーポレートサイト／採用サイト／販売サイト 等</span></span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥300,000〜</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_w10.png" alt="" width="150" height="108" loading="lazy" decoding="async"><span class="sprice__specname">10ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_w10.png" alt="" width="151" height="108" loading="lazy" decoding="async"><span class="sprice__specname">10ページ</span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥400,000〜</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_w15.png" alt="" width="156" height="108" loading="lazy" decoding="async"><span class="sprice__specname">15ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_w15.png" alt="" width="170" height="108" loading="lazy" decoding="async"><span class="sprice__specname">15ページ</span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥600,000〜</span></td>
           </tr>
@@ -2957,7 +2964,7 @@ body.cta-hide .scontact__fixed{
             <td><span class="sprice__price">￥30,000〜<small>／500部</small></span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_cproof.png" alt="" width="169" height="108" loading="lazy" decoding="async"><span class="sprice__specname">色校正（簡易・本機）</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_cproof.png" alt="" width="216" height="108" loading="lazy" decoding="async"><span class="sprice__specname">色校正（簡易・本機）</span></span></td>
             <td>A4／4P</td>
             <td><span class="sprice__price">￥5,000〜<small>／1部</small></span></td>
           </tr>
