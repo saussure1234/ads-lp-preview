@@ -1924,239 +1924,114 @@ body.cta-hide .scontact__fixed{
   .sfaq__a{ padding-bottom:16px; }
 }
 /* ── 節10 ── */
-/* ── 第10節「会社情報」（青系）─────────────────────────────────
-   採用モック _lp/blue10.png（1536x1024）の実測から起こした。
-   換算率：縦 ×0.9375（1440/1536）。
-           横は桁を --wrap 1200px に正規化 ×0.8869（＝1200/1353。
-           実測の桁幅 x92-1444＝1353px は1440換算で1268pxとなり --wrap を超えるため、
-           比率だけ保って1200に収めた。sec10/blue6 と同じ扱い）。
+/* ── 第10節「会社情報」青系 ─────────────────────────────────────────
+   採用モック _lp/co_table.png（1536x1024）を実測 → 1440実装（×0.9375）。
+   6案から「① 表で上から順に読ませる」を採用（2026-09-07 ユーザー選択）。
 
-   写真・イメージ画像は一切なし。地も箱も var(--bg) のまま（輝度差0）。
-   実測 地 最頻 #eef2f8（407,226px）→ var(--bg) #eff4fa
-   上段の箱は上辺の2px罫だけ（実測 y326-327・最暗 (9,75,134)）→ var(--blue)
-   下段は1pxの薄罫のみ（実測 y642 横罫 (208,213,219)／x622 縦罫 (215,220,227)）→ var(--line)
+   🚨 前の実装（4列の定義リスト＋下段2列）を捨てて組み直した。
+      4列だと所在地が3行に折れ、事業内容の列だけ丈が伸びて揃わなかった。
 
-   【色の実測 → 採用】
-     H2「会社情報」  最頻濃色 (8,39,73) → var(--navy) #0f2b4a（地に 12.97:1）
-     箱の見出し      最頻濃色 (12,55,113) → var(--blue) #1765ab（地に 5.45:1）
-     リード・本文    最暗 (0,0,0) → var(--text) #2b3440（地に 11.39:1）
+   実測（@1536 → @1440）
+     見出し「会社情報」 y72-123（高さ52）           → 級数は --h2
+     見出しの墨下端123 → 短罫 y158                  … 35 → 33
+     短罫 → リードの墨上端 y210                     … 50 → 47
+     リードの墨下端230 → 表の先頭 y288              … 58 → 54
+     行の墨の送り 93 / 96 / 91 / 86（平均91.5）      … → 86
+     行の墨の高さ 21（本文1行）                      → var(--body)
+     表の左右 x215-1318（幅1104）                    → 桁 --wrap 120-1320 に合わせる
+     項目名の墨 x250-360 ／ 内容の墨 x533-1251
+       内容の左端は表の左端から318 → 298@1440
+     地 最頻 #f0f4fa                                → var(--bg) #eff4fa
+     罫 要素の最頻 #9ebad9（輝度185）               → var(--line) #d5e0ec より濃い。
+       罫は表の中だけに使うので --line を採る（節をまたいだ罫の濃さを揃える）
 
-   【級数（字送りで実測。モックはポスター寸法なので実務値へ落とした）】
-     H2      字送り 65.7px@1536（会93→社157→情225→報290）→ 61.6@1440 → var(--h2) 34px
-     リード   字送り 20.2px@1536 → 18.9@1440 → var(--lead) 18px
-     箱の見出し 字送り 25.0px@1536 → 23.4@1440 → var(--lead) 18px（決定欄2）
-     本文     字送り 18.8px@1536 → 17.6@1440 → var(--body) 16px
-
-   【行の縦位置（実測@1536 → @1440）】
-     H2の墨          134-192 → 125.6-180.0
-     リードの墨       229-248 → 214.7-232.5
-     青罫（2px）      326-327 → 305.6
-     箱の見出しの墨    358-380 → 335.6-356.3
-     本文1行目の墨     412-428 → 386.3-401.3
-     薄罫（1px）      642     → 601.9
-     下段の見出しの墨  680-702 → 637.5-658.1
-     下段の本文1行目   739-756 → 692.8-708.8
-     縦罫の下端       934     → 875.6
-
-   【墨から墨の間（＝この節のリズム）】
-     H2→リード 37→34.7 ／ リード→青罫 78→73.1 ／ 青罫→箱の見出し 30→28.1
-     箱の見出し→本文 32→30.0 ／ 事業内容の最終行→薄罫 67→62.8
-     薄罫→下段の見出し 38→35.6 ／ 下段の見出し→本文 37→34.7 ／ 最終行→縦罫の下端 87→81.6
-
-   【行送り】
-     所在地 30→28.1（16px×1.75＝28）
-     事業内容の項目 36.8→34.5（16px×1.75＝28 ＋ 項目間6.5）
-     対応エリア 34→31.9（16px×2.0＝32）
-     制作体制 44→41.25（16px×2.0＝32 ＋ 段落間9）
-
-   【桁の幅と位置（実測@1536 → 1200px正規化）】
-     上段4桁 x92-352 / 383-711 / 742-1041 / 1072-1444（幅 261/329/300/373・桁間30）
-       → fr比 261:329:300:373、桁間 26px（30×0.8869）
-     下段2桁 縦罫 x622 ＝ 左端から530px → 470px（39.2%）／右 822px → 729px（60.8%）
-     箱の内側の余白 左 24→21 ／ 下段左 29→26 ／ 下段右（縦罫から）55→49
-     箇条の点 x1099・字面 x1108（箱の左から24/36）→ 点0・字面11 */
-
+   【地と箱の強度】地も箱も淡い青のまま。区切りは罫だけ（輝度差0）。
+   前後（節9=罫／節11=強）との並びは変えていない。
+   ------------------------------------------------------------------ */
 .scompany{
   background:var(--bg);
   color:var(--text);
-  padding:var(--sec-y) 0;
+  padding:var(--sec-y) var(--pad);
   font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
 }
-
 .scompany__in{
-  width:min(var(--wrap), calc(100% - var(--pad) * 2));
+  max-width:var(--wrap);
   margin-inline:auto;
 }
 
-/* ── 見出し・リード ───────────────────────────────────────── */
+/* ── 見出し（中央揃え）── */
 .scompany__h{
-  /* 実測：字面 x93-347／墨 y134-192。桁の左端 x92 とほぼ一致＝左揃え */
   margin:0;
-  font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  /* 実測：縦画の太さ 4-6px／級数65.7 ＝ .076em → W3寄り。600だと太る */
-  font-weight:500;
-  font-size:var(--h2);
-  line-height:1.4;
-  /* 実測：漢字の字面58px・字送り65.7 → 級数64.4・差1.3px＝.020em */
-  letter-spacing:.02em;
-  color:var(--navy);
-}
-
-.scompany__lead{
-  /* 実測：字面 x92-569（26字）／墨 y229-248。
-     H2の墨の下端192 → リードの墨の上端229 ＝ 37px → 34.7@1440。
-     行箱の余り（H2下8.5＋リード上8.1）を引いて margin 18px */
-  margin:18px 0 0;
-  font-size:var(--lead);
-  line-height:1.8;
-  letter-spacing:.02em;
-}
-
-/* ── 上段：4桁 ─────────────────────────────────────────── */
-.scompany__grid{
-  /* 実測：リードの墨の下端248 → 青罫326 ＝ 78px → 73.1@1440。
-     var(--g-body) 60px だけだと再測で68px（-5.1）だったので、リードの行箱の余りぶん5pxを足す */
-  margin:calc(var(--g-body) + 5px) 0 0;
-  display:grid;
-  /* 実測の幅比をそのまま fr に。桁間は 30×0.8869 = 26px */
-  /* 🚨 所在地が3行に折れていた。社名・電話は短いので詰め、所在地に回す（合計は据え置き） */
-  grid-template-columns:minmax(0,215fr) minmax(0,400fr) minmax(0,275fr) minmax(0,373fr);
-  column-gap:26px;
-  /* モックは1段なので段間の実測値は無い。折り返した時だけ効く値（桁間26pxより広く取った） */
-  row-gap:32px;
-}
-
-.scompany__card{
-  margin:0;
-  /* 実測：箱の上辺だけに青の2px罫（y326-327）。地も箱も var(--bg) のまま＝輝度差0 */
-  border-top:2px solid var(--blue);
-  /* 実測：青罫 → 見出しの墨の上端 30px → 28.1@1440。見出しの行箱の余り4.5を引いて24px
-     左：見出しの字面 x116 − 箱の左 x92 ＝ 24px → 21px（横は×0.8869） */
-  padding:24px 21px 0;
-  box-sizing:border-box;
-}
-
-/* ── 下段：2桁 ─────────────────────────────────────────── */
-.scompany__grid2{
-  /* 実測：事業内容の最終行の墨の下端575 → 薄罫642 ＝ 67px → 62.8@1440。
-     本文の行箱の余り6.8を引いて56px */
-  margin:56px 0 0;
-  /* 実測：y642 の1px 横罫。x92-1444＝桁いっぱい。色 (208,213,219) → var(--line) */
-  border-top:1px solid var(--line);
-  display:grid;
-  /* 実測：縦罫 x622 ＝ 桁の左端から530px。1200正規化で 470 : 729 */
-  grid-template-columns:minmax(0,470fr) minmax(0,729fr);
-}
-
-.scompany__cell{
-  margin:0;
-  box-sizing:border-box;
-  /* 実測：薄罫642 → 見出しの墨の上端680 ＝ 38px → 35.6@1440。行箱の余り4.5を引いて31px
-     下：最終行の墨の下端847 → 縦罫の下端934 ＝ 87px → 81.6@1440。余り8.8を引いて73px
-     左：見出しの字面 x121 − 桁の左端 x92 ＝ 29px → 26px */
-  padding:31px 21px 73px 26px;
-}
-
-.scompany__cell--r{
-  /* 実測：x622 の1px 縦罫（y642-934）。色 (215,220,227) → var(--line)
-     左：見出しの字面 x678 − 縦罫 x622 ＝ 56px → 49px（罫の1pxを含む） */
-  border-left:1px solid var(--line);
-  padding-left:49px;
-}
-
-/* ── 見出し（社名・所在地…）───────────────────────────── */
-.scompany__k{
-  margin:0;
-  font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
+  text-align:center;
+  font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
   font-weight:600;
+  font-size:var(--h2);
+  line-height:1.34;
+  letter-spacing:.135em;
+  text-indent:.135em;          /* 字間の追い込み分だけ中心がずれるのを戻す */
+  color:var(--navy);           /* 地に対し 12.97:1 */
+}
+.scompany__h::after{
+  content:"";
+  display:block;
+  width:62px; height:2px;
+  margin:clamp(16px,2.29vw,33px) auto 0;   /* 実測 墨下端→短罫 35 → 33 */
+  background:var(--blue);
+}
+.scompany__lead{
+  margin:clamp(24px,3.26vw,47px) 0 0;      /* 実測 短罫→リードの墨 50 → 47 */
+  text-align:center;
   font-size:var(--lead);
-  line-height:1.4;
-  /* 実測：漢字の字面21.5px・字送り25.0 → 級数23.9・差1.1px＝.046em */
-  letter-spacing:.05em;
-  color:var(--blue);
-}
-
-/* ── 中身 ─────────────────────────────────────────────── */
-.scompany__v{
-  /* 実測：見出しの墨の下端380 → 本文の墨の上端412 ＝ 32px → 30.0@1440。
-     行箱の余り（見出し下4.5＋本文上6.8）を引いて19px */
-  margin:19px 0 0;
-  font-size:var(--body);
-  /* 実測：所在地の行送り 30px@1536 → 28.1@1440 ＝ 16 × 1.75 */
   line-height:1.75;
+  color:var(--ink);
 }
 
-/* 下段は行送りが広い（実測 対応エリアの行送り 34→31.9 ＝ 16 × 2.0） */
-.scompany__cell .scompany__v{ line-height:2; }
-
-/* 実測：下段の見出しの墨の下端702 → 本文の墨の上端739 ＝ 37px → 34.7@1440。
-   見出しの直後の1つだけに効かせる。段落間（下の隣接セレクタ）に負けないよう
-   クラス3つで詳細度を上げてある（順序に依存させない） */
-.scompany__cell .scompany__k + .scompany__v{ margin-top:21px; }
-
-/* 制作体制。実測の段落間 44px@1536 → 41.25@1440。行箱32pxを引いて9px */
-.scompany__v + .scompany__v{ margin-top:9px; }
-
-/* 事業内容の箇条 */
-.scompany__ul{
+/* ── 表 ──
+   dl を2桁のグリッドで組む。行ごとに横罫。
+   実測の「内容の左端＝表の左端から298px」をそのまま項目名の桁にする */
+.scompany__dl{
+  --co-c1:298px;
+  --co-pad:clamp(18px,1.94vw,28px);  /* 行送り86 − 本文の行箱30.4 の半分 */
+  margin:clamp(28px,3.75vw,54px) 0 0; /* 実測 リードの墨下端→表の先頭 58 → 54 */
+  display:grid;
+  grid-template-columns:var(--co-c1) 1fr;
+  border-top:1px solid var(--line);
+}
+.scompany__dl dt,
+.scompany__dl dd{
   margin:0;
-  padding:0;
-  list-style:none;
+  padding:var(--co-pad) 0;
+  border-bottom:1px solid var(--line);
+  font-size:var(--body);
+  line-height:1.9;
+}
+.scompany__dl dt{
+  font-weight:700;
+  letter-spacing:.06em;
+  color:var(--blue);           /* 地に対し 5.40:1 */
+}
+.scompany__dl dd{
+  color:var(--text);           /* 11.39:1 */
+}
+/* 数字が未確定の箇所。ここは埋めない */
+.scompany__tbc{
+  font-size:var(--small);
+  color:var(--mute);           /* 4.95:1 */
+  letter-spacing:.04em;
 }
 
-.scompany__li{
-  /* 実測：点の墨 x1099／字面 x1108／箱の左 x1072・内側の余白24 → 点は内側0・字面は内側12px
-     → 1200正規化で 点0・字面11。全角中黒の墨は em の中央にあるので、
-     text-indent -1em で中黒の枠を -5px に置くと 墨が1-5px・後続の字が11px に来る。
-     -16px 固定にすると級数が縮む幅（--body 14px）で折り返し行と2pxずれるので em で書く */
-  padding-left:11px;
-  text-indent:-1em;
-}
-
-.scompany__li::before{ content:"・"; }
-
-/* 実測：項目の送り 36.8px@1536 → 34.5@1440。行箱28pxを引いて6.5px */
-.scompany__li + .scompany__li{ margin-top:6.5px; }
-
-/* 和文の折り返し。句のまとまりを inline-block で守り、境目に wbr を置く。
-   inline-block はブロックコンテナなので text-indent が継承して効いてしまう。
-   箇条の -16px が中の1行目まで引っぱって中黒が前の字に重なったので、ここで戻す */
-.scompany__nb{ display:inline-block; text-indent:0; }
-
-/* ── 折り返し ─────────────────────────────────────────── */
-@media (max-width:1080px){
-  /* 4桁のままだと「社名」桁が200pxを切って中身が折れるので2桁で受ける */
-  .scompany__grid{
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-    column-gap:24px;
-    row-gap:34px;
-  }
-}
-
+/* ── 幅が詰まったら1桁に積む ── */
 @media (max-width:820px){
-  .scompany__grid2{ grid-template-columns:minmax(0,1fr); }
-  .scompany__cell{ padding:28px 0 34px; }
-  .scompany__cell--r{
-    /* 縦に積むので仕切りは上辺へ移す */
-    border-left:0;
-    border-top:1px solid var(--line);
-    padding-left:0;
-    padding-top:28px;
+  .scompany__dl{
+    grid-template-columns:1fr;
   }
-  .scompany__cell:first-child{ padding-bottom:30px; }
-}
-
-@media (max-width:560px){
-  .scompany__grid{
-    grid-template-columns:minmax(0,1fr);
-    row-gap:26px;
+  .scompany__dl dt{
+    padding:var(--co-pad) 0 4px;
+    border-bottom:0;
   }
-  .scompany__card{ padding:20px 0 0; }
-  .scompany__v{ margin-top:15px; }
-  .scompany__cell .scompany__k + .scompany__v{ margin-top:16px; }
-  .scompany__grid2{ margin-top:40px; }
-  .scompany__cell{ padding:26px 0 30px; }
-  .scompany__cell--r{ padding-top:26px; }
+  .scompany__dl dd{
+    padding:0 0 var(--co-pad);
+  }
 }
 /* ── 節11 ── */
 /* ── 第11節「クロージングとフォーム」（青系）──────────────────────────
@@ -3039,56 +2914,26 @@ body.cta-hide .scontact__fixed{
   <div class="scompany__in">
 
     <h2 class="scompany__h">会社情報</h2>
+    <p class="scompany__lead">ADSの基本情報と、制作を支える体制をご紹介します。</p>
 
-    <p class="scompany__lead"><span class="scompany__nb">ADSの基本情報と、</span><wbr><span class="scompany__nb">制作を支える体制を</span><wbr><span class="scompany__nb">ご紹介します。</span></p>
+    <dl class="scompany__dl">
+      <dt>社名</dt>
+      <dd>ADS株式会社</dd>
 
-    <dl class="scompany__grid">
+      <dt>所在地</dt>
+      <dd>〒<span class="scompany__tbc">※要確認</span>　東京都葛飾区青戸3-37-15 3F</dd>
 
-      <div class="scompany__card">
-        <dt class="scompany__k">社名</dt>
-        <dd class="scompany__v">ADS株式会社</dd>
-      </div>
+      <dt>電話番号</dt>
+      <dd>03-6336-5425</dd>
 
-      <div class="scompany__card">
-        <dt class="scompany__k">所在地</dt>
-        <!-- 🚨 「3F」だけが3行目に落ちて汚かった。番地と階は1つの塊にする -->
-        <dd class="scompany__v">〒※要確認<br><span class="scompany__nb">東京都葛飾区青戸3-37-15 3F</span></dd>
-      </div>
+      <dt>事業内容</dt>
+      <dd>会社案内・パンフレットの企画・制作／コピーライティング／デザイン／印刷手配・納品／Webコンテンツの企画・制作</dd>
 
-      <div class="scompany__card">
-        <dt class="scompany__k">電話番号</dt>
-        <dd class="scompany__v">03-6336-5425</dd>
-      </div>
+      <dt>対応エリア</dt>
+      <dd>東京全域および関東近県は訪問、全国オンライン対応</dd>
 
-      <div class="scompany__card">
-        <dt class="scompany__k">事業内容</dt>
-        <dd class="scompany__v">
-          <ul class="scompany__ul">
-            <li class="scompany__li"><span class="scompany__nb">会社案内・</span><wbr><span class="scompany__nb">パンフレットの</span><wbr><span class="scompany__nb">企画・制作</span></li>
-            <li class="scompany__li">コピーライティング</li>
-            <li class="scompany__li">デザイン</li>
-            <li class="scompany__li"><span class="scompany__nb">印刷手配・納品</span></li>
-            <li class="scompany__li"><span class="scompany__nb">Webコンテンツの</span><wbr><span class="scompany__nb">企画・制作</span></li>
-          </ul>
-        </dd>
-      </div>
-
-    </dl>
-
-    <dl class="scompany__grid2">
-
-      <div class="scompany__cell">
-        <dt class="scompany__k">対応エリア</dt>
-        <dd class="scompany__v"><span class="scompany__nb">東京全域および</span><wbr><span class="scompany__nb">関東近県は訪問、</span><br><span class="scompany__nb">全国オンライン対応</span></dd>
-      </div>
-
-      <div class="scompany__cell scompany__cell--r">
-        <dt class="scompany__k">制作体制</dt>
-        <dd class="scompany__v"><span class="scompany__nb">ディレクター、</span><wbr><span class="scompany__nb">コピーライター、</span><wbr><span class="scompany__nb">デザイナーが</span><wbr><span class="scompany__nb">専任で担当。</span></dd>
-        <dd class="scompany__v"><span class="scompany__nb">社内での情報共有を</span><wbr><span class="scompany__nb">密に行い、</span><wbr><span class="scompany__nb">品質管理を</span><wbr><span class="scompany__nb">徹底しています。</span></dd>
-        <dd class="scompany__v"><span class="scompany__nb">必要に応じて、</span><wbr><span class="scompany__nb">信頼するパートナーと連携し、</span><wbr><span class="scompany__nb">最適な体制で制作します。</span></dd>
-      </div>
-
+      <dt>制作体制</dt>
+      <dd>ディレクター、コピーライター、デザイナーが専任で担当。社内での情報共有を密に行い、品質管理を徹底しています。必要に応じて、信頼するパートナーと連携し、最適な体制で制作します。</dd>
     </dl>
 
   </div>
