@@ -2486,10 +2486,12 @@ body.cta-hide .scontact__fixed{
     <div class="sfv__act">
       <ul class="sfv__badges">
         <li class="sfv__badge">
-          <!-- 実測：前後2枚の紙。前 x187-215 / 後 x196-224、高さ44@1536 -->
-          <svg viewBox="0 0 38 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <rect x="10" y="1" width="27" height="38"/>
-            <rect x="1" y="5" width="27" height="38" fill="#fff"/>
+          <!-- 🚨 もとは紙2枚だった（「3案以上」なのに2枚）。3枚に描き直した。
+               手前ほど下・左へずらして重ねる。塗りは地の色で、後ろの線を隠す -->
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="16"  y="1"   width="27" height="36" fill="var(--bg)"/>
+            <rect x="8.5" y="4.5" width="27" height="36" fill="var(--bg)"/>
+            <rect x="1"   y="8"   width="27" height="36" fill="var(--bg)"/>
           </svg>
           <span>デザイン3案以上</span>
         </li>
@@ -2503,21 +2505,18 @@ body.cta-hide .scontact__fixed{
           <span>修正回数無制限</span>
         </li>
         <li class="sfv__badge">
-          <!-- 実測：外枠 x593-628 y536-580、表示部 y543-550、キーは3x3 -->
-          <svg viewBox="0 0 35 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <rect x="1" y="1" width="33" height="42" rx="3"/>
-            <rect x="5.5" y="7.5" width="24" height="6.5"/>
-            <g stroke-width="1.6">
-              <rect x="7" y="19" width="4.6" height="4.2" rx="1"/>
-              <rect x="16" y="19" width="4.6" height="4.2" rx="1"/>
-              <rect x="24.8" y="19" width="4.6" height="4.2" rx="1"/>
-              <rect x="7" y="26.9" width="4.6" height="4.2" rx="1"/>
-              <rect x="16" y="26.9" width="4.6" height="4.2" rx="1"/>
-              <rect x="24.8" y="26.9" width="4.6" height="4.2" rx="1"/>
-              <rect x="7" y="34.3" width="4.6" height="4.2" rx="1"/>
-              <rect x="16" y="34.3" width="4.6" height="4.2" rx="1"/>
-              <rect x="24.8" y="34.3" width="4.6" height="4.2" rx="1"/>
-            </g>
+          <!-- 🚨 もとは電卓だった。「ページ数別」がまったく伝わらないので、
+               ページ数＝厚みの違う冊子3冊に描き直した。左から薄い→厚い。
+               上の短い線は綴じ side。段が上がるほど料金も上がることを表す -->
+          <svg viewBox="0 0 46 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <!-- 🚨 上端に横線を引くと棒グラフに見えたので、右寄りの縦線（＝紙の重なり／小口）に変えた。
+                 3冊とも同じ位置に小口を入れることで「本を正面から見た」形になる -->
+            <rect x="1"  y="25" width="12" height="18"/>
+            <line x1="10" y1="25" x2="10" y2="43" stroke-width="1.3"/>
+            <rect x="17" y="15" width="12" height="28"/>
+            <line x1="26" y1="15" x2="26" y2="43" stroke-width="1.3"/>
+            <rect x="33" y="3"  width="12" height="40"/>
+            <line x1="42" y1="3"  x2="42" y2="43" stroke-width="1.3"/>
           </svg>
           <span>ページ数別の明朗料金</span>
         </li>
