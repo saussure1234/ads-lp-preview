@@ -76,8 +76,12 @@ a{color:inherit}
 .lph__left{
   display:flex; align-items:center; gap:clamp(14px,2.5vw,36px);
   /* 🚨 ヘッダーだけ x=--pad で始まると本文の桁（1200中央＝1440で120）とズレる。
-     本文の左端に合わせる */
-  padding-left:max(var(--pad), calc((100vw - var(--wrap)) / 2));
+     本文の左端に合わせる。
+     🚨 100vw はスクロールバーを含む。スクロールバーが出る環境（Windows既定・
+     macOSの「常に表示」）だと (1440-1200)/2=120 と計算されるが、実際のコンテンツ幅は
+     1425 なので節の中身は112.5から始まり、ヘッダーだけ7.5px右にずれる。
+     100% ならスクロールバーを除いた実幅を見るのでズレない */
+  padding-left:max(var(--pad), calc((100% - var(--wrap)) / 2));
   flex:0 0 auto;
 }
 .lph__logo{display:flex; align-items:center; min-height:44px}
@@ -410,7 +414,11 @@ body.cta-hide .scontact__fixed{
   top:0;
   bottom:auto;
   left:53.5%;                                        /* x762。見出し「します」の右端700から62px */
-  right:calc(50% - 50vw + 16px);                     /* 画面の縁から16px。冊子は白地なので浅くてよい */
+  /* 🚨 50vw もスクロールバー込みなので、バーが出ると縁からの空きが 16→8.5px に詰まる。
+     ここは .sfv__top（幅1200・中央）が基準で、画面幅を % で参照できない。
+     .sfv に overflow-x:clip があるのではみ出しは切られるため、
+     バーの有無どちらでも縁から十分空くよう +24px にした（バーあり16.5／なし24） */
+  right:calc(50% - 50vw + 24px);
   aspect-ratio:1536 / 1024;                          /* 素材そのままの比 */
   margin:0;
 }
@@ -2320,7 +2328,7 @@ body.cta-hide .scontact__fixed{
      字が要るぶんだけ伸ばす（字を詰めて実測の箱に押し込むより、組みを優先した） */
   min-width:415px;
   width:max-content;
-  max-width:calc(100vw - 44px);
+  max-width:calc(100% - 44px);   /* 🚨 100vw はスクロールバー込み。fixed なので 100% でよい */
   min-height:82px;          /* 実測 87@1536 → 81.6 */
   box-sizing:border-box;
   padding:12px 30px;        /* 実測 箱の左端1069 → アイコン1101 ＝ 32 → 30。右も字の右端から32 → 30 */
