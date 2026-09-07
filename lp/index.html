@@ -1395,17 +1395,21 @@ body.cta-hide .scontact__fixed{
 
    図は既にある素材を割り当てる：
      パンフレット … pr/fold_4p 〜 fold_24p（実ページの7段とページ数が1対1で一致）
-     ホームページ … pr/web_corp（5/10/15ページ）／pr/web_lp（LP）
-     オプション   … ic/trans（翻訳）のみ。
+     ホームページ … pr/ic_corp（5/10/15ページ）／pr/ic_lp（LP）
+     ホームページの残り・オプション・印刷 … pr/ic_*（12種を新規に生成）
        🚨 po/plan・copy・photo・illust（白地の物撮り写真）も当てたが、
-          fold_* の線画と画風が揃わず表の中で浮いたので外した
+          fold_* の線画と画風が揃わず表の中で浮いたので外し、線画で作り直した
 
    【地と箱の強度】地は淡い青 #eff4fa、箱は白 #ffffff の塗り。罫は使わない（輝度差7〜12）。
    前後（節6＝罫だけ／節8＝濃紺の面）との並びは変えていない。
    ------------------------------------------------------------------ */
 .sprice{
+  /* 🚨 桁は 84x52（比1.62）で組んだが、中の絵の実効幅が 27〜84px と3倍ちがった。
+     アイコンを作り直して比を 1.02〜1.87（中央値 約1.55）に寄せたので、
+     桁の比もそこへ合わせる（84x54 ＝ 1.56）。両方向で頭打ちに近くなり、
+     絵の見た目の大きさが揃う */
   --pr-ico:clamp(58px,5.8vw,84px);      /* 図の桁 */
-  --pr-icoh:clamp(38px,3.6vw,52px);     /* 図の箱の高さ */
+  --pr-icoh:clamp(38px,3.75vw,54px);    /* 図の箱の高さ。84/54 = 1.56 */
   --pr-pad:clamp(14px,1.53vw,22px);
 
   background:var(--bg);
@@ -1584,10 +1588,11 @@ body.cta-hide .scontact__fixed{
   .sprice__table tbody td:nth-child(2){display:none}
 }
 @media (max-width:600px){
-  .sprice{--pr-ico:0px}
-  .sprice__ico{display:none}
-  .sprice__spec{grid-template-columns:1fr; column-gap:0}
-  .sprice__specname{grid-column:1}
+  /* 🚨 ここで .sprice__ico を display:none にしていて、スマホでは22行すべての
+     アイコンが消えていた（実測 表示0個）。全行に入れる指示なので、小さくして残す。
+     393pxでの内訳：左右パディング40 ＋ 図40 ＋ 間8 ＝ 88。項目名に265px 残る */
+  .sprice{--pr-ico:40px; --pr-icoh:26px}
+  .sprice__spec{column-gap:8px}
 }
 /* ── 節8 ── */
 /* ── 第8節「他の選択肢との違い」（青系）────────────────────────
@@ -2831,32 +2836,32 @@ body.cta-hide .scontact__fixed{
         </thead>
         <tbody>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/web_corp.png" alt="" width="105" height="104" loading="lazy" decoding="async"><span class="sprice__specname">5ページ<span class="sprice__note">コーポレートサイト／採用サイト／販売サイト 等</span></span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_corp.png" alt="" width="186" height="108" loading="lazy" decoding="async"><span class="sprice__specname">5ページ<span class="sprice__note">コーポレートサイト／採用サイト／販売サイト 等</span></span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥300,000〜</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/web_corp.png" alt="" width="105" height="104" loading="lazy" decoding="async"><span class="sprice__specname">10ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_corp.png" alt="" width="186" height="108" loading="lazy" decoding="async"><span class="sprice__specname">10ページ</span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥400,000〜</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/web_corp.png" alt="" width="105" height="104" loading="lazy" decoding="async"><span class="sprice__specname">15ページ</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_corp.png" alt="" width="186" height="108" loading="lazy" decoding="async"><span class="sprice__specname">15ページ</span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥600,000〜</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/web_lp.png" alt="" width="55" height="104" loading="lazy" decoding="async"><span class="sprice__specname">LP（ランディングページ）</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_lp.png" alt="" width="110" height="108" loading="lazy" decoding="async"><span class="sprice__specname">LP（ランディングページ）</span></span></td>
             <td>PC／SP</td>
             <td><span class="sprice__price">￥200,000〜</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><span class="sprice__specname">CMS導入</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_cms.png" alt="" width="151" height="108" loading="lazy" decoding="async"><span class="sprice__specname">CMS導入</span></span></td>
             <td></td>
             <td><span class="sprice__price">￥100,000〜</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><span class="sprice__specname">フォーム設置</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_form.png" alt="" width="172" height="108" loading="lazy" decoding="async"><span class="sprice__specname">フォーム設置</span></span></td>
             <td></td>
             <td><span class="sprice__price">￥30,000〜</span></td>
           </tr>
@@ -2875,32 +2880,32 @@ body.cta-hide .scontact__fixed{
         </thead>
         <tbody>
           <tr>
-            <td><span class="sprice__spec"><span class="sprice__specname">企画・構成費</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_plan.png" alt="" width="188" height="108" loading="lazy" decoding="async"><span class="sprice__specname">企画・構成費</span></span></td>
             <td>コンテンツ・構成・仕様案等の制作</td>
             <td><span class="sprice__price">￥30,000〜<small>／一式</small></span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><span class="sprice__specname">コピーライティング費</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_copy.png" alt="" width="167" height="108" loading="lazy" decoding="async"><span class="sprice__specname">コピーライティング費</span></span></td>
             <td>キャッチコピー、リード、図版案などの原稿作成費</td>
             <td><span class="sprice__price">￥8,000〜<small>／1P</small></span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><span class="sprice__specname">カメラマン撮影費</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_photo.png" alt="" width="126" height="108" loading="lazy" decoding="async"><span class="sprice__specname">カメラマン撮影費</span></span></td>
             <td>商品撮影・人物・社内風景・設備・作業風景など</td>
             <td><span class="sprice__price">￥3,000〜<small>／1カット（物撮）</small>￥35,000<small>／2H（ロケ）</small>￥80,000<small>／6H（ロケ）</small></span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><span class="sprice__specname">イラスト制作費</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_illust.png" alt="" width="165" height="108" loading="lazy" decoding="async"><span class="sprice__specname">イラスト制作費</span></span></td>
             <td>各種イラスト・アイコン・キャラクター作成</td>
             <td><span class="sprice__price">￥3,000〜<small>／1カット</small>￥50,000〜<small>／1式</small></span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><span class="sprice__specname">校正・校閲料金</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_proof.png" alt="" width="154" height="108" loading="lazy" decoding="async"><span class="sprice__specname">校正・校閲料金</span></span></td>
             <td>誤字脱字、表現、表記統一、整合性確認など</td>
             <td><span class="sprice__price">￥2,000〜<small>／1頁</small></span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/ic/trans.png" alt="" loading="lazy" decoding="async"><span class="sprice__specname">翻訳</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_trans.png" alt="" width="167" height="108" loading="lazy" decoding="async"><span class="sprice__specname">翻訳</span></span></td>
             <td>日本語から英語に</td>
             <td><span class="sprice__price">￥20,000〜<small>／500文字</small></span></td>
           </tr>
@@ -2919,17 +2924,17 @@ body.cta-hide .scontact__fixed{
         </thead>
         <tbody>
           <tr>
-            <td><span class="sprice__spec"><span class="sprice__specname">印刷部数追加</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_copies.png" alt="" width="154" height="108" loading="lazy" decoding="async"><span class="sprice__specname">印刷部数追加</span></span></td>
             <td>A4／4P</td>
             <td><span class="sprice__price">￥30,000〜<small>／500部</small></span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><span class="sprice__specname">色校正（簡易・本機）</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_cproof.png" alt="" width="169" height="108" loading="lazy" decoding="async"><span class="sprice__specname">色校正（簡易・本機）</span></span></td>
             <td>A4／4P</td>
             <td><span class="sprice__price">￥5,000〜<small>／1部</small></span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><span class="sprice__specname">印刷特殊加工</span></span></td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/ic_finish.png" alt="" width="174" height="108" loading="lazy" decoding="async"><span class="sprice__specname">印刷特殊加工</span></span></td>
             <td>PP貼り／カットアウト／箔押し／浮き出し／UV／ホログラム加工 他</td>
             <td><span class="sprice__price">￥30,000〜<small>／100部〜</small></span></td>
           </tr>
