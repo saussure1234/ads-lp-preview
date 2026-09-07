@@ -736,7 +736,10 @@ body.cta-hide .scontact__fixed{
 .strans__shot img{
   width:100%;
   height:100%;
-  object-fit:cover;
+  /* 🚨 cover だと制作物の上下が切れる。この節は「実際の制作物で、何をどう変換したのかを
+     ご覧ください」という節なので、切らずに全体を見せる。素材は 1200x781（比1.54）、
+     枠は 43:25（比1.72）なので左右に19pxずつ余白が出るが、地は白なので目立たない */
+  object-fit:contain;
   display:block;
 }
 
@@ -798,6 +801,16 @@ body.cta-hide .scontact__fixed{
    本人の制作物に差し替え済み：
      木田工業 = sample09 ／ リスタートジャパン = sample04 ／ 環球貿易 = sample06
    3枚とも同じ「机に置いた見開き」の撮り方で揃えてある */
+
+/* 🚨 日本語が単語の途中で割れていた（住宅整/備、合言/葉、スローガ/ン、更/新頻度、絞り込/み）。
+   本文を意味の塊で <span class="strans__nb"> に包み、その間に <wbr> を置いたが、
+   それだけでは直らなかった。<wbr> は「ここで折ってよい」という印にすぎず、
+   日本語は既定（line-break:auto）でどこでも折れるため。
+   word-break:keep-all で自動の分割を止め、<wbr> を置いた場所でだけ折らせる。
+   🚨 keep-all だけだと折れる場所が無くなって画面外へ溢れるので、<wbr> は必須。
+   auto-phrase は Safari が見ないので使わない。 */
+.strans__txt{ word-break:keep-all; overflow-wrap:break-word }
+.strans__txt .strans__nb{ display:inline }
 /* ── 節4 ── */
 /* ── 4. 3つの安心 ──────────────────────────────────────────────
    採用モック _lp/blue4.png（1536x1024）の実測から起こした。
@@ -2531,10 +2544,10 @@ body.cta-hide .scontact__fixed{
         </div>
         <div class="strans__note-block">
           <p class="strans__label">特色（何を）</p>
-          <p class="strans__txt">都内最大級の生産設備。社員一人一人が日本のモノづくりへのポリシーを持つ</p>
+          <p class="strans__txt"><span class="strans__nb">都内</span><wbr><span class="strans__nb">最大級の</span><wbr><span class="strans__nb">生産設備。</span><wbr><span class="strans__nb">社員</span><wbr><span class="strans__nb">一人一人が</span><wbr><span class="strans__nb">日本の</span><wbr><span class="strans__nb">モノづくりへの</span><wbr><span class="strans__nb">ポリシーを</span><wbr><span class="strans__nb">持つ</span></p>
           <svg class="strans__arrow" width="13" height="20" viewBox="0 0 13 20" fill="none" aria-hidden="true"><path d="M6.5 0v18.4M1 13.4l5.5 5.6 5.5-5.6" stroke="currentColor" stroke-width="1.4"/></svg>
           <p class="strans__label">デザイン判断（どのように）</p>
-          <p class="strans__txt">その想いから Protect Japan Brand をスローガンとして提案。専門用語を避け、製造工程をフロア毎に図示</p>
+          <p class="strans__txt"><span class="strans__nb">その想いから </span><wbr><span class="strans__nb">Protect Japan Brand を</span><wbr><span class="strans__nb">スローガンとして</span><wbr><span class="strans__nb">提案。</span><wbr><span class="strans__nb">専門用語を</span><wbr><span class="strans__nb">避け、</span><wbr><span class="strans__nb">製造工程を</span><wbr><span class="strans__nb">フロア毎に</span><wbr><span class="strans__nb">図示</span></p>
         </div>
         <figure class="strans__shot">
           <img src="../fv/img/works/s09.jpg" alt="木田工業株式会社の会社案内" loading="lazy" decoding="async">
@@ -2551,10 +2564,10 @@ body.cta-hide .scontact__fixed{
         </div>
         <div class="strans__note-block">
           <p class="strans__label">特色（何を）</p>
-          <p class="strans__txt">ニッポン再起動を掲げ、空き家再生で国内の住宅整備に貢献</p>
+          <p class="strans__txt"><span class="strans__nb">ニッポン再起動を</span><wbr><span class="strans__nb">掲げ、</span><wbr><span class="strans__nb">空き家再生で</span><wbr><span class="strans__nb">国内の</span><wbr><span class="strans__nb">住宅整備に</span><wbr><span class="strans__nb">貢献</span></p>
           <svg class="strans__arrow" width="13" height="20" viewBox="0 0 13 20" fill="none" aria-hidden="true"><path d="M6.5 0v18.4M1 13.4l5.5 5.6 5.5-5.6" stroke="currentColor" stroke-width="1.4"/></svg>
           <p class="strans__label">デザイン判断（どのように）</p>
-          <p class="strans__txt">古来より日本人に愛されてきた桜をモチーフに、社会課題を親しみやすさへ変換。ポケットフォルダには更新頻度を考えて普遍情報のみ掲載</p>
+          <p class="strans__txt"><span class="strans__nb">古来より</span><wbr><span class="strans__nb">日本人に</span><wbr><span class="strans__nb">愛されてきた</span><wbr><span class="strans__nb">桜を</span><wbr><span class="strans__nb">モチーフに、</span><wbr><span class="strans__nb">社会課題を</span><wbr><span class="strans__nb">親しみやすさへ</span><wbr><span class="strans__nb">変換。</span><wbr><span class="strans__nb">ポケットフォルダには</span><wbr><span class="strans__nb">更新頻度を</span><wbr><span class="strans__nb">考えて</span><wbr><span class="strans__nb">普遍情報のみ</span><wbr><span class="strans__nb">掲載</span></p>
         </div>
         <!-- ※要確認：リスタートジャパン合同会社の制作物写真が ASSETS.txt に無い。
              仮に自社のスプレッド写真を置いている。差し替え候補は本番サイトの
@@ -2574,10 +2587,10 @@ body.cta-hide .scontact__fixed{
         </div>
         <div class="strans__note-block">
           <p class="strans__label">特色（何を）</p>
-          <p class="strans__txt">未来の子供たちにも青い地球を残したい、が合言葉。買取から再生までの一貫体制</p>
+          <p class="strans__txt"><span class="strans__nb">未来の</span><wbr><span class="strans__nb">子供たちにも</span><wbr><span class="strans__nb">青い地球を</span><wbr><span class="strans__nb">残したい、</span><wbr><span class="strans__nb">が合言葉。</span><wbr><span class="strans__nb">買取から</span><wbr><span class="strans__nb">再生までの</span><wbr><span class="strans__nb">一貫体制</span></p>
           <svg class="strans__arrow" width="13" height="20" viewBox="0 0 13 20" fill="none" aria-hidden="true"><path d="M6.5 0v18.4M1 13.4l5.5 5.6 5.5-5.6" stroke="currentColor" stroke-width="1.4"/></svg>
           <p class="strans__label">デザイン判断（どのように）</p>
-          <p class="strans__txt">訴求点を自然環境の保護と一貫体制の2点に絞り込み。両観音折の面積を活かして工程を図示し、日英併記</p>
+          <p class="strans__txt"><span class="strans__nb">訴求点を</span><wbr><span class="strans__nb">自然環境の</span><wbr><span class="strans__nb">保護と</span><wbr><span class="strans__nb">一貫体制の</span><wbr><span class="strans__nb">2点に</span><wbr><span class="strans__nb">絞り込み。</span><wbr><span class="strans__nb">両観音折の</span><wbr><span class="strans__nb">面積を</span><wbr><span class="strans__nb">活かして</span><wbr><span class="strans__nb">工程を</span><wbr><span class="strans__nb">図示し、</span><wbr><span class="strans__nb">日英併記</span></p>
         </div>
         <!-- ※要確認：環球貿易株式会社の制作物写真が ASSETS.txt に無い。
              仮に自社の見開き写真を置いている。差し替え候補は本番サイトの
