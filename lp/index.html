@@ -1744,6 +1744,20 @@ body.cta-hide .scontact__fixed{
   /* 締めの <br> はPCの改行位置。スマホでは切って自然に折り返させる */
   .scompare__close br{ display:none; }
 }
+
+/* ── 自社の列だけロゴにする ────────────────────────────────────
+   🚨 4社を「ADS」の3文字で並べていたが、自社だけは本物のロゴを出す。
+   素材は現行サイトの logo_plane-white.svg（白抜き＋Dだけ赤）。この節は地が濃紺
+   #0f2b4a なので、白抜き版がそのまま乗る。比 24.16:3.9 の横長。
+   列幅は 19.4%（1440で約233px）なので、そこに収まる大きさで頭打ちにする */
+.scompare__ads{padding-inline:6px}
+.scompare__ads img{
+  display:block; margin-inline:auto;
+  width:min(100%, 152px); height:auto;
+}
+@media (max-width:900px){
+  .scompare__ads img{width:min(100%, 108px)}
+}
 /* ── 節9 ── */
 /* ===== 第9節 よくあるご質問 ／ 青系 ==========================================
    採用モック _lp/blue9.png（1536x1024）を実測 → 1440実装（換算率 x0.9375）
@@ -2880,7 +2894,9 @@ body.cta-hide .scontact__fixed{
         <thead>
           <tr>
             <th scope="col"></th>
-            <th scope="col">ADS</th>
+            <th scope="col" class="scompare__ads">
+              <img src="../fv/img/logo_white.svg" alt="ADS株式会社" width="242" height="39" loading="lazy" decoding="async">
+            </th>
             <th scope="col">大手制作会社</th>
             <th scope="col">印刷通販</th>
             <th scope="col">クラウドソーシング</th>
