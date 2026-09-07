@@ -1183,6 +1183,42 @@ body.cta-hide .scontact__fixed{
   .srecord__fig{ letter-spacing:.1em; text-indent:.1em; }
   .srecord__boxlabel{ letter-spacing:.16em; text-indent:.16em; }
 }
+
+/* ── ご依頼企業のロゴ帯（無限スライダー）───────────────────────────
+   🚨 社名のテキスト2行だったのを、実物のロゴに差し替えた（トップページと同じ素材）。
+   動きはトップの .cl__marquee と同じ仕掛け：同じ並びを2本置いて -50% まで動かす。
+   端は切り落とさず地に溶かす（切ると「途中で切れている」ように見える） */
+.srecord__marquee{
+  /* 🚨 22px は「ロゴ帯」ラベルが上にあった頃の値。ラベルを消したのでリードと詰まった。
+     トップの .cl__marquee と同じ 49px まで開ける */
+  margin-top:clamp(28px,3.4vw,49px);
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);
+}
+.srecord__track{
+  display:flex; width:max-content;
+  animation:srecordScroll 46s linear infinite;
+}
+.srecord__marquee:hover .srecord__track{animation-play-state:paused}
+.srecord__set{
+  display:flex; align-items:center;
+  gap:clamp(34px,4.7vw,68px);
+  padding-right:clamp(34px,4.7vw,68px);
+}
+.srecord__logo{display:flex; align-items:center; justify-content:center}
+.srecord__logo img{
+  /* 素材の比が 0.97〜2.17 とばらつくので、幅と高さの両方で頭打ちにする */
+  max-width:clamp(96px,10.2vw,147px);
+  max-height:clamp(28px,2.92vw,42px);
+  width:auto; height:auto; object-fit:contain; display:block;
+  mix-blend-mode:multiply;   /* 素材に残る白地を地（淡い青）になじませる */
+}
+@keyframes srecordScroll{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
+@media (prefers-reduced-motion:reduce){
+  .srecord__track{animation:none; flex-wrap:wrap; justify-content:center}
+  .srecord__set[aria-hidden="true"]{display:none}
+}
 /* ── 節6 ── */
 /* ── 第6節「進め方」 青系 ─────────────────────────────────────────
    採用モック _lp/blue6.png（1536x1024）の実測から起こした。
@@ -2602,29 +2638,40 @@ body.cta-hide .scontact__fixed{
     <!-- 🚨 ここに「ロゴ帯」と書いた見出しが出ていた。構成案の指示メモであって
          画面に出す言葉ではないので、帯の見出し行ごと消した -->
 
-    <div class="srecord__clients">
-      <ul class="srecord__row">
-        <li>環境省</li>
-        <li class="srecord__sep" aria-hidden="true">／</li>
-        <li>リクルート</li>
-        <li class="srecord__sep" aria-hidden="true">／</li>
-        <li>JFE鋼板</li>
-        <li class="srecord__sep" aria-hidden="true">／</li>
-        <li>損害保険ジャパン</li>
-        <li class="srecord__sep" aria-hidden="true">／</li>
-        <li>日本労働組合総連合会</li>
-      </ul>
-      <ul class="srecord__row">
-        <li>ILO駐日事務所</li>
-        <li class="srecord__sep" aria-hidden="true">／</li>
-        <li>帝京大学医学部附属病院</li>
-        <li class="srecord__sep" aria-hidden="true">／</li>
-        <li>東京都立病院</li>
-        <li class="srecord__sep" aria-hidden="true">／</li>
-        <li>スバル興産</li>
-        <li class="srecord__sep" aria-hidden="true">／</li>
-        <li>東京舞台照明<span class="srecord__etc">ほか</span></li>
-      </ul>
+    <div class="srecord__marquee">
+      <!-- 🚨 無限スライダーは「同じ並びを2本」置いて -50% まで動かすのが要点。
+           1本だと端で必ず継ぎ目が出る。translate は px でなく % にする。
+           2本目は読み上げ対象から外す（aria-hidden／alt を空に） -->
+      <div class="srecord__track">
+        <div class="srecord__set">
+          <span class="srecord__logo"><img src="../fv/img/cl_kankyo.webp" alt="環境省" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_recruit.webp" alt="リクルート" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_jfe.webp" alt="JFE鋼板株式会社" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_sonpo.webp" alt="損害保険ジャパン株式会社" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_jtuc.webp" alt="日本労働組合総連合会" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_ilo.webp" alt="ILO駐日事務所" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_tekyo.webp" alt="帝京大学医学部附属病院" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_toritsu.webp" alt="東京都立病院" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_ebis.webp" alt="スバル興産株式会社" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_tbs.webp" alt="株式会社東京舞台照明" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_sbi.webp" alt="SBI e-Sports株式会社" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_tnk.webp" alt="東日観光株式会社" loading="lazy" decoding="async"></span>
+        </div>
+        <div class="srecord__set" aria-hidden="true">
+          <span class="srecord__logo"><img src="../fv/img/cl_kankyo.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_recruit.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_jfe.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_sonpo.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_jtuc.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_ilo.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_tekyo.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_toritsu.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_ebis.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_tbs.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_sbi.webp" alt="" loading="lazy" decoding="async"></span>
+          <span class="srecord__logo"><img src="../fv/img/cl_tnk.webp" alt="" loading="lazy" decoding="async"></span>
+        </div>
+      </div>
     </div>
 
     <dl class="srecord__stats">
