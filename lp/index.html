@@ -72,16 +72,15 @@ a{color:inherit}
   position:sticky; top:0; z-index:50;
   height:var(--head-h); display:flex; align-items:stretch;
   background:var(--bg); border-bottom:1px solid var(--line);
+  /* 🚨 左のロゴは桁（1440で120）から始まるのに、右のCTAは画面の縁まで抜けていた。
+     左120／右0 の非対称で、ヘッダー全体が右に寄って見える。左右とも桁に合わせる。
+     🚨 padding は .lph__left ではなく .lph 側で持つ。子に持たせると、親に付けた
+     padding-right のぶん子の 100% が 1320 になり、(1320-1200)/2=60 → max(71,60)=71 と
+     左だけ狭くなる（実測 左71／右120）。親の 100% は body 幅なので狂わない */
+  padding-inline:max(var(--pad), calc((100% - var(--wrap)) / 2));
 }
 .lph__left{
   display:flex; align-items:center; gap:clamp(14px,2.5vw,36px);
-  /* 🚨 ヘッダーだけ x=--pad で始まると本文の桁（1200中央＝1440で120）とズレる。
-     本文の左端に合わせる。
-     🚨 100vw はスクロールバーを含む。スクロールバーが出る環境（Windows既定・
-     macOSの「常に表示」）だと (1440-1200)/2=120 と計算されるが、実際のコンテンツ幅は
-     1425 なので節の中身は112.5から始まり、ヘッダーだけ7.5px右にずれる。
-     100% ならスクロールバーを除いた実幅を見るのでズレない */
-  padding-left:max(var(--pad), calc((100% - var(--wrap)) / 2));
   flex:0 0 auto;
 }
 .lph__logo{display:flex; align-items:center; min-height:44px}
@@ -121,7 +120,7 @@ a{color:inherit}
 }
 @media (max-width:900px){
   .lph__nav{display:none}
-  .lph__left{padding-left:var(--pad)}
+  .lph{padding-inline:var(--pad)}
   .lph__cta{flex:0 0 auto; margin-left:auto; padding-inline:16px; font-size:12px}
   .lph__arw{display:none}
 }
@@ -414,11 +413,11 @@ body.cta-hide .scontact__fixed{
   top:0;
   bottom:auto;
   left:53.5%;                                        /* x762。見出し「します」の右端700から62px */
-  /* 🚨 50vw もスクロールバー込みなので、バーが出ると縁からの空きが 16→8.5px に詰まる。
-     ここは .sfv__top（幅1200・中央）が基準で、画面幅を % で参照できない。
-     .sfv に overflow-x:clip があるのではみ出しは切られるため、
-     バーの有無どちらでも縁から十分空くよう +24px にした（バーあり16.5／なし24） */
-  right:calc(50% - 50vw + 24px);
+  /* 🚨 もとは calc(50% - 50vw + 24px) で画面の右端まで抜いていたが、
+     左は桁（1440で120）から始まるのに右は縁まで行くので、左右が非対称になり
+     FV全体が右に寄って見えた。桁の右端（1320）で止めて左右を揃える。
+     50vw を使わなくなるので、スクロールバーの有無でもズレない */
+  right:0;
   aspect-ratio:1536 / 1024;                          /* 素材そのままの比 */
   margin:0;
 }
