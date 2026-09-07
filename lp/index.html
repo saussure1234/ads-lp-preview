@@ -1407,6 +1407,10 @@ body.cta-hide .scontact__fixed{
    箱をやめて罫だけにし、左端は見出しと同じ桁に戻す。 */
 .sflow__notes{
   margin:clamp(20px,2.4vw,34px) 0 0;
+  /* 🚨 一度は桁（120）まで戻したが、階段の流れが切れて左に寄りすぎた。
+     5段目の写真と同じ位置（字下げ×4＝1440で左356）から始める。
+     白い箱はやめたまま、罫だけで区切る */
+  margin-left:calc(var(--sflow-indent) * 4);
   border-top:1px solid var(--line);
 }
 .sflow__note{
@@ -1435,6 +1439,7 @@ body.cta-hide .scontact__fixed{
   .sflow__shot{grid-column:1 / -1; grid-row:1; width:100%}
   .sflow__num{grid-column:1; grid-row:2; line-height:1.1}
   .sflow__txt{grid-column:2; grid-row:2}
+  .sflow__notes{margin-left:0}   /* 階段をやめる幅では字下げも外す */
 }
 /* ── 節7 ── */
 /* ── 第7節「料金」青系 ─────────────────────────────────────────
@@ -2516,18 +2521,16 @@ body.cta-hide .scontact__fixed{
           <span>修正回数無制限</span>
         </li>
         <li class="sfv__badge">
-          <!-- 🚨 もとは電卓だった。「ページ数別」がまったく伝わらないので、
-               ページ数＝厚みの違う冊子3冊に描き直した。左から薄い→厚い。
-               上の短い線は綴じ side。段が上がるほど料金も上がることを表す -->
-          <svg viewBox="0 0 46 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <!-- 🚨 上端に横線を引くと棒グラフに見えたので、右寄りの縦線（＝紙の重なり／小口）に変えた。
-                 3冊とも同じ位置に小口を入れることで「本を正面から見た」形になる -->
-            <rect x="1"  y="25" width="12" height="18"/>
-            <line x1="10" y1="25" x2="10" y2="43" stroke-width="1.3"/>
-            <rect x="17" y="15" width="12" height="28"/>
-            <line x1="26" y1="15" x2="26" y2="43" stroke-width="1.3"/>
-            <rect x="33" y="3"  width="12" height="40"/>
-            <line x1="42" y1="3"  x2="42" y2="43" stroke-width="1.3"/>
+          <!-- 🚨 2回外した。電卓（ページ数と無関係）→ 厚みの違う冊子3冊（棒グラフに見えた）。
+               「明朗料金」の核は "ページ数ごとに価格が表になって出ている" ことなので、
+               料金表そのものを描く。左が仕様の行、右が価格の行 -->
+          <svg viewBox="0 0 40 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="1" y="1" width="38" height="42" rx="2"/>
+            <g stroke-width="1.6">
+              <line x1="7" y1="13" x2="21" y2="13"/><line x1="27" y1="13" x2="33" y2="13"/>
+              <line x1="7" y1="22" x2="21" y2="22"/><line x1="27" y1="22" x2="33" y2="22"/>
+              <line x1="7" y1="31" x2="21" y2="31"/><line x1="27" y1="31" x2="33" y2="31"/>
+            </g>
           </svg>
           <span>ページ数別の明朗料金</span>
         </li>
