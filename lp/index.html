@@ -1275,10 +1275,14 @@ body.cta-hide .scontact__fixed{
   /* 素材の比が 0.97〜2.17 とばらつくので、幅と高さの両方で頭打ちにする。
      🚨 トップから持ってきた 42px のままだと、同じページのFVのロゴ帯（58px）より小さく、
      後から出てくる主役のほうが弱く見えた。ここはロゴが主役の節なのでFVより上に置く */
-  max-width:clamp(128px,15.1vw,218px);
-  max-height:clamp(40px,4.31vw,62px);
+  /* 🚨 62px は FVのロゴ帯（58px）より少し大きいだけだった。ここはロゴが主役なので上げる */
+  max-width:clamp(150px,18.4vw,265px);
+  max-height:clamp(46px,5.21vw,75px);
   width:auto; height:auto; object-fit:contain; display:block;
-  mix-blend-mode:multiply;   /* 素材に残る白地を地（淡い青）になじませる */
+  /* 🚨 もとは mix-blend-mode:multiply で「白地を地になじませて」いたが、それは誤魔化しで、
+     実際に白地が残っているのは jfe(62%) / jtuc(51%) / sonpo(74%) の3点だった（実測）。
+     素材そのものを透過させたので blend は要らない。
+     blend を外すと、地の色に影響されずロゴ本来の色が出る */
 }
 @keyframes srecordScroll{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
 @media (prefers-reduced-motion:reduce){
