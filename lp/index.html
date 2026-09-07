@@ -155,6 +155,23 @@ body.cta-hide .scontact__fixed{
   opacity:0; visibility:hidden; pointer-events:none;
 }
 .scontact__fixed{transition:background-color .2s, opacity .3s, visibility .3s}
+
+/* ══════ スクロールで順に出す ══════
+   SHARE Security（design-library/docs/sharesec/fv2）と同じ仕掛けを移植。
+   要素に [data-rv] を付けて沈めておき、画面に入ったら .is-in で解除する。
+   遅延は --rv-d（同じ群の中で 80ms ずつ、4つ目で頭打ち）。
+   🚨 「動かない環境で中身が見えなくなる」のが最悪なので、下の script で
+      IntersectionObserver が無い／3秒たっても1つも発火しない場合は全部出す */
+[data-rv]{
+  opacity:0; transform:translateY(18px);
+  transition:opacity .72s cubic-bezier(.22,.61,.36,1),
+             transform .72s cubic-bezier(.22,.61,.36,1);
+  transition-delay:var(--rv-d,0ms);
+}
+[data-rv].is-in{opacity:1; transform:none}
+@media (prefers-reduced-motion:reduce){
+  [data-rv],[data-rv].is-in{opacity:1 !important; transform:none !important; transition:none !important}
+}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *{animation:none !important; transition:none !important}
@@ -1365,190 +1382,154 @@ body.cta-hide .scontact__fixed{
   .sflow__notes{margin-left:0}
 }
 /* ── 節7 ── */
-/* 7. 料金 ── 青系
-   地=var(--bg) #eff4fa／箱=var(--card) #fff（輝度差 89.96 vs 100.00 ＝ 10.0）
-   モック blue7.png（1536x1024）実測 → 1440実装は 横 x0.9375
-   写真なし・罫（ボーダー）なし。塗りの濃淡と余白だけで組む */
-.sprice{
-  background:var(--bg);
-  padding-block:var(--sec-y);
-  color:var(--text);
-  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
-.sprice__wrap{
-  width:min(var(--wrap), 100% - var(--pad) * 2);
-  margin-inline:auto;
-}
+/* ── 第7節「料金」青系 ─────────────────────────────────────────
+   🚨 中身は現行サイトの料金ページ（https://ads-gc.co.jp/price/）を踏襲する。
+      構成案に「以下は、既存の料金表を踏まえて適宜修正」と書かれていたのを、
+      抜粋5行のまま組んでいた（2026-09-07 ユーザー指摘）。
+      抽出済みの _site/price/index.html から4つの表をそのまま起こした。
 
-/* 見出し「料金」＝明朝・濃紺。下に短い青の横棒
-   実測 字送り59px／棒 x167-245（幅79・太さ4）／見出し下端121→棒上端157（36）
-   級数はトークンへ落とす（--h2）。棒は見出しに対する比で持つ：79/59=1.34em */
-.sprice__h2{
-  margin:0;
-  font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:600;
-  font-size:var(--h2);
-  line-height:1.2;
-  letter-spacing:.04em;
-  color:var(--navy);
+   これで埋まった数字：
+     A4中綴じ 8ページ … 構成案では「◯◯万円から」＝※要確認だった → ¥280,000
+   構成案になくて実ページにある行（6/12/20/24ページ、10/15ページ、CMS、フォーム、
+   校正・校閲、翻訳、印刷オプション3行）も、踏襲の指示に従って全部入れた。
+
+   図は既にある素材を割り当てる：
+     パンフレット … pr/fold_4p 〜 fold_24p（実ページの7段とページ数が1対1で一致）
+     ホームページ … pr/web_corp（5/10/15ページ）／pr/web_lp（LP）
+     オプション   … ic/trans（翻訳）のみ。
+       🚨 po/plan・copy・photo・illust（白地の物撮り写真）も当てたが、
+          fold_* の線画と画風が揃わず表の中で浮いたので外した
+
+   【地と箱の強度】地は淡い青 #eff4fa、箱は白 #ffffff の塗り。罫は使わない（輝度差7〜12）。
+   前後（節6＝罫だけ／節8＝濃紺の面）との並びは変えていない。
+   ------------------------------------------------------------------ */
+.sprice{
+  --pr-ico:clamp(58px,5.8vw,84px);      /* 図の桁 */
+  --pr-icoh:clamp(38px,3.6vw,52px);     /* 図の箱の高さ */
+  --pr-pad:clamp(14px,1.53vw,22px);
+
+  background:var(--bg);
+  color:var(--text);
+  padding:var(--sec-y) var(--pad);
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
 }
-.sprice__h2::after{
-  content:"";
-  display:block;
-  width:1.34em;              /* 実測 棒79px ÷ 字送り59px */
-  height:.09em;              /* 実測 4px ÷ 59px */
-  margin-top:.82em;          /* 実測 見出し下端121→棒上端157＝36px。再測して +4px 詰まっていたので補正 */
+.sprice__wrap{ width:min(var(--wrap), 100%); margin-inline:auto }
+
+/* ── 見出し ── */
+.sprice__h{
+  margin:0;
+  font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+  font-size:var(--h2); font-weight:400; line-height:1.3; letter-spacing:.04em;
+  color:var(--navy);                 /* 12.97:1 */
+}
+.sprice__h::after{
+  content:""; display:block;
+  width:56px; height:2px;
+  margin:clamp(14px,1.6vw,23px) 0 0;
   background:var(--blue);
 }
-
-/* 節の主張（明朝・濃紺）。実測 字送り34px＝ポスター寸法なので --lead に収める */
 .sprice__sub{
-  margin:clamp(22px, 2.37vw, 34px) 0 0;   /* 実測 棒下端160→字上端205＝45 */
-  font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:600;
-  font-size:var(--lead);
-  line-height:1.6;
-  letter-spacing:.03em;
-  color:var(--navy);
+  margin:clamp(18px,2.1vw,30px) 0 0;
+  font-size:var(--lead); font-weight:700; line-height:1.6; letter-spacing:.02em;
+  color:var(--ink);
 }
-
-/* リード（ゴシック・2行）。実測 字送り16.4px／行送り32px＝lh 1.95 */
 .sprice__lead{
-  margin:clamp(14px, 1.46vw, 21px) 0 0;   /* 実測 主張下端237→リード上端273＝36（→1440で33.8） */
-  font-size:var(--body);
-  line-height:1.95;
+  margin:clamp(12px,1.25vw,18px) 0 0;
+  font-size:var(--body); line-height:1.9; color:var(--text);
 }
 
-/* 箱＝白。実測 x165-1369（幅1204）／y358-898（高さ541）／角丸16px／下に薄い影 */
-.sprice__panel{
-  margin-top:clamp(16px, 1.6vw, 23px);    /* 実測 リード下端323→箱上端358＝35 */
-  padding:clamp(18px,1.74vw,25px) clamp(16px,2.64vw,38px) clamp(20px,1.95vw,28px);
-  background:var(--card);
-  border-radius:15px;                     /* 実測 16px@1536 */
-  box-shadow:0 3px 9px rgba(15,43,74,.06);/* 実測 箱の下 1px で 245→237（-8/255） */
+/* ── 表の箱（白）── */
+.sprice__card{
+  margin:clamp(22px,2.6vw,38px) 0 0;
+  background:var(--card);            /* 地 #eff4fa に対し輝度差 10 */
+  border-radius:8px;
+  padding:clamp(18px,2.1vw,30px) clamp(14px,1.94vw,28px) clamp(16px,1.8vw,26px);
+}
+.sprice__cardh{
+  margin:0 0 clamp(10px,1.1vw,16px);
+  padding-left:var(--pr-pad);
+  font-size:var(--body); font-weight:700; letter-spacing:.06em; line-height:1.6;
+  color:var(--blue);                 /* 白地に 6.02:1 */
 }
 
-/* 料金表
-   実測 帯 x206-1329（箱の内側いっぱい）／ヘッダ帯 y385-441（h57）
-        行ピッチ61.2px・帯の高さ60px（＝行間の隙間 約1.5px）
-        価格列の左端 x944 ＝ 帯幅1124 の 65.7% */
+/* ── 表 ── */
 .sprice__table{
   width:100%;
-  border-collapse:separate;
-  border-spacing:0 2px;                   /* 実測 行間 約1.5px */
+  border-collapse:collapse;
   font-size:var(--body);
-  text-align:left;
+  line-height:1.8;
 }
 .sprice__table th,
 .sprice__table td{
-  font-weight:400;
-  line-height:1.6;
+  padding:var(--pr-pad);
+  text-align:left;
+  vertical-align:middle;
 }
-.sprice__table td{ padding-block:15px; }  /* 実測 行の帯 60px@1536 ≒ 56px@1440 */
-.sprice__table th{
-  padding-block:14px;                     /* 実測 ヘッダ帯 57px@1536 ≒ 53px@1440 */
-  font-weight:600;
-  color:var(--blue);                      /* 実測 #0d4e98 → --blue。帯の上で 5.44:1 */
-  background:var(--bg);                   /* 実測 ヘッダ帯＝地と同じ淡い青 */
+.sprice__table thead th{
+  font-weight:700;
+  color:var(--blue);
+  background:#f2f6fb;                /* 白より一段だけ沈める */
+  white-space:nowrap;
 }
-.sprice__table th:first-child,
-.sprice__table td:first-child{
-  width:65.7%;                            /* 実測 価格列の左端が帯幅の65.7% */
-  padding-left:34px;                      /* 実測 帯左206→文字左242＝36 */
-}
-.sprice__table th:last-child,
-.sprice__table td:last-child{
-  padding-right:34px;
-}
-.sprice__table th:first-child{ border-radius:4px 0 0 4px; }
-.sprice__table th:last-child{ border-radius:0 4px 4px 0; }
+.sprice__table tbody tr:nth-child(even){ background:#f7fafd }
+.sprice__table td:last-child,
+.sprice__table th:last-child{ text-align:right; padding-right:clamp(14px,2.5vw,36px) }
 
-/* 縞は偶数行だけ。実測 #f6f9fd ＝ 淡い青と白の中間（＝地と箱の中間 #f6f9fc）
-   1行目は color-mix 非対応ブラウザ向けの控え */
-.sprice__table tbody tr:nth-child(even) td{
-  background:var(--bg);
-  background:color-mix(in srgb, var(--bg) 55%, var(--card));
-}
-.sprice__table tbody tr:nth-child(even) td:first-child{ border-radius:4px 0 0 4px; }
-.sprice__table tbody tr:nth-child(even) td:last-child{ border-radius:0 4px 4px 0; }
-
-/* 「A4二つ折り」と「4ページ」の間（実測 24px 送り ＝ 通常19.3px ＋ 約0.25em） */
-.sprice__spec{ word-spacing:.2em; }
-
-/* 注記。※ を字下げの外にぶら下げる
-   実測 ※ x211（＝帯の左端）／本文 x232 ＝ 21px ≒ 1.5em／行送り34.5px */
-.sprice__notes{
-  margin:clamp(10px, 1vw, 14px) 0 0;
-  padding:0;
-  list-style:none;
-  font-size:var(--small);
-  line-height:2.4;
-  color:var(--mute);                      /* 白の上で 5.48:1 */
-}
-.sprice__notes li{
-  padding-left:1.5em;
-  text-indent:-1.5em;
-}
-
-/* 表の下の一文。実測 字送り18px・1行で x173-1333 */
-.sprice__close{
-  margin:clamp(18px, 1.95vw, 28px) 0 0;   /* 実測 箱下端898→字上端938＝40 */
-  font-size:var(--body);
-  line-height:1.95;
-}
-
-@media (max-width:820px){
-  .sprice__table th:first-child,
-  .sprice__table td:first-child{ width:62%; padding-left:14px; }
-  .sprice__table th:last-child,
-  .sprice__table td:last-child{ padding-right:14px; }
-  .sprice__table td{ padding-block:12px; }
-  .sprice__table th{ padding-block:11px; }
-}
-@media (max-width:600px){
-  /* 一番長い「コーポレートサイト 5ページ」が1行に収まる幅を確保する */
-  .sprice__panel{ padding-inline:12px; }
-  .sprice__table th:first-child,
-  .sprice__table td:first-child{ width:64%; padding-left:8px; }
-  .sprice__table th:last-child,
-  .sprice__table td:last-child{ padding-right:8px; }
-  .sprice__spec{ word-spacing:normal; word-break:keep-all; }
-  .sprice__notes{ line-height:2.1; }
-}
-
-/* 🚨 価格が帯の65.7%の位置に置かれ、表の右35%が空白のままだった（モックの実測どおりだが
-   実際に見るとスカスカ）。価格を右端に寄せて、表の幅を使い切る */
-.sprice__table th:last-child,
-.sprice__table td:last-child{ text-align:right; padding-right:clamp(14px,2.5vw,36px); }
-
-/* ── ページ数の図 ──────────────────────────────────────────────
-   🚨「A4二つ折り4ページ」「中綴じ8ページ」が字だけだと形が浮かばない。
-   トップの料金表で使っている折り本の線画（pr/fold_*）をそのまま持ってくる。
-   Webの2行（コーポレートサイト・LP）は冊子の形が無いので図を置かない（空欄で揃う） */
-/* 🚨 flex で並べると、図の無い行（コーポレートサイト・LP）だけ字が左端から始まり、
-   仕様名の頭が揃わなかった。図の桁を固定幅で切って、無い行も同じだけ空ける。
-   図は 4p=119x91 / 8p=208x92 / 16p=239x103 と幅がばらつくので、桁の中で中央に置く */
+/* 仕様の桁：図＋名前。図が無い行も同じだけ空けて、名前の頭を揃える */
 .sprice__spec{
   display:grid;
-  grid-template-columns:clamp(58px,5.8vw,84px) 1fr;
+  grid-template-columns:var(--pr-ico) 1fr;
   column-gap:clamp(10px,1.1vw,16px);
   align-items:center;
 }
-/* 🚨 紙の図は横長（比1.3〜2.3）、Webの図は正方形〜縦長（0.99／0.52）。
-   高さだけで頭打ちにすると、縦長のLPが幅19pxまで痩せて別物の大きさに見える。
-   桁を「幅84×高さ52の箱」に決めて、その中に contain で収める。外接の箱が同じなら
-   見た目の大きさが揃う */
-.sprice__fold{
+/* 🚨 紙の図は横長（比1.3〜2.3）、Webの図は正方形〜縦長（0.99／0.53）。
+   高さだけで頭打ちにすると縦長のLPが幅19pxまで痩せて別物の大きさに見える。
+   桁を「幅84×高52の箱」に決めて contain で収める。外接の箱が同じなら大きさが揃う */
+.sprice__ico{
   grid-column:1; justify-self:center;
-  width:100%; height:clamp(38px,3.6vw,52px);
+  width:100%; height:var(--pr-icoh);
   object-fit:contain;
-  opacity:.85;                  /* 線が濃いので少し引く。字より前に出させない */
+  opacity:.85;                       /* 線が濃いので少し引く。字より前に出させない */
 }
-.sprice__specname{grid-column:2}
+.sprice__specname{ grid-column:2; min-width:0 }
+.sprice__note{
+  display:block;
+  margin-top:2px;
+  font-size:var(--small); line-height:1.7; color:var(--mute);   /* 白地に 5.66:1 */
+}
+.sprice__price{ white-space:nowrap; font-weight:700; color:var(--ink) }
+.sprice__price small{ display:block; font-weight:400; font-size:var(--small); color:var(--mute) }
+
+/* ── 注記 ── */
+.sprice__notes{
+  margin:clamp(12px,1.25vw,18px) 0 0;
+  padding:0 0 0 var(--pr-pad);
+  list-style:none;
+}
+.sprice__notes li{
+  margin:0; font-size:var(--small); line-height:1.9; color:var(--mute);
+}
+.sprice__close{
+  margin:clamp(22px,2.4vw,34px) 0 0;
+  font-size:var(--body); line-height:1.9; color:var(--text);
+}
+.sprice__tax{
+  margin:clamp(10px,1.1vw,16px) 0 0;
+  font-size:var(--small); line-height:1.8; color:var(--mute);
+}
+
+/* ── 幅が詰まったら図を落として2桁に ── */
+@media (max-width:820px){
+  .sprice{--pr-ico:46px; --pr-icoh:34px; --pr-pad:10px}
+  .sprice__table{font-size:14px}
+  .sprice__table thead th:nth-child(2){display:none}
+  .sprice__table tbody td:nth-child(2){display:none}
+}
 @media (max-width:600px){
-  .sprice__spec{grid-template-columns:46px 1fr; column-gap:10px}
-  .sprice__fold{height:34px}
+  .sprice{--pr-ico:0px}
+  .sprice__ico{display:none}
+  .sprice__spec{grid-template-columns:1fr; column-gap:0}
+  .sprice__specname{grid-column:1}
 }
 /* ── 節8 ── */
 /* ── 第8節「他の選択肢との違い」（青系）────────────────────────
@@ -2718,50 +2699,188 @@ body.cta-hide .scontact__fixed{
 
 <section class="sprice" id="price">
   <div class="sprice__wrap">
-    <h2 class="sprice__h2">料金</h2>
+
+    <h2 class="sprice__h">料金</h2>
     <p class="sprice__sub">ページ数ごとの明朗料金。印刷費まで含めた総額でご提示します</p>
     <p class="sprice__lead">お問い合わせをいただく前に、おおよその費用がお分かりいただけます。<br>社内で予算をご申請いただく際の資料としても、そのままお使いください。</p>
 
-    <div class="sprice__panel">
+    <!-- ① パンフレット -->
+    <div class="sprice__card">
+      <p class="sprice__cardh">パンフレットのデザイン・印刷費</p>
       <table class="sprice__table">
         <thead>
-          <tr>
-            <th scope="col">仕様</th>
-            <th scope="col">参考価格</th>
-          </tr>
+          <tr><th scope="col">サイズ／ページ数</th><th scope="col">仕様／部数／色数</th><th scope="col">料金</th></tr>
         </thead>
         <tbody>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__fold" src="../fv/img/pr/fold_4p.png" alt="" loading="lazy" decoding="async" width="119" height="91"><span class="sprice__specname">A4二つ折り 4ページ</span></span></td>
-            <td>18万円から</td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_4p.png" alt="" width="119" height="91" loading="lazy" decoding="async"><span class="sprice__specname">A4／4ページ</span></span></td>
+            <td>二つ折り／500部／4c</td>
+            <td><span class="sprice__price">￥180,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__fold" src="../fv/img/pr/fold_8p.png" alt="" loading="lazy" decoding="async" width="208" height="92"><span class="sprice__specname">A4中綴じ 8ページ</span></span></td>
-            <td>※要確認</td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_6p.png" alt="" width="177" height="91" loading="lazy" decoding="async"><span class="sprice__specname">A4／6ページ</span></span></td>
+            <td>三つ折り／500部／4c</td>
+            <td><span class="sprice__price">￥220,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__fold" src="../fv/img/pr/fold_16p.png" alt="" loading="lazy" decoding="async" width="239" height="103"><span class="sprice__specname">A4中綴じ 16ページ</span></span></td>
-            <td>43万円から</td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_8p.png" alt="" width="208" height="92" loading="lazy" decoding="async"><span class="sprice__specname">A4／8ページ</span></span></td>
+            <td>中綴じ／500部／4c</td>
+            <td><span class="sprice__price">￥280,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__fold" src="../fv/img/pr/web_corp.png" alt="" loading="lazy" decoding="async" width="105" height="104"><span class="sprice__specname">コーポレートサイト 5ページ</span></span></td>
-            <td>30万円から</td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_12p.png" alt="" width="221" height="93" loading="lazy" decoding="async"><span class="sprice__specname">A4／12ページ</span></span></td>
+            <td>中綴じ／500部／4c</td>
+            <td><span class="sprice__price">￥360,000</span></td>
           </tr>
           <tr>
-            <td><span class="sprice__spec"><img class="sprice__fold" src="../fv/img/pr/web_lp.png" alt="" loading="lazy" decoding="async" width="55" height="104"><span class="sprice__specname">ランディングページ</span></span></td>
-            <td>20万円から</td>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_16p.png" alt="" width="239" height="103" loading="lazy" decoding="async"><span class="sprice__specname">A4／16ページ</span></span></td>
+            <td>中綴じ／500部／4c</td>
+            <td><span class="sprice__price">￥430,000</span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_20p.png" alt="" width="254" height="103" loading="lazy" decoding="async"><span class="sprice__specname">A4／20ページ</span></span></td>
+            <td>中綴じ／500部／4c</td>
+            <td><span class="sprice__price">￥510,000</span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/fold_24p.png" alt="" width="254" height="103" loading="lazy" decoding="async"><span class="sprice__specname">A4／24ページ</span></span></td>
+            <td>中綴じ／500部／4c</td>
+            <td><span class="sprice__price">￥590,000</span></td>
           </tr>
         </tbody>
       </table>
-
       <ul class="sprice__notes">
-        <li>※ いずれも印刷500部の費用を含みます</li>
-        <li>※ 撮影、コピーライティング、イラスト作成、翻訳はオプションで承ります</li>
-        <li>※ 小部数の印刷にも対応しています</li>
+        <li>※ 高級用紙・特殊加工は別途お見積いたします</li>
+        <li>※ 原稿作成・写真撮影費等は下の「制作オプション」をご参考ください</li>
+      </ul>
+    </div>
+
+    <!-- ② ホームページ -->
+    <div class="sprice__card">
+      <p class="sprice__cardh">ホームページのデザイン（原稿ご支給時）・コーディング費</p>
+      <table class="sprice__table">
+        <thead>
+          <tr><th scope="col">ページ数</th><th scope="col">仕様</th><th scope="col">料金</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/web_corp.png" alt="" width="105" height="104" loading="lazy" decoding="async"><span class="sprice__specname">5ページ<span class="sprice__note">コーポレートサイト／採用サイト／販売サイト 等</span></span></span></td>
+            <td>PC／SP</td>
+            <td><span class="sprice__price">￥300,000〜</span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/web_corp.png" alt="" width="105" height="104" loading="lazy" decoding="async"><span class="sprice__specname">10ページ</span></span></td>
+            <td>PC／SP</td>
+            <td><span class="sprice__price">￥400,000〜</span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/web_corp.png" alt="" width="105" height="104" loading="lazy" decoding="async"><span class="sprice__specname">15ページ</span></span></td>
+            <td>PC／SP</td>
+            <td><span class="sprice__price">￥600,000〜</span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/pr/web_lp.png" alt="" width="55" height="104" loading="lazy" decoding="async"><span class="sprice__specname">LP（ランディングページ）</span></span></td>
+            <td>PC／SP</td>
+            <td><span class="sprice__price">￥200,000〜</span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><span class="sprice__specname">CMS導入</span></span></td>
+            <td></td>
+            <td><span class="sprice__price">￥100,000〜</span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><span class="sprice__specname">フォーム設置</span></span></td>
+            <td></td>
+            <td><span class="sprice__price">￥30,000〜</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <ul class="sprice__notes">
+        <li>※ 原稿作成・写真撮影費等は下の「制作オプション」をご参考ください</li>
+        <li>※ 地域、制作内容により交通費や別途進行管理費がかかります</li>
+      </ul>
+    </div>
+
+    <!-- ③ 制作オプション -->
+    <div class="sprice__card">
+      <p class="sprice__cardh">制作オプション</p>
+      <table class="sprice__table">
+        <thead>
+          <tr><th scope="col">項目</th><th scope="col">内容</th><th scope="col">料金／数量</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="sprice__spec"><span class="sprice__specname">企画・構成費</span></span></td>
+            <td>コンテンツ・構成・仕様案等の制作</td>
+            <td><span class="sprice__price">￥30,000〜<small>／一式</small></span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><span class="sprice__specname">コピーライティング費</span></span></td>
+            <td>キャッチコピー、リード、図版案などの原稿作成費</td>
+            <td><span class="sprice__price">￥8,000〜<small>／1P</small></span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><span class="sprice__specname">カメラマン撮影費</span></span></td>
+            <td>商品撮影・人物・社内風景・設備・作業風景など</td>
+            <td><span class="sprice__price">￥3,000〜<small>／1カット（物撮）</small>￥35,000<small>／2H（ロケ）</small>￥80,000<small>／6H（ロケ）</small></span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><span class="sprice__specname">イラスト制作費</span></span></td>
+            <td>各種イラスト・アイコン・キャラクター作成</td>
+            <td><span class="sprice__price">￥3,000〜<small>／1カット</small>￥50,000〜<small>／1式</small></span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><span class="sprice__specname">校正・校閲料金</span></span></td>
+            <td>誤字脱字、表現、表記統一、整合性確認など</td>
+            <td><span class="sprice__price">￥2,000〜<small>／1頁</small></span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><img class="sprice__ico" src="../fv/img/ic/trans.png" alt="" loading="lazy" decoding="async"><span class="sprice__specname">翻訳</span></span></td>
+            <td>日本語から英語に</td>
+            <td><span class="sprice__price">￥20,000〜<small>／500文字</small></span></td>
+          </tr>
+        </tbody>
+      </table>
+      <ul class="sprice__notes">
+        <li>※ 部数・頁数・用紙にてお見積いたします</li>
+        <li>※ 筆文字、CD、マンガ、マップ制作等も制作しています。お気軽にお問い合わせください</li>
+      </ul>
+    </div>
+
+    <!-- ④ 印刷オプション -->
+    <div class="sprice__card">
+      <p class="sprice__cardh">印刷オプション</p>
+      <table class="sprice__table">
+        <thead>
+          <tr><th scope="col">項目</th><th scope="col">内容</th><th scope="col">料金／数量</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="sprice__spec"><span class="sprice__specname">印刷部数追加</span></span></td>
+            <td>A4／4P</td>
+            <td><span class="sprice__price">￥30,000〜<small>／500部</small></span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><span class="sprice__specname">色校正（簡易・本機）</span></span></td>
+            <td>A4／4P</td>
+            <td><span class="sprice__price">￥5,000〜<small>／1部</small></span></td>
+          </tr>
+          <tr>
+            <td><span class="sprice__spec"><span class="sprice__specname">印刷特殊加工</span></span></td>
+            <td>PP貼り／カットアウト／箔押し／浮き出し／UV／ホログラム加工 他</td>
+            <td><span class="sprice__price">￥30,000〜<small>／100部〜</small></span></td>
+          </tr>
+        </tbody>
+      </table>
+      <ul class="sprice__notes">
+        <li>※ 部数・頁数・用紙にてお見積いたします</li>
+        <li>※ 用紙銘柄や印刷仕様により組み合わせができない加工がございます。詳しくはお問い合わせください</li>
       </ul>
     </div>
 
     <p class="sprice__close">追加費用が後から発生しないよう、着手前に総額をご提示します。修正回数は無制限ですが、それによる追加費用はいただきません。</p>
+    <p class="sprice__tax">表示価格は税抜価格です。</p>
+
   </div>
 </section>
 
@@ -3021,6 +3140,62 @@ body.cta-hide .scontact__fixed{
       <span class="scontact__fixedsub">1営業日以内にご返信</span>
     </span>
   </a>
+<script>
+/* スクロールで順に出す（SHARE Security と同じ）。節ごとに群をまとめて 80ms ずつ遅らせる */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var groups = [
+    '#pain .spain__h, #pain .spain__lead, #pain li, #pain .spain__close',
+    '#trans .strans__h2, #trans .strans__lead, #trans .strans__col, #trans .strans__close, #trans .strans__btn',
+    '#assure .sassure__h2, #assure .sassure__card',
+    '#record .srecord__h, #record .srecord__lead, #record .srecord__marquee, #record .srecord__stat, #record .srecord__box',
+    '#flow .sflow__eyebrow, #flow .sflow__h2, #flow .sflow__row, #flow .sflow__note',
+    '#price .sprice__h, #price .sprice__sub, #price .sprice__lead, #price .sprice__card, #price .sprice__close',
+    '#compare .scompare__h, #compare .scompare__lead, #compare .scompare__note, #compare .scompare__box, #compare .scompare__close',
+    '#faq h2, #faq .sfaq__item',
+    '#company .scompany__h, #company .scompany__lead, #company .scompany__dl',
+    '#contact .scontact__h, #contact .scontact__lead, #contact .scontact__form, #contact .scontact__note'
+  ];
+  var els = [];
+  groups.forEach(function(sel){
+    [].slice.call(document.querySelectorAll(sel)).forEach(function(el, i){
+      el.setAttribute('data-rv','');
+      el.style.setProperty('--rv-d', Math.min(i,4)*80 + 'ms');
+      els.push(el);
+    });
+  });
+  if (!els.length) return;
+  var showAll = function(){ els.forEach(function(el){ el.classList.add('is-in'); }); };
+  if (!('IntersectionObserver' in window)) { showAll(); return; }
+  /* 🚨 alive は「監視が動いているか」だけを見る。isIntersecting が true になった時に
+     立てると、読み込み直後（FVだけが画面にあり data-rv の要素は1つも画面内にいない）に
+     false のままになり、下の保険が誤発動して全部いきなり出てしまう。
+     コールバックが呼ばれた事実そのものが、監視が動いている証拠 */
+  var alive = false;
+  var io = new IntersectionObserver(function(ents){
+    alive = true;
+    ents.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+    });
+  }, {rootMargin:'0px 0px -12% 0px', threshold:0.08});
+  els.forEach(function(el){ io.observe(el); });
+  /* 保険① 監視が一度も呼ばれない環境。1.2秒待って諦める */
+  setTimeout(function(){ if (!alive) showAll(); }, 1200);
+  /* 保険② 初回だけ呼ばれて以降が死ぬ環境。実際にスクロールしたのに1つも出ていなければ諦める。
+     🚨 中身が見えないのが最悪なので、演出より表示を優先する */
+  addEventListener('scroll', function once(){
+    removeEventListener('scroll', once);
+    setTimeout(function(){
+      if (!document.querySelector('[data-rv].is-in')) showAll();
+    }, 500);
+  }, {passive:true});
+  /* 保険③ 最後の砦。8秒たって1つも出ていなければ全部出す。
+     通常は8秒あれば必ずスクロールしているので、そこまで何も出ていないのは異常 */
+  setTimeout(function(){
+    if (!document.querySelector('[data-rv].is-in')) showAll();
+  }, 8000);
+})();
+</script>
 <script>
 /* 追従CTAは、FVを抜けてから出す（FVのロゴ帯に重なっていた）。
    🚨 ここで先に cta-hide を付けてはいけない。監視が動かない環境だと
