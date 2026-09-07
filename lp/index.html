@@ -369,17 +369,25 @@ a{color:inherit}
 .sfv__art{
   position:absolute;
   /* z-index は付けない。付けると重ね合わせ文脈ができて mix-blend-mode が地に届かない */
-  top:30px;                                          /* 実測 写真上端 140@1536 → 131（節の上余白121の下） */
-  left:55%;                                          /* 冊子の左端が x806 に来る位置。実測 x818（H1の右端700から118空く） */
-  right:calc(50% - 50vw);                            /* 画面の右端まで抜く */
-  aspect-ratio:744 / 675;                            /* 実測 見えている範囲 744 x 675 の比 */
+  /* 🚨 モックの実測どおり「右ページを画面外で切る」で組んだが、実際に見ると
+     右ページの事業内容が画面の縁で26%ぶつ切りになり、上下は閉じているので
+     「ブリード」ではなく「切れた写真」に見えた。冊子を丸ごと見せる。
+     枠の比を素材そのもの（1536:1024）に合わせ、contain で全体を収める */
+  /* 🚨 縦中央にしようと transform:translateY(-50%) を入れたら、重ね合わせ文脈ができて
+     mix-blend-mode:darken が地に届かず、写真の周りに白い板（255,255,255）が出た。
+     このファイルの冒頭に「z-index を付けるな」と書いてあるのと同じ罠。transform も同じ。
+     縦は、冊子の下端を左カラムの下端に揃える（bottom基準）ことで合わせる */
+  top:auto;
+  bottom:0;
+  left:53.5%;                                        /* x762。見出し「します」の右端700から62px */
+  right:calc(50% - 50vw + 16px);                     /* 画面の縁から16px。冊子は白地なので浅くてよい */
+  aspect-ratio:1536 / 1024;                          /* 素材そのままの比 */
   margin:0;
-  overflow:hidden;
 }
 .sfv__art img{
   width:100%; height:100%;
-  object-fit:cover;
-  object-position:36% 50%;                           /* 冊子の左ページを全部見せ、右ページを画面外で切る */
+  object-fit:contain;                                /* 切らない */
+  object-position:center;
   filter:brightness(1.06);                           /* 素材の地 #e9e9e9〜#f6f6f6 を地の明るさへ寄せる */
   mix-blend-mode:darken;                             /* 素材の白地を節の地 #eff4fa に沈める。四角い板にしない */
 }
@@ -420,10 +428,10 @@ a{color:inherit}
   .sfv__art{
     position:static;
     width:auto;
-    margin:clamp(28px,4vw,48px) calc(50% - 50vw) 0 0;
-    aspect-ratio:16 / 10;
+    /* PCと同じ扱い。画面の縁まで抜かず、素材の比のまま全体を見せる */
+    margin:clamp(28px,4vw,48px) 0 0;
+    aspect-ratio:1536 / 1024;
   }
-  .sfv__art img{ object-position:44% 50%; }
   .sfv__badges{ flex-wrap:wrap; }
   .sfv__badge{ flex:1 1 200px; }
 }
@@ -754,6 +762,18 @@ a{color:inherit}
 @media (max-width:700px){
   .strans__nb{display:inline}   /* 文節の塊のままだと画面外へ溢れる */
   .strans__panel{padding:clamp(20px,4vw,30px) var(--pad) clamp(28px,5vw,40px)}
+}
+
+/* 🚨 3件のうち2件は、FVと料金セクションの画像を流用して埋めてあった（alt も空）。
+   実際の制作物ではないので外し、写真待ちの枠にした。素材が届いたらここに入れる */
+.strans__shot--todo{
+  display:grid; place-items:center;
+  border:1px dashed var(--line);
+  background:var(--bg);
+}
+.strans__todo{
+  font-size:var(--small); line-height:1.9; text-align:center;
+  color:var(--mute); letter-spacing:.04em;
 }
 /* ── 節4 ── */
 /* ── 4. 3つの安心 ──────────────────────────────────────────────
@@ -1463,6 +1483,11 @@ a{color:inherit}
   .sprice__spec{ word-spacing:normal; word-break:keep-all; }
   .sprice__notes{ line-height:2.1; }
 }
+
+/* 🚨 価格が帯の65.7%の位置に置かれ、表の右35%が空白のままだった（モックの実測どおりだが
+   実際に見るとスカスカ）。価格を右端に寄せて、表の幅を使い切る */
+.sprice__table th:last-child,
+.sprice__table td:last-child{ text-align:right; padding-right:clamp(14px,2.5vw,36px); }
 /* ── 節8 ── */
 /* ── 第8節「他の選択肢との違い」（青系）────────────────────────
    採用モック _lp/blue8.png（1536x1024）の実測を 1440px 実装へ ×0.9375 で換算。
@@ -1892,7 +1917,8 @@ a{color:inherit}
   margin:calc(var(--g-body) + 5px) 0 0;
   display:grid;
   /* 実測の幅比をそのまま fr に。桁間は 30×0.8869 = 26px */
-  grid-template-columns:minmax(0,261fr) minmax(0,329fr) minmax(0,300fr) minmax(0,373fr);
+  /* 🚨 所在地が3行に折れていた。社名・電話は短いので詰め、所在地に回す（合計は据え置き） */
+  grid-template-columns:minmax(0,215fr) minmax(0,400fr) minmax(0,275fr) minmax(0,373fr);
   column-gap:26px;
   /* モックは1段なので段間の実測値は無い。折り返した時だけ効く値（桁間26pxより広く取った） */
   row-gap:32px;
@@ -2308,6 +2334,20 @@ a{color:inherit}
   .scontact{ padding-bottom:calc(var(--sec-y) + 66px); }
 }
 
+/* 送信ボタン。見た目は同じ節の .scontact__cta（実測値）に合わせる */
+.scontact__submit{
+  -webkit-appearance:none; appearance:none; border:0; cursor:pointer;
+  display:block; width:100%; margin:clamp(18px,1.6vw,23px) 0 0;
+  min-height:60px; padding:0 24px;
+  background:var(--blue); color:#fff;
+  font-family:inherit; font-size:var(--body); font-weight:700; letter-spacing:.04em;
+  border-radius:5px; transition:background-color .2s;
+}
+.scontact__submit:hover{background:var(--blue-dark)}
+.scontact__privacy{
+  margin:12px 0 0; font-size:var(--small); line-height:1.8; color:var(--mute);
+}
+
 /* ══════ 桁の統一（節をまたぐ調整なので、節の部品ではなくここで持つ） ══════
    節ごとに独立して組んだ結果、文字の左端が 120 / 135 / 143 / 172 / 197 の5種類あった。
    桁は2本だけにする：
@@ -2458,8 +2498,8 @@ a{color:inherit}
           <p class="strans__label">デザイン判断（どのように）</p>
           <p class="strans__txt">その想いから Protect Japan Brand をスローガンとして提案。専門用語を避け、製造工程をフロア毎に図示</p>
         </div>
-        <figure class="strans__shot">
-          <img src="../fv/img/works/w7.webp" alt="木田工業株式会社の会社案内" loading="lazy" decoding="async">
+        <figure class="strans__shot strans__shot--todo">
+          <span class="strans__todo">※ 木田工業株式会社の制作物写真<br>要提供</span>
         </figure>
       </a>
 
@@ -2481,8 +2521,8 @@ a{color:inherit}
         <!-- ※要確認：リスタートジャパン合同会社の制作物写真が ASSETS.txt に無い。
              仮に自社のスプレッド写真を置いている。差し替え候補は本番サイトの
              assets/images/works/works-sample04/sample04_image01_sp.jpg -->
-        <figure class="strans__shot">
-          <img src="../fv/img/hero_spread.jpg" alt="" loading="lazy" decoding="async">
+        <figure class="strans__shot strans__shot--todo">
+          <span class="strans__todo">※ リスタートジャパン合同会社の制作物写真<br>要提供</span>
         </figure>
       </a>
 
@@ -2504,8 +2544,8 @@ a{color:inherit}
         <!-- ※要確認：環球貿易株式会社の制作物写真が ASSETS.txt に無い。
              仮に自社の見開き写真を置いている。差し替え候補は本番サイトの
              assets/images/works/works-sample06/sample06_image01_sp.jpg -->
-        <figure class="strans__shot">
-          <img src="../fv/img/price_band.jpg" alt="" loading="lazy" decoding="async">
+        <figure class="strans__shot strans__shot--todo">
+          <span class="strans__todo">※ 環球貿易株式会社の制作物写真<br>要提供</span>
         </figure>
       </a>
 
@@ -2521,7 +2561,8 @@ a{color:inherit}
 <section class="sassure" id="assure">
   <div class="sassure__inner">
     <h2 class="sassure__h2">3つの安心</h2>
-    <p class="sassure__label">3つの安心</p>
+    <!-- 🚨 ここに同じ「3つの安心」がもう1行あった（見出しとアイブロウで二重）。消した -->
+
     <span class="sassure__rule" aria-hidden="true"></span>
 
     <div class="sassure__grid">
@@ -2552,9 +2593,8 @@ a{color:inherit}
     <h2 class="srecord__h">実績と規模</h2>
     <p class="srecord__lead"><span class="srecord__nb">官公庁から大手企業まで。</span><wbr><span class="srecord__nb">20分野以上の制作実績があります</span></p>
 
-    <div class="srecord__bandhead">
-      <p class="srecord__bandlabel">ロゴ帯</p>
-    </div>
+    <!-- 🚨 ここに「ロゴ帯」と書いた見出しが出ていた。構成案の指示メモであって
+         画面に出す言葉ではないので、帯の見出し行ごと消した -->
 
     <div class="srecord__clients">
       <ul class="srecord__row">
@@ -2608,7 +2648,9 @@ a{color:inherit}
 <section class="sflow" id="flow">
   <div class="sflow__wrap">
     <p class="sflow__eyebrow"><span>進め方</span></p>
-    <h2 class="sflow__h2">プロジェクトの進め方<span class="sflow__sub">5ステップ</span></h2>
+    <!-- 🚨 見出しの下に「5ステップ」と出ていた。構成案の指示メモなので消した
+         （番号 1.〜5. が並んでいるので、5段だということは見れば分かる） -->
+    <h2 class="sflow__h2">プロジェクトの進め方</h2>
 
     <ol class="sflow__list">
       <li class="sflow__row">
@@ -2805,7 +2847,7 @@ a{color:inherit}
         <p class="sfaq__a">はい、その状態でのご相談が多くいただく形です。ページ数ごとの参考価格を公開しておりますので、まずは規模感をご確認ください。伝えたい内容と渡す相手をお聞きしたうえで、印刷費を含めた総額をお出しします。</p>
       </details>
 
-      <details class="sfaq__item" open>
+      <details class="sfaq__item">
         <summary class="sfaq__q">
           <span class="sfaq__qmark" aria-hidden="true">Q.</span>
           <span class="sfaq__qtext"><span class="sfaq__nb">原稿や写真が</span><wbr><span class="sfaq__nb">まったくない状態からでも</span><wbr><span class="sfaq__nb">お願いできますか</span></span>
@@ -2814,7 +2856,7 @@ a{color:inherit}
         <p class="sfaq__a">はい、その状態から始まる案件がほとんどです。原稿はこちらで執筆し、撮影はカメラマンの手配から対応します。お願いするのは、取材へのご対応とご確認だけです。</p>
       </details>
 
-      <details class="sfaq__item" open>
+      <details class="sfaq__item">
         <summary class="sfaq__q">
           <span class="sfaq__qmark" aria-hidden="true">Q.</span>
           <span class="sfaq__qtext"><span class="sfaq__nb">修正回数が無制限とありますが、</span><wbr><span class="sfaq__nb">追加費用はかかりませんか</span></span>
@@ -2823,7 +2865,7 @@ a{color:inherit}
         <p class="sfaq__a">修正による追加費用はいただきません。無制限としているのは、御社の特色を正しく読み取れているかは、形にしてご覧いただかないと分からないためです。</p>
       </details>
 
-      <details class="sfaq__item" open>
+      <details class="sfaq__item">
         <summary class="sfaq__q">
           <span class="sfaq__qmark" aria-hidden="true">Q.</span>
           <span class="sfaq__qtext"><span class="sfaq__nb">途中で方向性を変えたくなった場合も</span><wbr><span class="sfaq__nb">対応いただけますか</span></span>
@@ -2832,7 +2874,7 @@ a{color:inherit}
         <p class="sfaq__a">対応します。作りながら伝えたいことが固まっていくケースは珍しくありません。変わった時点でお知らせいただければ、そこから組み直します。</p>
       </details>
 
-      <details class="sfaq__item" open>
+      <details class="sfaq__item">
         <summary class="sfaq__q">
           <span class="sfaq__qmark" aria-hidden="true">Q.</span>
           <span class="sfaq__qtext"><span class="sfaq__nb">制作期間は</span><wbr><span class="sfaq__nb">どのくらいかかりますか</span></span>
@@ -2841,7 +2883,7 @@ a{color:inherit}
         <p class="sfaq__a">A4二つ折り4ページで約1か月、中綴じ16ページで約2か月が目安です。展示会や採用イベントなど動かせない期限がある場合は、そこから逆算して組みますのでお申し付けください。</p>
       </details>
 
-      <details class="sfaq__item" open>
+      <details class="sfaq__item">
         <summary class="sfaq__q">
           <span class="sfaq__qmark" aria-hidden="true">Q.</span>
           <span class="sfaq__qtext"><span class="sfaq__nb">遠方ですが</span><wbr><span class="sfaq__nb">対応いただけますか</span></span>
@@ -2850,7 +2892,7 @@ a{color:inherit}
         <p class="sfaq__a">全国からご依頼いただけます。関東近県は直接お伺いし、それ以外はオンラインで進めます。取材や撮影が必要な場合は出張して対応します。</p>
       </details>
 
-      <details class="sfaq__item" open>
+      <details class="sfaq__item">
         <summary class="sfaq__q">
           <span class="sfaq__qmark" aria-hidden="true">Q.</span>
           <span class="sfaq__qtext"><span class="sfaq__nb">制作したデータは</span><wbr><span class="sfaq__nb">納品してもらえますか</span></span>
@@ -2879,7 +2921,8 @@ a{color:inherit}
 
       <div class="scompany__card">
         <dt class="scompany__k">所在地</dt>
-        <dd class="scompany__v">〒※要確認<br><span class="scompany__nb">東京都葛飾区青戸3-37-15</span><br>3F</dd>
+        <!-- 🚨 「3F」だけが3行目に落ちて汚かった。番地と階は1つの塊にする -->
+        <dd class="scompany__v">〒※要確認<br><span class="scompany__nb">東京都葛飾区青戸3-37-15 3F</span></dd>
       </div>
 
       <div class="scompany__card">
@@ -2926,14 +2969,15 @@ a{color:inherit}
     <div class="scontact__cols">
 
       <div class="scontact__left">
-        <p class="scontact__eyebrow">クロージングとフォーム</p>
-        <hr class="scontact__rule">
+        <!-- 🚨 「クロージングとフォーム」＝構成案の節タイトルが本文に出ていた。消した -->
+        <!-- 🚨 上のアイブロウを消したので、この罫だけが宙に浮いた。一緒に外す -->
 
         <h2 class="scontact__h"><span class="scontact__nb">まだ何も</span><wbr><span class="scontact__nb">決まっていない</span><br><span class="scontact__nb">段階でも</span><wbr><span class="scontact__nb">ぜひご相談ください</span></h2>
 
         <p class="scontact__lead"><span class="scontact__nb">ページ数、</span><wbr><span class="scontact__nb">部数、</span><wbr><span class="scontact__nb">載せる内容も</span><wbr><span class="scontact__nb">一緒に決めていきます。</span><br><span class="scontact__nb">まずは御社の現状と、</span><wbr><span class="scontact__nb">お困りごとから</span><wbr><span class="scontact__nb">お聞かせください。</span></p>
 
-        <p class="scontact__ctawrap"><a class="scontact__cta" href="#scontact-form">無料で相談する</a></p>
+        <!-- 🚨 同じ画面にフォームが出ているのに、そのフォームへ飛ぶボタンを置いていた。
+             送信ボタン（この内容で相談する）があるので外す -->
 
         <hr class="scontact__rule scontact__rule--2">
 
@@ -2962,6 +3006,9 @@ a{color:inherit}
           <label class="scontact__label" for="scontact-message">ご相談内容（自由記述）</label>
           <textarea class="scontact__textarea" id="scontact-message" name="message" rows="3"></textarea>
         </div>
+        <!-- 🚨 送信ボタンが無く、フォームが送信できなかった -->
+        <button class="scontact__submit" type="submit">この内容で相談する</button>
+        <p class="scontact__privacy">ご記入いただいた内容は、ご相談への回答のみに使用します。</p>
       </form>
 
     </div>
