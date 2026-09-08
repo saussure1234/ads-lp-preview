@@ -333,7 +333,15 @@ body.cta-hide .scontact__fixed{
      🚨 minmax(0,1fr) にすること。1fr（＝minmax(auto,1fr)）だと見出しの min-content で
         左の桁が広がり、写真が押し潰される */
   display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  /* 🚨 1fr 1fr（＝左右600ずつ）から 9:11 ＋ 溝へ（2026-09-08）。
+     いったん 13:17（520/680）にしたら、左のボタン列（532px 必要）が
+     バッジ列の左端 640 に 12px 食い込んだ。白い箱どうしがぶつかる。
+     溝を切って 1440で 左522 ／ 溝40 ／ 右638。ボタン列 120-652、バッジ 682-1320 で30px空く。
+     🚨 写真だけは溝ぶん左へ食い込ませる（下の .sfv__art）。写真は箱を持たない
+        （周りが地に沈む）ので、溝を跨いでも境界が見えない。バッジは跨がせない */
+  --fv-colgap:clamp(24px,2.78vw,40px);
+  grid-template-columns:minmax(0,9fr) minmax(0,11fr);
+  column-gap:var(--fv-colgap);
   align-items:stretch;
 }
 
@@ -348,12 +356,12 @@ body.cta-hide .scontact__fixed{
 /* ---- 左：文章 ---- */
 .sfv__copy,
 .sfv__act{ position:relative; z-index:1; }
-/* 🚨 55% → 110%。% の基準が .sfv__top（＝桁1200）から .sfv__left（＝その半分600）に
-   変わったので、55% が 330px になって見出しが7行に折れた。
-   基準が半分になったぶん倍にする。660px は桁の右半分（600）を60px はみ出すが、
-   写真の紙が実際に始まるのは右カラムの左端＋約9%（1440で772）なので重ならない。
-   狭い幅では 110% が効いて、写真の紙より内側で止まる */
-.sfv__copy{ max-width:min(660px, 110%); }           /* H1 2行目に 548px 要る（実測 120-668@1440） */
+/* 🚨 max-width ではなく width。max-width だとセル（左カラム520）より広くならず、
+   見出しの2行目（548px 要る）が折れてしまう。width なら 110% ＝ 572 まで取れて、
+   セルからはみ出したぶんは右カラムの上に乗る。
+   写真の紙が実際に始まるのは右カラムの左端＋約9%（1440で699）なので重ならない（空き31px）。
+   狭い幅では 110% 側が効いて、紙より内側で止まる */
+.sfv__copy{ width:min(660px, 110%); }               /* H1 2行目に 548px 要る（実測 120-668@1440） */
 
 .sfv__h1{
   margin:0;
@@ -385,7 +393,11 @@ body.cta-hide .scontact__fixed{
      ③左に戻す（今）… 右は写真1枚だけにして、写真の高さを左カラムに合わせる。
        左右が1本ずつの塊になるので、揃える対象が「塊の上端と下端」だけになる */
 .sfv__act{
-  max-width:min(576px, 96%);                        /* 桁の左半分（600）の内側 */
+  /* 🚨 100% で止める。.sfv__copy と違ってここは白い箱（ボタン）なので、溝を跨ぐと
+     右のバッジの白い箱とぶつかる。110% にしていたら 1025〜1280px で 12〜13px 食い込んだ
+     （110% − 100% ＝ 左カラムの10% が、溝 clamp(24px,2.78vw,40px) を上回るため）。
+     ボタンは 532 から左カラム幅まで縮むが、1440で 247px ＋ 間28 ＋ 247px。設計の252から5px */
+  width:min(532px, 100%);
   /* 🚨 auto で下端に押しつける。右のバッジ3つも同じことをしているので下端が揃う。
      リードとの最低の空きは .sfv__lead の margin-bottom で持たせる */
   margin:0 0 0;
@@ -504,10 +516,15 @@ body.cta-hide .scontact__fixed{
 /* ---- 写真（開いたパンフレット1冊） ---- */
 .sfv__art{
   flex:0 0 auto;
-  width:100%;                                        /* 桁の右半分いっぱい＝600 */
+  /* 🚨 溝ぶん左へ食い込ませる。写真は箱を持たず、周りが mix-blend-mode:darken で
+     地に沈むので、溝を跨いでも境界が見えない。バッジ（白い箱）は跨がせない。
+     1440：右カラム638 ＋ 溝40 = 678幅。紙が実際に始まるのは左端＋約9%＝701 で、
+     見出しの最長行の右端668 とは33px空く */
+  width:calc(100% + var(--fv-colgap));
+  margin-left:calc(var(--fv-colgap) * -1);
   aspect-ratio:1536 / 1024;                          /* 素材そのままの比。差し替えたら直す */
   /* 下は「写真 → バッジ」の最低の空き。バッジは下端に押されるので余りが出たら広がる */
-  margin:0 0 clamp(18px,2.2vw,32px);
+  margin-bottom:clamp(18px,2.2vw,32px);
 }
 .sfv__art img{
   /* 🚨 display:block が要る。inline のままだと baseline の下に行間の余白が付き、
@@ -571,12 +588,12 @@ body.cta-hide .scontact__fixed{
      grid の割り付けも解除する（grid-area が残ると1行目に重なる） */
   .sfv__top{ display:flex; flex-direction:column; }
   .sfv__left{ display:contents; }        /* 中の copy / act を .sfv__top 直下の並びに戻す */
-  .sfv__copy{ order:1; max-width:none; }
+  .sfv__copy{ order:1; width:auto; max-width:none; }
   .sfv__side{ order:2; grid-area:auto; }
-  .sfv__act{  order:3; max-width:none; margin-top:clamp(24px,3.4vw,36px); }
+  .sfv__act{  order:3; width:auto; max-width:none; margin-top:clamp(24px,3.4vw,36px); }
   .sfv__lead{ margin-bottom:0; }         /* 縦積みでは下の余白は .sfv__act 側で持つ */
   .sfv__art{
-    width:auto;
+    width:auto;                          /* 溝が無いので食い込ませる必要もない */
     margin:clamp(28px,4vw,48px) 0 clamp(18px,2.2vw,32px);
   }
   /* 🚨 height の固定を外す。縦積みでは左と高さを揃える相手がいないうえ、
