@@ -374,6 +374,12 @@ body.cta-hide .scontact__fixed{
 }
 .sfv__h1 .sfv__gloss{ font-size:.58em; }            /* 実測 27 ÷ 47 = 0.574 */
 
+/* 見出しの中の1語だけアクセント色にする（2026-09-08 指示）。
+   引用符ごと包む。地 #eff4fa に対し 6.02:1（大見出しなのでAAA）。
+   🚨 色を変えるだけ。太さも級数も触らない。触ると行の幅が変わって
+      写真の紙にぶつかる（3行目の余裕は31px しかない） */
+.sfv__h1 .sfv__hl{ color:var(--blue); }
+
 .sfv__lead{
   /* 下は「リード → CTA」の最低の空き。CTAは margin-top:auto で下端に押されるので、
      余りが出たときだけ広がる。ここが下限 */
@@ -2673,7 +2679,7 @@ body.cta-hide .scontact__fixed{
       <!-- 🚨 改行は「読み解いて、」ではなく「読み解いて、伝わる一冊に」で切る。
            級数を上げると旧3行目「伝わる一冊に翻訳（デザイン）します」が伸びて
            写真の紙に食い込む。ここで割ると1行目が最長になり、写真から離れる -->
-      <h1 class="sfv__h1">御社の“らしさ”を<br class="sfv__pcbr">読み解いて、伝わる一冊に<br class="sfv__pcbr">翻訳<span class="sfv__gloss">（デザイン）</span>します</h1>
+      <h1 class="sfv__h1">御社の<span class="sfv__hl">“らしさ”</span>を<br class="sfv__pcbr">読み解いて、伝わる一冊に<br class="sfv__pcbr">翻訳<span class="sfv__gloss">（デザイン）</span>します</h1>
 
       <p class="sfv__lead">何を載せるかが決まっていない状態からでも構いません。<br class="sfv__pcbr">企画・取材・撮影・コピー・デザイン・印刷まで一貫対応。<br class="sfv__pcbr">デザインは3案以上、修正回数は無制限。<br class="sfv__pcbr">納得いただけるまでお付き合いします。</p>
 
@@ -3053,7 +3059,7 @@ body.cta-hide .scontact__fixed{
       </table>
       <ul class="sprice__notes">
         <li>※ 高級用紙・特殊加工は別途お見積いたします</li>
-        <li>※ 原稿作成・写真撮影費等は下の「制作オプション」をご参考ください</li>
+        <li>※ 原稿作成・写真撮影費等は「制作オプション」のタブをご参考ください</li>
       </ul>
     </div>
       <div class="sprice__panel">
@@ -3096,7 +3102,7 @@ body.cta-hide .scontact__fixed{
         </tbody>
       </table>
       <ul class="sprice__notes">
-        <li>※ 原稿作成・写真撮影費等は下の「制作オプション」をご参考ください</li>
+        <li>※ 原稿作成・写真撮影費等は「制作オプション」のタブをご参考ください</li>
         <li>※ 地域、制作内容により交通費や別途進行管理費がかかります</li>
       </ul>
     </div>
