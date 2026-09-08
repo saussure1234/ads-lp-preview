@@ -323,12 +323,37 @@ body.cta-hide .scontact__fixed{
      写真もこの中に収まるので左右が対称になる */
   width:100%;                                       /* 親の content box いっぱい＝71-1369 */
   margin-inline:auto;
+  /* 🚨 右カラムを absolute で置くのをやめた（2026-09-08）。
+     absolute は親の高さに寄与しないので、節の高さが左カラムだけで決まり、
+     写真の枠が左に合わせて潰れていた（幅600に対し 560×373 まで縮んだ）。
+     grid にすると 行の高さ＝左右の高い方 になり、両方がそこまで伸びる。
+     ・下端  … 左右とも margin-top:auto で最後の塊を下に押す → 必ず揃う
+     ・上端  … CTA＋注記 と バッジ3つ を同じ106pxにしてあるので、下端が揃えば上端も揃う
+     ・写真  … 幅100%（＝桁の右半分600）を必ず使える
+     🚨 minmax(0,1fr) にすること。1fr（＝minmax(auto,1fr)）だと見出しの min-content で
+        左の桁が広がり、写真が押し潰される */
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  align-items:stretch;
+}
+
+/* 左カラム。見出し＋リードを上に、CTA＋注記を下端に押しつける */
+.sfv__left{
+  grid-area:1 / 1;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
 }
 
 /* ---- 左：文章 ---- */
 .sfv__copy,
 .sfv__act{ position:relative; z-index:1; }
-.sfv__copy{ max-width:min(660px, 55%); }            /* H1 3行目に 637px 要る（実測 x128-746@1536） */
+/* 🚨 55% → 110%。% の基準が .sfv__top（＝桁1200）から .sfv__left（＝その半分600）に
+   変わったので、55% が 330px になって見出しが7行に折れた。
+   基準が半分になったぶん倍にする。660px は桁の右半分（600）を60px はみ出すが、
+   写真の紙が実際に始まるのは右カラムの左端＋約9%（1440で772）なので重ならない。
+   狭い幅では 110% が効いて、写真の紙より内側で止まる */
+.sfv__copy{ max-width:min(660px, 110%); }           /* H1 2行目に 548px 要る（実測 120-668@1440） */
 
 .sfv__h1{
   margin:0;
@@ -342,7 +367,9 @@ body.cta-hide .scontact__fixed{
 .sfv__h1 .sfv__gloss{ font-size:.58em; }            /* 実測 27 ÷ 47 = 0.574 */
 
 .sfv__lead{
-  margin:clamp(16px,1.88vw,27px) 0 0;               /* 実測 墨間55@1536 → 51.6。行送りの上半分を引いて27 */
+  /* 下は「リード → CTA」の最低の空き。CTAは margin-top:auto で下端に押されるので、
+     余りが出たときだけ広がる。ここが下限 */
+  margin:clamp(16px,1.88vw,27px) 0 var(--g-lead);   /* 実測 墨間55@1536 → 51.6。行送りの上半分を引いて27 */
   max-width:590px;
   font-size:var(--lead);                            /* 実測 字送り17.5@1536 → 16.4。ポスター寸法→--lead */
   line-height:1.83;                                 /* 実測 行送り32 ÷ 字送り17.5 */
@@ -358,17 +385,30 @@ body.cta-hide .scontact__fixed{
      ③左に戻す（今）… 右は写真1枚だけにして、写真の高さを左カラムに合わせる。
        左右が1本ずつの塊になるので、揃える対象が「塊の上端と下端」だけになる */
 .sfv__act{
-  max-width:min(576px, 48%);                        /* 写真の左端 50% より内側に必ず収める */
-  margin:clamp(14px,1.32vw,19px) 0 0;
+  max-width:min(576px, 96%);                        /* 桁の左半分（600）の内側 */
+  /* 🚨 auto で下端に押しつける。右のバッジ3つも同じことをしているので下端が揃う。
+     リードとの最低の空きは .sfv__lead の margin-bottom で持たせる */
+  margin:0 0 0;
+  margin-top:auto;
 }
 
-/* ---- 信頼バッジ：白の箱3つ（🚨 モックの仕切り罫は箱の間隔に置き換え） ---- */
+/* ---- 信頼バッジ：白の箱3つ（🚨 モックの仕切り罫は箱の間隔に置き換え） ----
+   置き場所は右カラムの一番下。.sfv__side が上下を張っているので、
+   この塊の下端＝ content box の下端＝左の注記の下端になる */
 .sfv__badges{
+  flex:0 0 auto;
   display:flex;
   gap:12px;
-  margin:0;
+  margin:auto 0 0;                                  /* 🚨 auto で下端に押す。左のCTAと同じ */
   padding:0;
   list-style:none;
+  /* 🚨 高さを「左の CTA＋注記」と同じ式で作る（2026-09-08）。
+     左＝ボタンの min-height 62 ＋ 注記の margin-top 22 ＋ 注記の行箱（--small × 1.7）。
+     数字で 106px と書くと、--small が clamp(12px,.9vw,13px) で幅により 12〜13 に動くぶん
+     ずれる（実測 1025px で 104.4／1440px で 106.1）。式で持たせれば全幅で一致する。
+     ここを固定にしないと、ラベルが2行に折れる幅（1025〜1100）でバッジだけ20px高くなり、
+     下端は揃うのに上端がずれる（実測 1025px で -20）*/
+  height:calc(62px + 22px + var(--small) * 1.7);
 }
 .sfv__badge{
   flex:1 1 0;
@@ -377,19 +417,25 @@ body.cta-hide .scontact__fixed{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:12px;                                         /* 実測 アイコン下端→ラベル墨上端 21@1536 */
-  padding:18px clamp(8px,1vw,12px);
+  /* 🚨 箱の高さは .sfv__badges 側で固定してある。ここは中身が106pxに収まるように詰める。
+     1440：14 + 40 + 12 + 22.4(16px×1.4) + 14 = 102.4 ≦ 106
+     1025：14 + 29 + 12 + 33.6(12px×1.4×2行) + 14 = 102.6 ≦ 106（ラベルが2行に折れる幅）
+     収まらないと箱からはみ出すので、アイコンとラベルを幅に連動させてある */
+  gap:clamp(8px,1.1vw,12px);                        /* 実測 アイコン下端→ラベル墨上端 21@1536 */
+  padding:14px clamp(8px,1vw,12px);
   border-radius:2px;                                /* ボタンの角に揃えた（実測 2px） */
   background:var(--card);                           /* 🚨 地 #eff4fa との輝度差 10.05 */
 }
 .sfv__badge svg{
   display:block;
-  width:auto; height:40px;                          /* 実測 高さ44@1536 → 41 */
+  width:auto;
+  height:clamp(29px,2.78vw,40px);                   /* 実測 高さ44@1536 → 41。狭い幅では詰める */
   color:var(--navy);                                /* 実測 最暗5% #1d2b3e */
 }
 .sfv__badge span{
   font-size:var(--body);                            /* 実測 字送り17.7@1536 → 16.6 */
-  line-height:1.6;
+  /* 🚨 1.6 → 1.4。ラベルが2行に折れる幅（1025〜1100）で箱の106pxに収めるため */
+  line-height:1.4;
   letter-spacing:0;
   text-align:center;                                /* 1440では1行。桁が縮むと2行になる */
   color:var(--ink);
@@ -401,7 +447,12 @@ body.cta-hide .scontact__fixed{
   grid-template-columns:repeat(2, minmax(0,1fr));    /* 実測 267 / 271 @1536 → 250 / 254 */
   gap:28px;                                          /* 実測 29@1536 → 27 */
   max-width:532px;                                   /* 252 + 28 + 252。実測 x130-696@1536 = 531 */
-  margin:var(--g-lead) 0 0;                          /* 実測 バッジ墨下端→ボタン上端 65@1536 → 61 */
+  /* 🚨 上マージンを外した（2026-09-08）。もとは同じ .sfv__act の中にあったバッジ3つとの
+     間を取るための --g-lead 39px だった。バッジが右カラムへ移って CTA が先頭になり、
+     さらに .sfv__act が flex item ＝ BFC になって中の margin が外へ抜けなくなったため、
+     この39pxが .sfv__act の高さに乗って 106→145 になり、右のバッジと上端が40pxずれた。
+     リードとの間は .sfv__lead の margin-bottom が下限として持っている */
+  margin:0;
 }
 .sfv__btn{
   display:grid;
@@ -436,28 +487,27 @@ body.cta-hide .scontact__fixed{
   color:var(--mute);                                 /* 実測 最暗5% #6c727d。地に 4.95:1 */
 }
 
-/* ---- 右：写真 ----
-   🚨 aspect-ratio で高さを決めるのをやめた（2026-09-08）。
-   素材が見開きの 3:2 だったため、右カラムの幅600に対して高さが400にしかならず、
-   「画像が小さい」「見開きで横長だから縦に長いほうがいい」（ユーザー指摘）。
-   上下も left/right と同じように張って、高さを左カラムに合わせる。
-   すると写真の実寸は「左カラムの高さ × 素材の比」で決まり、幅600を超えたら
-   contain が幅で頭打ちにする。素材を差し替えても勝手に釣り合う。
-   🚨 この要素に z-index も transform も付けない。付けると重ね合わせ文脈ができて
-   mix-blend-mode:darken が節の地に届かず、写真の周りに白い板（255,255,255）が出る */
+/* ---- 右カラム：写真＋バッジ3つ ----
+   🚨 バッジを左へ動かしたのは誤り（2026-09-08）。指摘の意味は「置き場所を変えろ」ではなく
+   「右のバッジ3つの塊の高さを、左の CTA＋注記 の塊に合わせろ」だった。右に戻す。
+   上下を張って左カラムと同じ高さにし、中を flex の縦積みにする。
+   バッジは下端（＝ content box の下端＝左の注記の下端）に貼りつき、写真が残りを取る。
+   🚨 この箱に z-index も transform も付けない。付けると重ね合わせ文脈ができて
+   中の写真の mix-blend-mode:darken が節の地に届かず、周りに白い板（255,255,255）が出る */
+.sfv__side{
+  grid-area:1 / 2;                                   /* 桁の右半分（1440で 720-1320） */
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+
+/* ---- 写真（開いたパンフレット1冊） ---- */
 .sfv__art{
-  position:absolute;
-  /* 🚨 absolute の基準は .sfv の padding box なので top:0 は padding の外側（節の上端）。
-     padding と同じ値を入れて、左カラムの上端・下端に揃える */
-  top:var(--fv-padt);
-  bottom:var(--fv-padb);
-  /* 基準は .sfv の padding box（0-1440）。左端 x720 ＝ 50% */
-  left:50%;
-  /* 🚨 absolute の基準になるのは親の padding box であって content box ではない。
-     right:0 だと .sfv の padding の外側＝画面の縁(1440)になってしまうので、
-     --fv-pad ぶん戻して桁の右端(1320)に合わせる */
-  right:var(--fv-pad);
-  margin:0;
+  flex:0 0 auto;
+  width:100%;                                        /* 桁の右半分いっぱい＝600 */
+  aspect-ratio:1536 / 1024;                          /* 素材そのままの比。差し替えたら直す */
+  /* 下は「写真 → バッジ」の最低の空き。バッジは下端に押されるので余りが出たら広がる */
+  margin:0 0 clamp(18px,2.2vw,32px);
 }
 .sfv__art img{
   /* 🚨 display:block が要る。inline のままだと baseline の下に行間の余白が付き、
@@ -466,12 +516,11 @@ body.cta-hide .scontact__fixed{
   width:100%; height:100%;
   object-fit:contain;                                /* 切らない。枠より縦長なら幅が余る */
   object-position:center;
-  /* 🚨 1.06 → 1.12（2026-09-08 hero.png への差し替えに伴い）。
-     素材の撮影背景は縁の中央値で (226,226,226)。darken で沈むには
-     素材 × 倍率 ≧ 節の地 (239,244,250) が要る。Bチャンネルで 250/226 = 1.106 が下限。
-     1.06 のままだと写真の周りに灰色の板が出ていた（実測：描画域の 50.5% が地と1〜14ずれ）。
-     1.12 で 5.3%、1.16 で 2.3%。1.16 は写真の中間調が飛ぶので 1.12 で止める */
-  filter:brightness(1.12);
+  /* 素材の地 #e9e9e9〜#f6f6f6 を節の地の明るさへ寄せる。
+     🚨 素材を差し替えたらここを測り直すこと。darken で沈むには 素材 × 倍率 ≧ 地 が要る。
+     hero.png（撮影背景 226）を試したときは 1.06 では足りず、写真の周りに灰色の板が
+     描画域の 50.5% に出た（1.12 で 5.3%）。hero_spread.jpg は 1.06 で沈む */
+  filter:brightness(1.06);
   mix-blend-mode:darken;                             /* 素材の白地を節の地 #eff4fa に沈める。四角い板にしない */
 }
 
@@ -518,17 +567,21 @@ body.cta-hide .scontact__fixed{
   /* 🚨 スマホでは FV だけ 26px、ほかの節は 20px と食い違っていた（実測 393px）。
      幅が狭いところで桁を分ける意味は無いので、ほかの節と揃える */
   .sfv{ --fv-pad:var(--pad); }
-  /* 🚨 スマホ・タブレットは 見出し＋リード → 写真 → バッジ＋CTA の3ブロック。写真はCTAより上 */
+  /* 🚨 狭い幅では2カラムをやめて縦積み。見出し＋リード → 写真＋バッジ → CTA。
+     grid の割り付けも解除する（grid-area が残ると1行目に重なる） */
   .sfv__top{ display:flex; flex-direction:column; }
+  .sfv__left{ display:contents; }        /* 中の copy / act を .sfv__top 直下の並びに戻す */
   .sfv__copy{ order:1; max-width:none; }
-  .sfv__art{  order:2; }
+  .sfv__side{ order:2; grid-area:auto; }
   .sfv__act{  order:3; max-width:none; margin-top:clamp(24px,3.4vw,36px); }
+  .sfv__lead{ margin-bottom:0; }         /* 縦積みでは下の余白は .sfv__act 側で持つ */
   .sfv__art{
-    position:static;                    /* 高さを左カラムに合わせる必要がない。素材の比のまま */
     width:auto;
-    margin:clamp(28px,4vw,48px) 0 0;
-    aspect-ratio:1024 / 1024;           /* 素材そのままの比。差し替えたらここも直す */
+    margin:clamp(28px,4vw,48px) 0 clamp(18px,2.2vw,32px);
   }
+  /* 🚨 height の固定を外す。縦積みでは左と高さを揃える相手がいないうえ、
+     104px のまま縦に3つ並べると入りきらず、バッジが画面の外へ溢れる（実測 右端618） */
+  .sfv__badges{ margin-top:0; height:auto; }
   .sfv__badges{ flex-wrap:wrap; }
   .sfv__badge{ flex:1 1 200px; }
 }
@@ -2534,28 +2587,16 @@ body.cta-hide .scontact__fixed{
 <section class="sfv" id="fv">
   <div class="sfv__top">
 
-    <!-- 🚨 この figure に z-index も transform も付けない（写真の blend が死ぬ） -->
-    <figure class="sfv__art">
-      <!-- 🚨 hero_spread.jpg（1536x1024・見開き1冊）から差し替え。
-           3:2 は右カラム幅600に対して高さ400にしかならず「小さい」「縦に長いほうがいい」。
-           これは実物の会社案内が斜めに複数冊。1024角なので高さが600出る。
-           ※要確認：素材は1024pxで、Retinaの2倍描画には足りない（600表示で1.71倍） -->
-      <img src="../fv/img/hero.png" width="1024" height="1024"
-           alt="ADSが制作した会社案内のパンフレット" fetchpriority="high" decoding="async">
-    </figure>
+    <!-- 右カラム。🚨 この div に z-index も transform も付けない（写真の blend が死ぬ） -->
+    <div class="sfv__side">
 
-    <div class="sfv__copy">
+      <figure class="sfv__art">
+        <!-- 🚨 hero.png（実物の会社案内が複数点）に差し替えたが「一枚にしろ」で戻した。
+             ここは開いたパンフレット1冊。ほかに散らかさない -->
+        <img src="../fv/img/hero_spread.jpg" width="1536" height="1024"
+             alt="開いた会社案内のパンフレット" fetchpriority="high" decoding="async">
+      </figure>
 
-      <!-- 🚨 改行は「読み解いて、」ではなく「読み解いて、伝わる一冊に」で切る。
-           級数を上げると旧3行目「伝わる一冊に翻訳（デザイン）します」が伸びて
-           写真の紙に食い込む。ここで割ると1行目が最長になり、写真から離れる -->
-      <h1 class="sfv__h1">御社の“らしさ”を<br class="sfv__pcbr">読み解いて、伝わる一冊に<br class="sfv__pcbr">翻訳<span class="sfv__gloss">（デザイン）</span>します</h1>
-
-      <p class="sfv__lead">何を載せるかが決まっていない状態からでも構いません。<br class="sfv__pcbr">企画・取材・撮影・コピー・デザイン・印刷まで一貫対応。<br class="sfv__pcbr">デザインは3案以上、修正回数は無制限。<br class="sfv__pcbr">納得いただけるまでお付き合いします。</p>
-
-    </div>
-
-    <div class="sfv__act">
       <ul class="sfv__badges">
         <li class="sfv__badge">
           <!-- 🚨 もとは紙2枚だった（「3案以上」なのに2枚）。3枚に描き直した。
@@ -2592,6 +2633,22 @@ body.cta-hide .scontact__fixed{
         </li>
       </ul>
 
+    </div>
+
+    <div class="sfv__left">
+
+    <div class="sfv__copy">
+
+      <!-- 🚨 改行は「読み解いて、」ではなく「読み解いて、伝わる一冊に」で切る。
+           級数を上げると旧3行目「伝わる一冊に翻訳（デザイン）します」が伸びて
+           写真の紙に食い込む。ここで割ると1行目が最長になり、写真から離れる -->
+      <h1 class="sfv__h1">御社の“らしさ”を<br class="sfv__pcbr">読み解いて、伝わる一冊に<br class="sfv__pcbr">翻訳<span class="sfv__gloss">（デザイン）</span>します</h1>
+
+      <p class="sfv__lead">何を載せるかが決まっていない状態からでも構いません。<br class="sfv__pcbr">企画・取材・撮影・コピー・デザイン・印刷まで一貫対応。<br class="sfv__pcbr">デザインは3案以上、修正回数は無制限。<br class="sfv__pcbr">納得いただけるまでお付き合いします。</p>
+
+    </div>
+
+    <div class="sfv__act">
       <div class="sfv__cta">
         <a class="sfv__btn sfv__btn--main" href="#contact">無料で相談する</a>
         <a class="sfv__btn sfv__btn--sub" href="#price">料金を見る</a>
@@ -2599,6 +2656,8 @@ body.cta-hide .scontact__fixed{
 
       <p class="sfv__note">ご相談・お見積もりは無料です。1営業日以内にご返信します。</p>
     </div>
+
+    </div><!-- /.sfv__left -->
 
   </div>
 </section>
