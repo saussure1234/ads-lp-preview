@@ -374,6 +374,9 @@ body.cta-hide .scontact__fixed{
 }
 .sfv__h1 .sfv__gloss{ font-size:.58em; }            /* 実測 27 ÷ 47 = 0.574 */
 
+/* スマホでだけ入れる改行。PCでは「読み解いて、伝わる一冊に」で1行にする */
+.sfv__spbr{ display:none; }
+
 /* 見出しの中の1語だけアクセント色にする（2026-09-08 指示）。
    引用符ごと包む。地 #eff4fa に対し 6.02:1（大見出しなのでAAA）。
    🚨 色を変えるだけ。太さも級数も触らない。触ると行の幅が変わって
@@ -612,6 +615,7 @@ body.cta-hide .scontact__fixed{
 /* ---- 700px以下（スマホ） ---- */
 @media (max-width:700px){
   .sfv__pcbr{ display:none; }                        /* 原稿の改行はPC用。狭い幅では自然に折る */
+  .sfv__spbr{ display:inline; }                      /* 見出しだけは「読み解いて、」の後でも折る */
   .sfv__lead{ max-width:none; }
   .sfv__badges{ flex-direction:column; gap:8px; }
   .sfv__badge{ flex:0 0 auto; flex-direction:row; justify-content:flex-start; gap:14px; padding:14px 18px; }
@@ -2718,7 +2722,12 @@ body.cta-hide .scontact__fixed{
       <!-- 🚨 改行は「読み解いて、」ではなく「読み解いて、伝わる一冊に」で切る。
            級数を上げると旧3行目「伝わる一冊に翻訳（デザイン）します」が伸びて
            写真の紙に食い込む。ここで割ると1行目が最長になり、写真から離れる -->
-      <h1 class="sfv__h1">御社の<span class="sfv__hl">“らしさ”</span>を<br class="sfv__pcbr">読み解いて、伝わる一冊に<br class="sfv__pcbr">翻訳<span class="sfv__gloss">（デザイン）</span>します</h1>
+      <!-- 🚨 見出しの改行はPC・スマホとも効かせる（裸の <br>）。リードの .sfv__pcbr と違って
+           ここは原稿の都合ではなく、意味の切れ目で切っているため。
+           スマホだけ「読み解いて、」の後でもう1回折る（.sfv__spbr）。
+           スマホ393では h1 30px なので「御社の“らしさ”を読み解いて、」は390px要り、
+           桁353に入らない。3行のままだと「読み解／いて、」で割れる -->
+      <h1 class="sfv__h1">御社の<span class="sfv__hl">“らしさ”</span>を<br>読み解いて、<br class="sfv__spbr">伝わる一冊に<br>翻訳<span class="sfv__gloss">（デザイン）</span>します</h1>
 
       <p class="sfv__lead">何を載せるかが決まっていない状態からでも構いません。<br class="sfv__pcbr">企画・取材・撮影・コピー・デザイン・印刷まで一貫対応。<br class="sfv__pcbr">デザインは3案以上、修正回数は無制限。<br class="sfv__pcbr">納得いただけるまでお付き合いします。</p>
 
