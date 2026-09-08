@@ -2139,8 +2139,22 @@ body.cta-hide .scontact__fixed{
   background:var(--blue);
 }
 .sfaq__mark::after{ width:18px; height:2px;  margin:-1px 0 0 -9px; }
-.sfaq__mark::before{ width:2px;  height:18px; margin:-9px 0 0 -1px; visibility:hidden; }
-.sfaq__item:not([open]) .sfaq__mark::before{ visibility:visible; }
+/* 🚨 visibility の出し入れをやめた（2026-09-08）。パッと消えるので、開閉の動きと
+   合わなかった。縦棒は常に置いておき、開いたら90度回して横棒に重ねる。
+   重なった状態が「−」になる。回転の中心は要素の中心（既定の transform-origin） */
+.sfaq__mark::before{
+  width:2px; height:18px; margin:-9px 0 0 -1px;
+  transform:rotate(0deg);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+/* JSが動かないとき用。open 属性だけで切り替わる */
+.sfaq__item[open] .sfaq__mark::before{ transform:rotate(90deg); }
+/* 🚨 JSが動いているときは open 属性を見ない。閉じるアニメーションの間は
+   中身の高さが要るので open を付けたままにしてあり、そのままだとマークが
+   閉じ終わってから遅れて回り出す。JSが付ける .is-open を見て、クリックと同時に回す。
+   下に書いてあるぶん、詳細度が同じ上の行に勝つ */
+.sfaq--js .sfaq__item .sfaq__mark::before{ transform:rotate(0deg); }
+.sfaq--js .sfaq__item.is-open .sfaq__mark::before{ transform:rotate(90deg); }
 
 /* 閉じた問は回答が無いぶん下が空かない。回答の下余白と同じ間隔を質問の側で持たせる
    撮って測り直し：質問墨下端 → 次の罫 目標24.6（回答最終行のときと同じ） */
@@ -3495,6 +3509,56 @@ body.cta-hide .scontact__fixed{
   addEventListener('scroll', sync, {passive:true});
   addEventListener('resize', both, {passive:true});
   addEventListener('load', both);
+})();
+</script>
+<script>
+/* よくあるご質問：開閉をなめらかに。
+   <details> は既定でアニメーションしないので、クリックを横取りして高さを動かす。
+   🚨 JSが動かなくても壊れない。preventDefault が走らなければブラウザ既定の即時開閉に
+      なるだけで、開閉そのものは効く（=中身が読めなくなることはない）。
+   🚨 ::details-content ＋ interpolate-size のCSSだけの書き方は、対応が新しすぎて
+      環境によって効いたり効かなかったりする。ここは挙動を揃えたいのでWAAPIで書く */
+(function(){
+  var items = [].slice.call(document.querySelectorAll('#faq details'));
+  if (!items.length) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!document.body.animate) return;                  /* WAAPIが無ければ既定のまま */
+  var EASE = 'cubic-bezier(.4,0,.2,1)';
+  /* 🚨 ここまで来て初めて印を付ける。付いていない＝JSが動いていない、なので
+     ＋/− のマークは open 属性で切り替わる（blue9.html のCSS）。
+     JSが動いているときは、閉じるアニメーションの間も open を付けたままにするため、
+     マークは open ではなく下で付け外しする .is-open を見る */
+  var root = document.getElementById('faq');
+  if (root) root.classList.add('sfaq--js');
+  items.forEach(function(d){
+    var sum = d.querySelector('summary');
+    if (!sum) return;
+    d.classList.toggle('is-open', d.open);             /* 初期状態（1問目だけ開いている）を写す */
+    var anim = null;
+    sum.addEventListener('click', function(ev){
+      ev.preventDefault();
+      /* 🚨 いま動いている高さを先に読む。cancel してから読むと style が戻って
+         自然高になり、連打したときに一度ジャンプしてから動き出す */
+      var from = d.getBoundingClientRect().height;
+      if (anim) { anim.cancel(); anim = null; }
+      var opening = !d.open;
+      d.classList.toggle('is-open', opening);          /* マークはクリックと同時に回す */
+      /* 🚨 目標の高さは「その状態に実際にして」測る。閉じたときは
+         .sfaq__item:not([open]) .sfaq__q に padding-bottom:19px が付くので、
+         summary の高さをそのまま使うと最後に19pxジャンプする */
+      d.open = opening;
+      var to = d.getBoundingClientRect().height;
+      d.open = true;                                   /* 動いている間は中身を出しておく */
+      d.style.overflow = 'hidden';
+      anim = d.animate({height:[from + 'px', to + 'px']},
+                       {duration: opening ? 280 : 220, easing: EASE});
+      anim.onfinish = function(){
+        d.open = opening;
+        d.style.overflow = '';
+        anim = null;
+      };
+    });
+  });
 })();
 </script>
 </body>
