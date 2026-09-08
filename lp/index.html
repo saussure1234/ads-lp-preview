@@ -37,8 +37,22 @@
   --pad:clamp(20px,4.93vw,71px);
 
   /* 級数。モックはポスター寸法なので実務値へ落としてある */
-  --h1:clamp(28px,3.06vw,44px);        /* FV見出し。実測 44px@1440 */
+  /* 🚨 44 → 52（2026-09-08）。級数そのものは 40〜56 の一般域に入っていたが、
+     FV見出し44 ÷ 節見出し34 = 1.29 でジャンプ率が足りず、FVが節の見出しに埋もれていた。
+     一般は 1.4〜1.6。52 にして 52/34 = 1.53。上限56の内側。
+     🚨 52 にすると3行目「伝わる一冊に翻訳（デザイン）します」が 635→750px に伸び、
+        写真の紙の左端 772 に98px食い込む。改行を「読み解いて、伝わる一冊に」で
+        割り直して3行のまま収めた（blue1.html）。級数だけ上げると重なる */
+  --h1:clamp(32px,3.61vw,52px);        /* FV見出し。3.61vw@1440 = 52.0 */
   --h2:clamp(24px,2.36vw,34px);        /* 節の見出し */
+
+  /* 節の見出しの体裁。🚨 ここを変数にしたのは、11節を別々に組んだ結果
+     太さ3種（400/500/600）・行送り8種（1.24〜1.55）・字送り5種（0〜.135em）に
+     ばらけていたため（2026-09-08 実測）。「進め方」「料金」「まだ何も〜」だけ
+     細いのが見て分かる状態だった。全節この3つを使う */
+  --h2-w:600;                          /* ヒラギノ明朝は W3/W6 の2段。太いほう */
+  --h2-lh:1.4;
+  --h2-ls:.02em;
   --lead:clamp(15px,1.25vw,18px);      /* リード */
   --body:clamp(14px,1.11vw,16px);      /* 本文 */
   --small:clamp(12px,.9vw,13px);       /* 注記 */
@@ -286,7 +300,8 @@ body.cta-hide .scontact__fixed{
   position:relative;
   /* 🚨 モックには追従ヘッダーが無かったので上余白を121で組んだが、ヘッダー80pxが乗ると
      見出しが y201 から始まり、上が空きすぎて第一画面が下に押し出される。上を詰める */
-  padding-block:clamp(34px,4.44vw,64px) clamp(36px,4.03vw,58px);
+  --fv-padt:clamp(34px,4.44vw,64px);                /* 右カラムの top と共有する */
+  padding-block:var(--fv-padt) clamp(36px,4.03vw,58px);
   /* 🚨 この節には左右のパディングが無く、.sfv の content box が 0-1440 だった。
      そのため写真の right:0 が画面の縁（1440）になってしまう。
      🚨 ここは3回振り直した。
@@ -333,17 +348,25 @@ body.cta-hide .scontact__fixed{
   color:var(--text);
 }
 
-/* ---- 行動のかたまり（バッジ・CTA・注記）。スマホで写真を挟むため文章と分けてある ---- */
+/* ---- 行動のかたまり（CTA・注記）。スマホで写真を挟むため文章と分けてある ----
+   🚨 もとは バッジ3つ＋CTA＋注記 の3点セットだった。左カラムだけが 759px 伸び、
+   右カラムは写真の 409px で終わって、右下に 483×600px の穴が空いていた（実測）。
+   バッジは写真の下（右カラム＝.sfv__side）へ移した。ここはCTAと注記だけ */
 .sfv__act{
-  max-width:min(576px, 48%);                        /* 写真の左端 55% より内側に必ず収める */
-  margin:clamp(14px,1.32vw,19px) 0 0;
+  max-width:min(576px, 48%);                        /* 写真の左端 50% より内側に必ず収める */
+  /* 🚨 バッジを抜いた分、リードとの間が 19px では詰まりすぎる。節の中の段落間 --g-lead へ */
+  margin:var(--g-lead) 0 0;
 }
 
-/* ---- 信頼バッジ：白の箱3つ（🚨 モックの仕切り罫は箱の間隔に置き換え） ---- */
+/* ---- 信頼バッジ：白の箱3つ（🚨 モックの仕切り罫は箱の間隔に置き換え） ----
+   置き場所は右カラム（写真の下）。左が759px・右が409px で右下に穴が空いていたのを、
+   ここを移すことで 左640／右558 まで詰めた（実測） */
 .sfv__badges{
   display:flex;
   gap:12px;
-  margin:0;
+  /* 冊子の下端からの間。写真は contain なので絵の下に素材の余白が少し残る。
+     その分を見込んで、左カラムの段落間（--g-lead）より詰める */
+  margin:clamp(18px,2.2vw,32px) 0 0;
   padding:0;
   list-style:none;
 }
@@ -413,9 +436,31 @@ body.cta-hide .scontact__fixed{
   color:var(--mute);                                 /* 実測 最暗5% #6c727d。地に 4.95:1 */
 }
 
-/* ---- 右：写真（開いたパンフレット1冊） ---- */
-.sfv__art{
+/* ---- 右カラム：写真＋信頼バッジ ----
+   🚨 写真だけを absolute で置いていたのを、写真とバッジをまとめた箱ごと置くように変えた。
+   バッジを absolute で別に置くと、写真の高さ（aspect-ratio で幅から決まる）が
+   画面幅で変わったときに追随しない。箱の中は通常フローなので勝手に積み上がる。
+   🚨 この箱に z-index を付けない。付けると重ね合わせ文脈ができて、中の写真の
+   mix-blend-mode:darken が節の地に届かず、写真の周りに白い板が出る（下の注記と同じ罠）。
+   position:absolute だけなら z-index:auto なので文脈はできない */
+.sfv__side{
   position:absolute;
+  /* 🚨 absolute の基準は .sfv の padding box なので top:0 は padding の外側（節の上端）。
+     そのまま置くと写真が節の縁に貼りつき、左カラムより64px上から始まって階段になる。
+     padding-top と同じ値を入れて、左カラムと上端を揃える。
+     実測：写真は contain なので枠の中で上下に4.5px余る → 紙の上端149、見出しの墨上端157 */
+  top:var(--fv-padt);
+  /* 基準は .sfv の padding box（0-1440）。左端 x720 ＝ 50% */
+  left:50%;
+  /* 🚨 absolute の基準になるのは親の padding box であって content box ではない。
+     right:0 だと .sfv の padding の外側＝画面の縁(1440)になってしまうので、
+     --fv-pad ぶん戻して桁の右端(1320)に合わせる */
+  right:var(--fv-pad);
+}
+
+/* ---- 写真（開いたパンフレット1冊） ---- */
+.sfv__art{
+  position:static;                                   /* 位置は親の .sfv__side が持つ */
   /* z-index は付けない。付けると重ね合わせ文脈ができて mix-blend-mode が地に届かない */
   /* 🚨 モックの実測どおり「右ページを画面外で切る」で組んだが、実際に見ると
      右ページの事業内容が画面の縁で26%ぶつ切りになり、上下は閉じているので
@@ -423,25 +468,12 @@ body.cta-hide .scontact__fixed{
      枠の比を素材そのもの（1536:1024）に合わせ、contain で全体を収める */
   /* 🚨 縦中央にしようと transform:translateY(-50%) を入れたら、重ね合わせ文脈ができて
      mix-blend-mode:darken が地に届かず、写真の周りに白い板（255,255,255）が出た。
-     このファイルの冒頭に「z-index を付けるな」と書いてあるのと同じ罠。transform も同じ。
-     縦は、冊子の下端を左カラムの下端に揃える（bottom基準）ことで合わせる */
-  /* 冊子の上端を見出しの1行目に揃える。下寄せだと見出しの真横が空いて重心が下がった */
-  top:0;
-  bottom:auto;
-  /* 基準は .sfv の padding box（0-1440）。左端 x720 ＝ 50%。
-     実測：見出しの文字は x755 で終わり、冊子の紙が実際に始まるのは x772
-     （画像の中の余白ぶん内側）。17px空いていて重ならない */
-  left:50%;
-  /* 🚨 右端は「面の桁」＝左右 --pad の内側（1440で1369）。
-     ヘッダーや本文の桁（120-1320）より外まで使ってよい、という指示による。
-     節2/3/8/11 の濃紺・白の面が 71-1369 に置かれているのと同じ桁なので、
-     ページ全体で見ると揃っている。.sfv が基準なので 0 で面の右端になる。
-     100vw を使わないのでスクロールバーの有無でもズレない。
-     🚨 absolute の基準になるのは親の padding box であって content box ではない。
-     right:0 だと .sfv の padding の外側＝画面の縁(1440)になってしまうので、
-     --fv-pad ぶん戻して桁の右端(1320)に合わせる */
-  right:var(--fv-pad);
+     このファイルの冒頭に「z-index を付けるな」と書いてあるのと同じ罠。transform も同じ */
+  /* 冊子の上端を見出しの1行目に揃える。下寄せだと見出しの真横が空いて重心が下がった。
+     実測：見出しの文字は x744 で終わり、冊子の紙が実際に始まるのは x772
+     （画像の中の余白ぶん内側）。28px空いていて重ならない */
   aspect-ratio:1536 / 1024;                          /* 素材そのままの比 */
+  width:100%;
   margin:0;
 }
 .sfv__art img{
@@ -452,11 +484,22 @@ body.cta-hide .scontact__fixed{
   mix-blend-mode:darken;                             /* 素材の白地を節の地 #eff4fa に沈める。四角い板にしない */
 }
 
-/* ---- 信頼バー ---- */
+/* ---- 信頼バー ----
+   🚨 FV の中（.sfv の一番下）に置いていたのを、独立した帯として外へ出した（2026-09-08）。
+   理由：ヘッダー80 ＋ FV 892 = 972px で、ビューポート 960 を12px超えていた。
+   実機の Chrome は URL バーぶん実効 800〜850px なので、注記もロゴ帯も第一画面で見えない。
+   外へ出すと FV が 892→約700px に収まり、次の節「こんな状態から〜」の見出しが
+   数十px覗く＝下に続きがある手がかりになる。要素は減らしていない、置き場所だけ変えた */
+.sfvbar{
+  background:var(--bg);
+  padding:clamp(28px,3.4vw,49px) var(--pad) clamp(28px,3.4vw,49px);
+  border-top:1px solid var(--line);                  /* FVと帯の境。地は同じなので細い罫で分ける */
+}
 .sfv__bar{
-  /* 見出しと同じく面の桁いっぱい。文章の左端とロゴの左端が揃う */
+  /* 見出しと同じ桁（1440で 120-1320）。文章の左端とロゴの左端が揃う */
   width:100%;
-  margin:clamp(44px,5.42vw,78px) auto 0;             /* 実測 注記→ロゴ墨上端 97@1536 → 91 */
+  max-width:var(--wrap);
+  margin-inline:auto;
 }
 .sfv__logos{
   display:flex;
@@ -484,13 +527,14 @@ body.cta-hide .scontact__fixed{
   /* 🚨 スマホでは FV だけ 26px、ほかの節は 20px と食い違っていた（実測 393px）。
      幅が狭いところで桁を分ける意味は無いので、ほかの節と揃える */
   .sfv{ --fv-pad:var(--pad); }
-  /* 🚨 スマホ・タブレットは 見出し＋リード → 写真 → CTA の3ブロック。写真はCTAより上に置く */
+  /* 🚨 スマホ・タブレットは 見出し＋リード → 写真＋バッジ → CTA の3ブロック。
+     ここは元から縦積みなので、右カラムの箱（.sfv__side）を通常フローに戻すだけで
+     PCと同じ「写真の下にバッジ」の並びになる */
   .sfv__top{ display:flex; flex-direction:column; }
   .sfv__copy{ order:1; max-width:none; }
-  .sfv__art{  order:2; }
+  .sfv__side{ order:2; position:static; }
   .sfv__act{  order:3; max-width:none; margin-top:clamp(24px,3.4vw,36px); }
   .sfv__art{
-    position:static;
     width:auto;
     /* PCと同じ扱い。画面の縁まで抜かず、素材の比のまま全体を見せる */
     margin:clamp(28px,4vw,48px) 0 0;
@@ -540,12 +584,14 @@ body.cta-hide .scontact__fixed{
 }
 
 /* 見出し（明朝）。実測 字送り 漢字62px@1536 → 58px@1440 はポスター寸法なので --h2 に収めた */
-.spain__h{
-  margin:0;
+.spain__h{  margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:500;
   font-size:var(--h2);
-  line-height:1.5;
+  /* 🚨 太さ・行送り・字送りは全節そろえる（2026-09-08）。
+     11節を別々に組んだ結果 太さ3種／行送り8種／字送り5種にばらけていた */
+  font-weight:var(--h2-w);
+  line-height:var(--h2-lh);
+  letter-spacing:var(--h2-ls);
 }
 /* 見出し下の罫。実測 y292、x209-670（幅462@1536 → 433@1440、内容幅の41.5%）、1px、#e1e4ea */
 .spain__h::after{
@@ -658,15 +704,16 @@ body.cta-hide .scontact__fixed{
 }
 
 /* ---- 節の見出し。明朝 ---- */
-.strans__h2{
-  margin:0;
+.strans__h2{  margin:0;
   font-family:var(--_mincho);
-  font-weight:600;
-  font-size:var(--h2);         /* 実測 34.6@1440 → トークン34px */
-  line-height:1.45;
-  letter-spacing:.02em;        /* 実測 字送り − 級数 ≒ 1px@1536 */
+  font-size:var(--h2);         /* 実測 34.6@1440 → トークン34px */        /* 実測 字送り − 級数 ≒ 1px@1536 */
   color:var(--ink);            /* 白地に 18.9:1 */
   text-align:center;
+  /* 🚨 太さ・行送り・字送りは全節そろえる（2026-09-08）。
+     11節を別々に組んだ結果 太さ3種／行送り8種／字送り5種にばらけていた */
+  font-weight:var(--h2-w);
+  line-height:var(--h2-lh);
+  letter-spacing:var(--h2-ls);
 }
 
 /* ---- リード ---- */
@@ -866,15 +913,16 @@ body.cta-hide .scontact__fixed{
 
 /* ── 見出し ── 実測 字送り75.3px@1536（=70.6@1440）＝ポスター寸法。--h2 に収めた
       色 実測 #0c223f → var(--navy)（地に対し 12.97:1） */
-.sassure__h2{
-  margin:0;
+.sassure__h2{  margin:0;
   text-align:center;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:600;
   font-size:var(--h2);
-  line-height:1.24;            /* 実測：単行のため行送りは取れず。他節と揃えた ※要確認 */
-  letter-spacing:.04em;
   color:var(--navy);
+  /* 🚨 太さ・行送り・字送りは全節そろえる（2026-09-08）。
+     11節を別々に組んだ結果 太さ3種／行送り8種／字送り5種にばらけていた */
+  font-weight:var(--h2-w);
+  line-height:var(--h2-lh);
+  letter-spacing:var(--h2-ls);
 }
 
 /* ── 見出しの下の小さいラベル ── 実測 字送り27px@1536。ゴシック
@@ -1008,15 +1056,15 @@ body.cta-hide .scontact__fixed{
    実測 墨 #0b1a3b → var(--navy)
    実測 見出し墨下端152 → 罫上端181 ＝ 29px@1536 = 27px@1440
    実測 罫 x734-800（幅67 → 62@1440）／濃さは --blue 2px 相当 */
-.srecord__h{
-  margin:0;
+.srecord__h{  margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
-  font-weight:600;
   font-size:var(--h2);
-  line-height:1.34;
-  letter-spacing:.135em;
-  text-indent:.135em;      /* 字間の追い込み分だけ中心がずれるのを戻す */
   color:var(--navy);
+  /* 🚨 太さ・行送り・字送りは全節そろえる（2026-09-08）。
+     11節を別々に組んだ結果 太さ3種／行送り8種／字送り5種にばらけていた */
+  font-weight:var(--h2-w);
+  line-height:var(--h2-lh);
+  letter-spacing:var(--h2-ls);
 }
 .srecord__h::after{
   content:"";
@@ -1243,7 +1291,8 @@ body.cta-hide .scontact__fixed{
     padding-top:clamp(18px,3.5vw,28px);
   }
   .srecord__box{ padding-inline:clamp(16px,4vw,32px); }
-  .srecord__h{ letter-spacing:.08em; text-indent:.08em; }
+  /* 🚨 .srecord__h の狭幅上書き（.08em）は外した。字送りは --h2-ls で全節そろえたので、
+     ここだけ別値にすると幅で見出しの体裁が変わってしまう */
   .srecord__fig{ letter-spacing:.1em; text-indent:.1em; }
   .srecord__boxlabel{ letter-spacing:.16em; text-indent:.16em; }
 }
@@ -1340,11 +1389,15 @@ body.cta-hide .scontact__fixed{
   padding-bottom:12px;
   border-bottom:1px solid var(--line);
 }
-.sflow__h2{
-  margin:var(--g-eyebrow) 0 0;
+.sflow__h2{  margin:var(--g-eyebrow) 0 0;
   color:var(--navy);                /* 12.97:1 */
   font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
-  font-size:var(--h2); font-weight:400; letter-spacing:.02em; line-height:1.3;
+  font-size:var(--h2);
+  /* 🚨 太さ・行送り・字送りは全節そろえる（2026-09-08）。
+     11節を別々に組んだ結果 太さ3種／行送り8種／字送り5種にばらけていた */
+  font-weight:var(--h2-w);
+  line-height:var(--h2-lh);
+  letter-spacing:var(--h2-ls);
 }
 
 /* ── 5段 ── */
@@ -1492,11 +1545,15 @@ body.cta-hide .scontact__fixed{
 .sprice__wrap{ width:min(var(--wrap), 100%); margin-inline:auto }
 
 /* ── 見出し ── */
-.sprice__h{
-  margin:0;
+.sprice__h{  margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
-  font-size:var(--h2); font-weight:400; line-height:1.3; letter-spacing:.04em;
+  font-size:var(--h2);
   color:var(--navy);                 /* 12.97:1 */
+  /* 🚨 太さ・行送り・字送りは全節そろえる（2026-09-08）。
+     11節を別々に組んだ結果 太さ3種／行送り8種／字送り5種にばらけていた */
+  font-weight:var(--h2-w);
+  line-height:var(--h2-lh);
+  letter-spacing:var(--h2-ls);
 }
 .sprice__h::after{
   content:""; display:block;
@@ -1706,17 +1763,18 @@ body.cta-hide .scontact__fixed{
 }
 
 /* ── 見出し ───────────────────────────────── */
-.scompare__h{
-  margin:0;
+.scompare__h{  margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:600;
   /* 実測：字送り 61.5px@1536（漢字間63-68・の→の5送り平均60.4）／ 墨の高さ53px
      → 56.5px@1440。ポスター寸法なので節の見出しの実務値 var(--h2) 34px に落とす */
   font-size:var(--h2);
-  line-height:1.4;
   /* 実測：漢字の字面54.4（≒0.90em → 級数60.4）に対し漢字間の字送り64.5 → 差4.1px＝.068em */
-  letter-spacing:.06em;
   text-align:center;
+  /* 🚨 太さ・行送り・字送りは全節そろえる（2026-09-08）。
+     11節を別々に組んだ結果 太さ3種／行送り8種／字送り5種にばらけていた */
+  font-weight:var(--h2-w);
+  line-height:var(--h2-lh);
+  letter-spacing:var(--h2-ls);
 }
 
 .scompare__rule{
@@ -1947,14 +2005,15 @@ body.cta-hide .scontact__fixed{
 }
 
 /* ── 節の見出し ──────────────────────────────────────────── */
-.sfaq__h{
-  margin:0;
+.sfaq__h{  margin:0;
   font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
-  font-weight:600;
   font-size:var(--h2);
-  line-height:1.35;
-  letter-spacing:.06em;
   color:var(--navy);
+  /* 🚨 太さ・行送り・字送りは全節そろえる（2026-09-08）。
+     11節を別々に組んだ結果 太さ3種／行送り8種／字送り5種にばらけていた */
+  font-weight:var(--h2-w);
+  line-height:var(--h2-lh);
+  letter-spacing:var(--h2-ls);
 }
 
 /* 撮って測り直し：見出し墨下端 → 1問目の質問墨上端 目標45.9（実測 46） */
@@ -2088,16 +2147,16 @@ body.cta-hide .scontact__fixed{
 }
 
 /* ── 見出し（中央揃え）── */
-.scompany__h{
-  margin:0;
+.scompany__h{  margin:0;
   text-align:center;
   font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
-  font-weight:600;
   font-size:var(--h2);
-  line-height:1.34;
-  letter-spacing:.135em;
-  text-indent:.135em;          /* 字間の追い込み分だけ中心がずれるのを戻す */
   color:var(--navy);           /* 地に対し 12.97:1 */
+  /* 🚨 太さ・行送り・字送りは全節そろえる（2026-09-08）。
+     11節を別々に組んだ結果 太さ3種／行送り8種／字送り5種にばらけていた */
+  font-weight:var(--h2-w);
+  line-height:var(--h2-lh);
+  letter-spacing:var(--h2-ls);
 }
 .scompany__h::after{
   content:"";
@@ -2245,15 +2304,16 @@ body.cta-hide .scontact__fixed{
 }
 
 /* ── 左：見出し ─────────────────────────────── */
-.scontact__h{
-  margin:35px 0 0;          /* 実測 罫210 → 見出しの墨上端259 ＝ 49 → 46。行箱の余り11pxを引く */
+.scontact__h{  margin:35px 0 0;          /* 実測 罫210 → 見出しの墨上端259 ＝ 49 → 46。行箱の余り11pxを引く */
   font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
-  font-weight:400;          /* 実測：縦画3px／字送り45 ＝ 細い。太らせない */
   /* 実測 字送り45@1536 ＝ 42.2@1440。ポスター寸法なので節の見出しの実務値 --h2 34 へ */
   font-size:var(--h2);
-  line-height:1.55;         /* 実測 行送り70 ÷ 字送り45 ＝ 1.556 */
-  letter-spacing:.02em;
   color:var(--ink);
+  /* 🚨 太さ・行送り・字送りは全節そろえる（2026-09-08）。
+     11節を別々に組んだ結果 太さ3種／行送り8種／字送り5種にばらけていた */
+  font-weight:var(--h2-w);
+  line-height:var(--h2-lh);
+  letter-spacing:var(--h2-ls);
 }
 
 /* ── 左：リード ─────────────────────────────── */
@@ -2485,21 +2545,15 @@ body.cta-hide .scontact__fixed{
 <section class="sfv" id="fv">
   <div class="sfv__top">
 
-    <figure class="sfv__art">
-      <!-- ※要確認：ASSETS.txt にある唯一の「開いたパンフレット1冊」。誌面に赤が入っている -->
-      <img src="../fv/img/hero_spread.jpg" width="1536" height="1024"
-           alt="開いた会社案内のパンフレット" fetchpriority="high" decoding="async">
-    </figure>
+    <!-- 右カラム：写真の下にバッジ。🚨 この div に z-index を付けない（写真の blend が死ぬ） -->
+    <div class="sfv__side">
 
-    <div class="sfv__copy">
+      <figure class="sfv__art">
+        <!-- ※要確認：ASSETS.txt にある唯一の「開いたパンフレット1冊」。誌面に赤が入っている -->
+        <img src="../fv/img/hero_spread.jpg" width="1536" height="1024"
+             alt="開いた会社案内のパンフレット" fetchpriority="high" decoding="async">
+      </figure>
 
-      <h1 class="sfv__h1">御社の“らしさ”を<br class="sfv__pcbr">読み解いて、<br class="sfv__pcbr">伝わる一冊に翻訳<span class="sfv__gloss">（デザイン）</span>します</h1>
-
-      <p class="sfv__lead">何を載せるかが決まっていない状態からでも構いません。<br class="sfv__pcbr">企画・取材・撮影・コピー・デザイン・印刷まで一貫対応。<br class="sfv__pcbr">デザインは3案以上、修正回数は無制限。<br class="sfv__pcbr">納得いただけるまでお付き合いします。</p>
-
-    </div>
-
-    <div class="sfv__act">
       <ul class="sfv__badges">
         <li class="sfv__badge">
           <!-- 🚨 もとは紙2枚だった（「3案以上」なのに2枚）。3枚に描き直した。
@@ -2536,6 +2590,21 @@ body.cta-hide .scontact__fixed{
         </li>
       </ul>
 
+    </div>
+
+    <div class="sfv__copy">
+
+      <!-- 🚨 改行は「読み解いて、」ではなく「読み解いて、伝わる一冊に」で切る。
+           級数を44→52に上げると、旧3行目「伝わる一冊に翻訳（デザイン）します」が
+           635→750px に伸び、写真の紙の左端 772 に98px食い込む。
+           ここで割ると 1行目415／2行目624／3行目471 で、最長でも右端744。28px空く -->
+      <h1 class="sfv__h1">御社の“らしさ”を<br class="sfv__pcbr">読み解いて、伝わる一冊に<br class="sfv__pcbr">翻訳<span class="sfv__gloss">（デザイン）</span>します</h1>
+
+      <p class="sfv__lead">何を載せるかが決まっていない状態からでも構いません。<br class="sfv__pcbr">企画・取材・撮影・コピー・デザイン・印刷まで一貫対応。<br class="sfv__pcbr">デザインは3案以上、修正回数は無制限。<br class="sfv__pcbr">納得いただけるまでお付き合いします。</p>
+
+    </div>
+
+    <div class="sfv__act">
       <div class="sfv__cta">
         <a class="sfv__btn sfv__btn--main" href="#contact">無料で相談する</a>
         <a class="sfv__btn sfv__btn--sub" href="#price">料金を見る</a>
@@ -2545,7 +2614,10 @@ body.cta-hide .scontact__fixed{
     </div>
 
   </div>
+</section>
 
+<!-- 信頼バー。🚨 FVの中から出して独立した帯にした。FVを第一画面（960）に収めるため -->
+<section class="sfvbar" aria-label="主なご依頼企業">
   <div class="sfv__bar">
     <ul class="sfv__logos">
       <li><img src="../fv/img/cl_kankyo.webp"  width="386" height="209" alt="環境省" loading="lazy"></li>
